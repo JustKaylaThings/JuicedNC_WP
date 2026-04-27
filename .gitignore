@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Local by Flywheel / server config
+conf/
+app/sql/
+
+# WordPress secrets & uploads
+app/public/wp-config.php
+app/public/wp-content/uploads/
+app/public/wp-content/cache/
+app/public/wp-content/upgrade/
+app/public/wp-content/backup*/
+app/public/wp-content/ai1wm-backups/
+app/public/wp-content/debug.log
+
+# Env / credentials
+.env
+.env.*
+*.key
+*.pem
+credentials*
