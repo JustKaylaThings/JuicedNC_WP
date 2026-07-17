@@ -1,0 +1,14 @@
+{
+  "name": "juiced-theme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Build tooling for the Juiced! classic WordPress theme. Compiles Tailwind v4 (src/tailwind.css) into the static assets/theme.css that functions.php enqueues. Node is only needed at build time — the deployed theme ships plain CSS with no runtime dependency.",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/tailwind.css -o ./assets/theme.css --watch",
+    "build": "tailwindcss -i ./src/tailwind.css -o ./assets/theme.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4",
+    "tailwindcss": "^4"
+  }
+}

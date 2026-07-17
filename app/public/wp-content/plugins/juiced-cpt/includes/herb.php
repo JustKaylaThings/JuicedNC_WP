@@ -27,7 +27,9 @@ function juiced_register_herb_cpt() {
     register_post_type( 'herb', [
         'labels'              => $labels,
         'public'              => true,
-        'has_archive'         => true,
+        // No archive: the Herb Library page (page-templates/herbs.php) is the
+        // canonical index at /herbs/, same pattern as the Events page.
+        'has_archive'         => false,
         'supports'            => [ 'title', 'editor', 'excerpt', 'thumbnail' ],
         'rewrite'             => [ 'slug' => 'herbs' ],
         'menu_icon'           => 'dashicons-palmtree',
@@ -115,6 +117,24 @@ function juiced_register_herb_acf_fields() {
         'title'  => 'Herb Fields',
         'fields' => [
             [
+                'key'               => 'field_herb_type',
+                'label'             => 'Type',
+                'name'              => 'herb_type',
+                'type'              => 'text',
+                'instructions'      => 'The part of the plant used — e.g. Root, Leaf, Flower. Shown as the badge above the herb\'s name.',
+                'show_in_graphql'   => 1,
+                'graphql_field_name'=> 'herbType',
+            ],
+            [
+                'key'               => 'field_herb_tagline',
+                'label'             => 'Tagline',
+                'name'              => 'tagline',
+                'type'              => 'text',
+                'instructions'      => 'Short epithet under the name, e.g. "The Golden Healer".',
+                'show_in_graphql'   => 1,
+                'graphql_field_name'=> 'tagline',
+            ],
+            [
                 'key'               => 'field_herb_latin_name',
                 'label'             => 'Latin Name',
                 'name'              => 'latin_name',
@@ -127,8 +147,18 @@ function juiced_register_herb_acf_fields() {
                 'label'             => 'Benefits',
                 'name'              => 'benefits',
                 'type'              => 'textarea',
+                'instructions'      => 'One per line — shown as the green checklist under "Overview" on the herb page.',
                 'show_in_graphql'   => 1,
                 'graphql_field_name'=> 'benefits',
+            ],
+            [
+                'key'               => 'field_herb_key_benefits',
+                'label'             => 'Key Benefits',
+                'name'              => 'key_benefits',
+                'type'              => 'textarea',
+                'instructions'      => 'One per line as "Title | Short description" — fills the "Key Benefits" panel on the herb page. The icon is picked from keywords in the title (immunity, digestion, energy, sleep, skin, brain…).',
+                'show_in_graphql'   => 1,
+                'graphql_field_name'=> 'keyBenefits',
             ],
             [
                 'key'               => 'field_herb_usage_notes',

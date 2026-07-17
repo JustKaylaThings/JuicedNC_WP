@@ -1,0 +1,11 @@
+# Node build tooling (Tailwind CLI) — only needed at build time
+/node_modules/
+package-lock.json
+
+# OS / editor cruft
+.DS_Store
+*.log
+
+# NOTE: assets/theme.css (the compiled output) IS committed on purpose so the
+# deployed theme needs no build step on the server. Run `npm run build` before
+# committing style changes.

@@ -1,0 +1,241 @@
+/**
+ * Juiced! — Tailwind v4 input stylesheet.
+ * Compiled to ../assets/theme.css via the Tailwind CLI (see package.json).
+ * Ported from the Next.js frontend's src/app/globals.css so existing utility
+ * class names (bg-brand-green, text-brand-bark, font-display, eyebrow, …) keep
+ * working verbatim when component markup is moved into PHP templates.
+ *
+ *   Dev:   npm run dev     (watch)
+ *   Build: npm run build   (minified, run before committing/deploying)
+ */
+@import "tailwindcss";
+
+/* Explicitly tell Tailwind where to find class names in this classic theme. */
+@source "../**/*.php";
+@source "../assets/**/*.js";
+
+@theme {
+  --color-background: #f5ecdc;
+  --color-foreground: #13110e;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand palette — sourced from client logo (orange / dark / green / gold).
+     Names preserved from the Next.js build so components inherit automatically. */
+  --color-brand-green: #38a54c;        /* CTAs, prices, primary accents */
+  --color-brand-green-light: #5cc070;  /* hover states */
+  --color-brand-gold: #f2811f;         /* badges, sale, eyebrows, icon accents */
+  --color-brand-yellow: #eebd18;       /* reserved highlight; use sparingly */
+  --color-brand-cream: #fdf8f0;        /* warm background */
+  --color-brand-paper: #f5ecdc;        /* warm background */
+  --color-brand-sage: #cfd9cb;         /* neutral */
+  --color-brand-clay: #c9b196;         /* neutral */
+  --color-brand-bark: #13110e;         /* headings, body, footer */
+  --color-brand-ink: #13110e;          /* headings, body, footer */
+}
+
+/* Font families are loaded from Google Fonts in header.php (enqueued in
+   functions.php). In the Next build these came from next/font. */
+:root {
+  --font-display: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
+  background: var(--color-brand-paper);
+  color: var(--color-brand-ink);
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  overscroll-behavior-y: none;
+}
+
+/* Editorial defaults — rounded display face sets the tone. (The optical-sizing
+   and SOFT/WONK variation settings from the Fraunces era are gone — Fredoka's
+   only axes are weight and width.) */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* Eyebrow label — grocery-shelf signage. Color is set by the caller (via a
+   text-* utility) so it works on both light and dark sections. */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Subtle paper grain used on hero / section backgrounds */
+.bg-grain {
+  background-image:
+    radial-gradient(rgba(92, 64, 51, 0.06) 1px, transparent 1px),
+    radial-gradient(rgba(92, 64, 51, 0.04) 1px, transparent 1px);
+  background-size: 6px 6px, 11px 11px;
+  background-position: 0 0, 3px 4px;
+}
+
+/* Hairline divider */
+.rule {
+  border-color: rgba(92, 64, 51, 0.18);
+}
+
+/* Hide scrollbars on horizontal rails while keeping scroll behavior */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Alpine.js: keep x-show/x-cloak elements hidden until Alpine initializes,
+   so inactive tab panels don't flash stacked on first paint. */
+[x-cloak] { display: none !important; }
+
+/* Primary nav — wp_nav_menu output has no utility classes on its <a> tags */
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 500;
+}
+.primary-nav a {
+  color: var(--color-brand-cream);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.primary-nav a:hover,
+.primary-nav .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Mobile drawer nav — the same wp_nav_menu output, stacked */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 500;
+}
+.mobile-nav a {
+  display: block;
+  padding: 0.5rem 0;
+  color: var(--color-brand-cream);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.mobile-nav a:hover,
+.mobile-nav .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Footer nav */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+.footer-nav a:hover {
+  color: var(--color-brand-gold);
+}
+
+/* Editorial footer columns (Section 8). wp_nav_menu strips utility classes, so
+   the link lists are styled here; the same class dresses the default fallbacks. */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-links a {
+  color: rgba(253, 248, 240, 0.7);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.15s ease;
+}
+.footer-links a:hover,
+.footer-links .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Post body copy (single event, and future single templates). the_content()
+   output is client-pasted HTML with no utility classes — often copied from
+   other sites, junk classes included — and the build has no typography plugin,
+   so the elements are styled here. Colors stay relative so it works on any
+   light section. */
+.entry-content {
+  color: color-mix(in srgb, var(--color-brand-ink) 80%, transparent);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+.entry-content > * + * {
+  margin-top: 1em;
+}
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4 {
+  font-family: var(--font-display);
+  color: var(--color-brand-ink);
+  line-height: 1.2;
+  margin-top: 1.6em;
+}
+.entry-content h1 { font-size: 1.6rem; }
+.entry-content h2 { font-size: 1.4rem; }
+.entry-content h3 { font-size: 1.2rem; }
+.entry-content h4 { font-size: 1.05rem; }
+.entry-content strong {
+  color: var(--color-brand-ink);
+}
+.entry-content a {
+  color: var(--color-brand-green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.entry-content a:hover {
+  color: var(--color-brand-gold);
+}
+.entry-content ul,
+.entry-content ol {
+  padding-left: 1.4em;
+}
+.entry-content ul { list-style: disc; }
+.entry-content ol { list-style: decimal; }
+.entry-content li + li { margin-top: 0.35em; }
+.entry-content img {
+  border-radius: 1rem;
+  max-width: 100%;
+  height: auto;
+}
+.entry-content blockquote {
+  border-left: 3px solid var(--color-brand-gold);
+  padding-left: 1em;
+  font-style: italic;
+}
+
+/* Mobile nav reveal */
+@keyframes juiced-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes juiced-rise {
+  to { opacity: 1; transform: translateY(0); }
+}

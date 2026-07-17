@@ -25,3 +25,10 @@ app/public/wp-content/debug.log
 *.key
 *.pem
 credentials*
+
+# Dev dependencies
+node_modules/
+
+# Claude Code local settings
+.claude/settings.local.json
+pass.txt
