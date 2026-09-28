@@ -472,7 +472,7 @@ function juiced_stars( $rating, $size = 18 ) {
  */
 function juiced_footer_column( $location, $heading, $defaults ) {
 	echo '<div>';
-	echo '<p class="font-semibold text-white mb-4">' . esc_html( $heading ) . '</p>';
+	echo '<p class="m-0 mb-2.5 font-bold text-brand-cream">' . esc_html( $heading ) . '</p>';
 
 	if ( has_nav_menu( $location ) ) {
 		wp_nav_menu(
@@ -497,6 +497,30 @@ function juiced_footer_column( $location, $heading, $defaults ) {
 	}
 
 	echo '</div>';
+}
+
+/**
+ * Print the footer copyright line ("© <year> <name>", plus optional Privacy and
+ * Terms links). footer.php prints it twice — beside the wordmark from md up,
+ * below the link columns on phones — so it lives here.
+ *
+ * @param string $class     Classes for the <p>.
+ * @param string $copyright Text after the year.
+ * @param string $privacy   Privacy policy URL, or ''.
+ * @param string $terms     Terms URL, or ''.
+ */
+function juiced_footer_copyright( $class, $copyright, $privacy, $terms ) {
+	?>
+	<p class="<?php echo esc_attr( $class ); ?>">
+		&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( $copyright ); ?>
+		<?php if ( $privacy ) : ?>
+			<span aria-hidden="true">·</span> <a href="<?php echo esc_url( $privacy ); ?>" class="hover:text-brand-gold transition-colors"><?php esc_html_e( 'Privacy', 'juiced' ); ?></a>
+		<?php endif; ?>
+		<?php if ( $terms ) : ?>
+			<span aria-hidden="true">·</span> <a href="<?php echo esc_url( $terms ); ?>" class="hover:text-brand-gold transition-colors"><?php esc_html_e( 'Terms', 'juiced' ); ?></a>
+		<?php endif; ?>
+	</p>
+	<?php
 }
 
 /**

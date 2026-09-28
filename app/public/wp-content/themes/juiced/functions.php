@@ -43,12 +43,9 @@ function juiced_setup() {
 	register_nav_menus(
 		array(
 			'primary'          => __( 'Primary Navigation', 'juiced' ),
-			'footer'           => __( 'Footer Navigation (legacy)', 'juiced' ),
-			'footer_menu'      => __( 'Footer — Menu column', 'juiced' ),
-			'footer_events'    => __( 'Footer — Events column', 'juiced' ),
-			'footer_about'     => __( 'Footer — About column', 'juiced' ),
-			'footer_locations' => __( 'Footer — Locations column', 'juiced' ),
-			'footer_order'     => __( 'Footer — Order column', 'juiced' ),
+			'footer_community' => __( 'Footer — Community column', 'juiced' ),
+			'footer_wellness'  => __( 'Footer — Wellness column', 'juiced' ),
+			'footer_visit'     => __( 'Footer — Visit column', 'juiced' ),
 		)
 	);
 }

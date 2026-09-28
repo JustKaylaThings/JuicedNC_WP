@@ -4,7 +4,9 @@
  *
  * Opens <html>, prints <head> via wp_head(), and renders the dark site header:
  * optional scheduled announcement bar, logo, primary nav, and the Order Ahead
- * button. The header sits on the dark hero, so it shares the ink background.
+ * button. The header sits on the page's first section, so it shares its
+ * background: deep green on the homepage (2026 "Garden" redesign), ink on the
+ * other pages until they're redesigned too.
  *
  * Below md the nav collapses behind the hamburger, which toggles an Alpine
  * drawer under the bar: the same wp_nav_menu stacked (.mobile-nav), plus an
@@ -42,7 +44,7 @@ if ( $juiced_announcement ) :
 	</div>
 <?php endif; ?>
 
-<header class="bg-brand-ink text-brand-cream" x-data="{ menuOpen: false }"
+<header class="<?php echo is_front_page() ? 'bg-brand-forest' : 'bg-brand-ink'; ?> text-brand-cream" x-data="{ menuOpen: false }"
 		@click.outside="menuOpen = false" @keydown.escape.window="menuOpen = false">
 	<div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 py-4">
 
@@ -72,7 +74,7 @@ if ( $juiced_announcement ) :
 
 		<div class="flex items-center gap-3">
 			<a href="<?php echo esc_url( juiced_field( 'order_ahead_url', '#' ) ); ?>"
-			   class="hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-semibold text-white hover:bg-brand-green-light transition">
+			   class="hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition">
 				<?php esc_html_e( 'Order Ahead', 'juiced' ); ?>
 			</a>
 
@@ -109,7 +111,7 @@ if ( $juiced_announcement ) :
 			);
 			?>
 			<a href="<?php echo esc_url( juiced_field( 'order_ahead_url', '#' ) ); ?>"
-			   class="mt-4 inline-flex sm:hidden items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-semibold text-white hover:bg-brand-green-light transition">
+			   class="mt-4 inline-flex sm:hidden items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition">
 				<?php esc_html_e( 'Order Ahead', 'juiced' ); ?>
 			</a>
 		</div>
