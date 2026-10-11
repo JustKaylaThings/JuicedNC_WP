@@ -61,10 +61,10 @@ add_action(
 						),
 						array(
 							'key'          => 'field_juiced_ct_hero_lead',
-							'label'        => 'Headline — white part',
+							'label'        => 'Headline — cream part',
 							'name'         => 'contact_hero_lead',
 							'type'         => 'text',
-							'instructions' => 'Shown in white. e.g. "We\'d Love to".',
+							'instructions' => 'Shown in cream. e.g. "We\'d Love to".',
 						),
 						array(
 							'key'          => 'field_juiced_ct_hero_accent',
@@ -87,7 +87,7 @@ add_action(
 							'type'          => 'image',
 							'return_format' => 'array',
 							'preview_size'  => 'medium',
-							'instructions'  => 'Fills the right side of the hero and fades into the dark background. Subject to the right of centre, since the headline covers the left.',
+							'instructions'  => 'Fills the right side of the hero and fades into the green background. Subject to the right of centre, since the headline covers the left.',
 						),
 
 						// --- Let's Connect (Section 2, left column) ----------------
@@ -157,7 +157,14 @@ add_action(
 							'label'        => 'Heading',
 							'name'         => 'contact_visit_heading',
 							'type'         => 'text',
-							'instructions' => 'e.g. "Visit Us".',
+							'instructions' => 'Green part of the heading, e.g. "Visit".',
+						),
+						array(
+							'key'          => 'field_juiced_ct_visit_accent',
+							'label'        => 'Heading accent',
+							'name'         => 'contact_visit_accent',
+							'type'         => 'text',
+							'instructions' => 'Orange part of the heading, e.g. "Us".',
 						),
 						array(
 							'key'          => 'field_juiced_ct_visit_subtext',
@@ -173,7 +180,42 @@ add_action(
 							'message' => 'The location names, addresses and directions links come from the site-wide business info under <strong>Appearance &rarr; Customize &rarr; Business Info</strong>. Only the photos below are set here.',
 						),
 					),
-					$visit_slots
+					$visit_slots,
+					array(
+						array(
+							'key'   => 'field_juiced_ct_host_tab',
+							'label' => 'Host an Event',
+							'type'  => 'tab',
+						),
+						array(
+							'key'          => 'field_juiced_ct_host_heading',
+							'label'        => 'Heading',
+							'name'         => 'contact_host_heading',
+							'type'         => 'text',
+							'instructions' => 'Cream part of the heading, e.g. "Host Your Next Event".',
+						),
+						array(
+							'key'          => 'field_juiced_ct_host_accent',
+							'label'        => 'Heading accent',
+							'name'         => 'contact_host_accent',
+							'type'         => 'text',
+							'instructions' => 'Orange part of the heading, e.g. "at Juiced!". Clear both heading fields to hide the section.',
+						),
+						array(
+							'key'          => 'field_juiced_ct_host_body',
+							'label'        => 'Text',
+							'name'         => 'contact_host_body',
+							'type'         => 'textarea',
+							'rows'         => 3,
+						),
+						array(
+							'key'          => 'field_juiced_ct_host_button',
+							'label'        => 'Button label',
+							'name'         => 'contact_host_button',
+							'type'         => 'text',
+							'instructions' => 'e.g. "Inquire Today". The button always goes to the Host an Event form.',
+						),
+					)
 				),
 				'location' => array(
 					array(

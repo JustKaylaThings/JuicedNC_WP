@@ -9,7 +9,7 @@
  *
  * Sections are added here as they're built. Currently: global + hero (Section 2, 2026 "Garden" redesign)
  * + coming up (Section 3) + community (Section 4) + top five (Section 5)
- * + two neighborhoods (Section 6) + testimonials (Section 7) + footer & newsletter
+ * + two neighborhoods (Section 6) + footer & newsletter
  * (Section 8, rendered site-wide in footer.php).
  *
  * @package Juiced
@@ -38,7 +38,7 @@ add_action(
 						'label'        => 'Order Ahead URL',
 						'name'         => 'order_ahead_url',
 						'type'         => 'url',
-						'instructions' => 'Link for the "Order Ahead" buttons in the header and hero (your online ordering page). Also used by the "Order on DoorDash" button in the Top five section.',
+						'instructions' => 'Link for the "Order Ahead" buttons in the header and hero (your online ordering page). Also used for the DoorDash buttons in the Top five section when that section has no DoorDash link of its own.',
 					),
 
 					// --- Hero (Section 2) --------------------------------------
@@ -334,7 +334,7 @@ add_action(
 						'label'   => 'How this section works',
 						'name'    => '',
 						'type'    => 'message',
-						'message' => 'Pick five drinks from Menu Items, in ranking order. The photo, ingredients, size and price come from each menu item (the size is the part of its title in brackets, e.g. "(32oz)"). Leave all five blank to show Berry Boost, Ginger Glow, Sunset, Rise N\' Grind and Spark Plug. The "Order on DoorDash" button uses the Order Ahead URL at the top of these Home page fields (the button is hidden while that is blank).',
+						'message' => 'Pick five drinks from Menu Items, in ranking order. The photo, ingredients, size, price and Juice/Smoothie label come from each menu item (the size is the part of its title in brackets, e.g. "(32oz)"). Leave all five blank to show Ginger Glow, Berry Boost, Pick Me Up, Spark Plug and Bright & Early.<br><br><strong>Order buttons:</strong> each drink shows DoorDash, Uber Eats and Grubhub buttons. Paste a link to that drink in each app under the drink, or leave it blank to use the store link for that app below. An app with no link anywhere gets no button.',
 					),
 					array(
 						'key'          => 'field_juiced_menu_eyebrow',
@@ -377,6 +377,30 @@ add_action(
 						'wrapper'      => array( 'width' => '50' ),
 					),
 					array(
+						'key'          => 'field_juiced_top_doordash_url',
+						'label'        => 'DoorDash store link',
+						'name'         => 'top_doordash_url',
+						'type'         => 'url',
+						'instructions' => 'Used by any drink without its own DoorDash link. Blank uses the Order Ahead URL.',
+						'wrapper'      => array( 'width' => '33' ),
+					),
+					array(
+						'key'          => 'field_juiced_top_ubereats_url',
+						'label'        => 'Uber Eats store link',
+						'name'         => 'top_ubereats_url',
+						'type'         => 'url',
+						'instructions' => 'Used by any drink without its own Uber Eats link.',
+						'wrapper'      => array( 'width' => '33' ),
+					),
+					array(
+						'key'          => 'field_juiced_top_grubhub_url',
+						'label'        => 'Grubhub store link',
+						'name'         => 'top_grubhub_url',
+						'type'         => 'url',
+						'instructions' => 'Used by any drink without its own Grubhub link.',
+						'wrapper'      => array( 'width' => '34' ),
+					),
+					array(
 						'key'           => 'field_juiced_top_pick_1',
 						'label'         => 'Drink #1',
 						'name'          => 'top_pick_1',
@@ -396,6 +420,27 @@ add_action(
 						'wrapper'     => array( 'width' => '40' ),
 					),
 					array(
+						'key'     => 'field_juiced_top_dd_1',
+						'label'   => 'Drink #1 on DoorDash',
+						'name'    => 'top_dd_1',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_ue_1',
+						'label'   => 'Drink #1 on Uber Eats',
+						'name'    => 'top_ue_1',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_gh_1',
+						'label'   => 'Drink #1 on Grubhub',
+						'name'    => 'top_gh_1',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '34' ),
+					),
+					array(
 						'key'           => 'field_juiced_top_pick_2',
 						'label'         => 'Drink #2',
 						'name'          => 'top_pick_2',
@@ -411,8 +456,29 @@ add_action(
 						'label'       => 'Drink #2 tag',
 						'name'        => 'top_tag_2',
 						'type'        => 'text',
-						'placeholder' => 'Work Remote favorite',
+						'placeholder' => 'Fan favorite',
 						'wrapper'     => array( 'width' => '40' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_dd_2',
+						'label'   => 'Drink #2 on DoorDash',
+						'name'    => 'top_dd_2',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_ue_2',
+						'label'   => 'Drink #2 on Uber Eats',
+						'name'    => 'top_ue_2',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_gh_2',
+						'label'   => 'Drink #2 on Grubhub',
+						'name'    => 'top_gh_2',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '34' ),
 					),
 					array(
 						'key'           => 'field_juiced_top_pick_3',
@@ -430,8 +496,29 @@ add_action(
 						'label'       => 'Drink #3 tag',
 						'name'        => 'top_tag_3',
 						'type'        => 'text',
-						'placeholder' => 'Open Mic go-to',
+						'placeholder' => 'Something to start your day',
 						'wrapper'     => array( 'width' => '40' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_dd_3',
+						'label'   => 'Drink #3 on DoorDash',
+						'name'    => 'top_dd_3',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_ue_3',
+						'label'   => 'Drink #3 on Uber Eats',
+						'name'    => 'top_ue_3',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_gh_3',
+						'label'   => 'Drink #3 on Grubhub',
+						'name'    => 'top_gh_3',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '34' ),
 					),
 					array(
 						'key'           => 'field_juiced_top_pick_4',
@@ -449,8 +536,29 @@ add_action(
 						'label'       => 'Drink #4 tag',
 						'name'        => 'top_tag_4',
 						'type'        => 'text',
-						'placeholder' => 'Meal replacement',
+						'placeholder' => 'Anti-inflammatory',
 						'wrapper'     => array( 'width' => '40' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_dd_4',
+						'label'   => 'Drink #4 on DoorDash',
+						'name'    => 'top_dd_4',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_ue_4',
+						'label'   => 'Drink #4 on Uber Eats',
+						'name'    => 'top_ue_4',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_gh_4',
+						'label'   => 'Drink #4 on Grubhub',
+						'name'    => 'top_gh_4',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '34' ),
 					),
 					array(
 						'key'           => 'field_juiced_top_pick_5',
@@ -468,8 +576,29 @@ add_action(
 						'label'       => 'Drink #5 tag',
 						'name'        => 'top_tag_5',
 						'type'        => 'text',
-						'placeholder' => 'Green juice',
+						'placeholder' => 'Most nutrient dense',
 						'wrapper'     => array( 'width' => '40' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_dd_5',
+						'label'   => 'Drink #5 on DoorDash',
+						'name'    => 'top_dd_5',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_ue_5',
+						'label'   => 'Drink #5 on Uber Eats',
+						'name'    => 'top_ue_5',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '33' ),
+					),
+					array(
+						'key'     => 'field_juiced_top_gh_5',
+						'label'   => 'Drink #5 on Grubhub',
+						'name'    => 'top_gh_5',
+						'type'    => 'url',
+						'wrapper' => array( 'width' => '34' ),
 					),
 
 					// --- Locations (Section 6) ---------------------------------
@@ -512,7 +641,7 @@ add_action(
 						'label'       => 'Location 2 — small label',
 						'name'        => 'locations_label_2',
 						'type'        => 'text',
-						'placeholder' => 'Neighborhood 02 · Events home',
+						'placeholder' => 'Washington Terrace · Events home',
 						'wrapper'     => array( 'width' => '50' ),
 					),
 					array(
@@ -524,34 +653,6 @@ add_action(
 						'preview_size'  => 'medium',
 						'instructions'  => 'A wide photo works best. Leave blank for a plain colour panel.',
 						'wrapper'       => array( 'width' => '50' ),
-					),
-
-					// --- Testimonials (Section 7) ------------------------------
-					array(
-						'key'   => 'field_juiced_testimonials_tab',
-						'label' => 'Testimonials',
-						'type'  => 'tab',
-					),
-					array(
-						'key'          => 'field_juiced_testimonials_heading',
-						'label'        => 'Heading — start',
-						'name'         => 'testimonials_heading',
-						'type'         => 'text',
-						'instructions' => 'In white. e.g. "What Our".',
-					),
-					array(
-						'key'          => 'field_juiced_testimonials_accent',
-						'label'        => 'Heading — accent',
-						'name'         => 'testimonials_accent',
-						'type'         => 'text',
-						'instructions' => 'The orange middle word. e.g. "Community".',
-					),
-					array(
-						'key'          => 'field_juiced_testimonials_heading_end',
-						'label'        => 'Heading — end',
-						'name'         => 'testimonials_heading_end',
-						'type'         => 'text',
-						'instructions' => 'In white, after the accent. e.g. "is Saying".',
 					),
 
 					// --- Footer & Newsletter (Section 8) -----------------------
@@ -574,7 +675,7 @@ add_action(
 						'label'        => 'Sign-up heading — accent',
 						'name'         => 'newsletter_heading_accent',
 						'type'         => 'text',
-						'placeholder'  => 'Juiced! family.',
+						'placeholder'  => 'Juiced! Family.',
 						'instructions' => 'Second line, in rust orange.',
 						'wrapper'      => array( 'width' => '50' ),
 					),
@@ -584,14 +685,14 @@ add_action(
 						'name'         => 'newsletter_body',
 						'type'         => 'textarea',
 						'rows'         => 2,
-						'placeholder'  => 'Hear about events first, plus new menu drops and community shout-outs.',
+						'placeholder'  => 'Join our email list to receive discounts, specials, and hear about community events.',
 					),
 					array(
 						'key'          => 'field_juiced_newsletter_action_url',
 						'label'        => 'Newsletter form action URL',
 						'name'         => 'newsletter_action_url',
 						'type'         => 'url',
-						'instructions' => 'Paste the form/POST URL from your email provider (Mailchimp, Klaviyo, etc.). In Mailchimp: Audience → Signup forms → Embedded form → copy the URL in the form\'s "action". Leave blank and the Join button will just reload the page.',
+						'instructions' => 'Paste the form/POST URL from your email provider (Mailchimp, Klaviyo, etc.). In Mailchimp: Audience → Signup forms → Embedded form → copy the URL in the form\'s "action". Leave blank to save sign-ups in WordPress instead (Email List in the admin menu, with a CSV export). The popup always saves to the Email List.',
 					),
 					array(
 						'key'           => 'field_juiced_newsletter_field_name',
@@ -600,6 +701,51 @@ add_action(
 						'type'          => 'text',
 						'placeholder'   => 'EMAIL',
 						'instructions'  => 'Advanced — the name of the email input your provider expects. Mailchimp uses "EMAIL" (the default); leave as-is unless your provider differs.',
+					),
+					array(
+						'key'           => 'field_juiced_popup_enabled',
+						'label'         => 'Show the sign-up popup',
+						'name'          => 'popup_enabled',
+						'type'          => 'true_false',
+						'ui'            => 1,
+						'default_value' => 1,
+						'instructions'  => 'A green popup that asks visitors to join the email list, on every page. It opens once, after about 12 seconds or partway down the page; closing it hides it for 14 days, and signing up hides it for good. Sign-ups land in Email List in the admin menu.',
+					),
+					array(
+						'key'          => 'field_juiced_popup_eyebrow',
+						'label'        => 'Popup label',
+						'name'         => 'popup_eyebrow',
+						'type'         => 'text',
+						'placeholder'  => 'The Juiced! List',
+						'instructions' => 'Small orange label above the popup heading.',
+						'wrapper'      => array( 'width' => '50' ),
+						'conditional_logic' => array( array( array( 'field' => 'field_juiced_popup_enabled', 'operator' => '==', 'value' => '1' ) ) ),
+					),
+					array(
+						'key'          => 'field_juiced_popup_heading',
+						'label'        => 'Popup heading',
+						'name'         => 'popup_heading',
+						'type'         => 'text',
+						'placeholder'  => 'Get the good stuff first.',
+						'wrapper'      => array( 'width' => '50' ),
+						'conditional_logic' => array( array( array( 'field' => 'field_juiced_popup_enabled', 'operator' => '==', 'value' => '1' ) ) ),
+					),
+					array(
+						'key'          => 'field_juiced_popup_body',
+						'label'        => 'Popup text',
+						'name'         => 'popup_body',
+						'type'         => 'textarea',
+						'rows'         => 2,
+						'placeholder'  => 'New drinks, pop-up events and community news from our garden to your inbox. No spam, just juice.',
+						'conditional_logic' => array( array( array( 'field' => 'field_juiced_popup_enabled', 'operator' => '==', 'value' => '1' ) ) ),
+					),
+					array(
+						'key'          => 'field_juiced_popup_button',
+						'label'        => 'Popup button',
+						'name'         => 'popup_button',
+						'type'         => 'text',
+						'placeholder'  => 'Count me in',
+						'conditional_logic' => array( array( array( 'field' => 'field_juiced_popup_enabled', 'operator' => '==', 'value' => '1' ) ) ),
 					),
 					array(
 						'key'          => 'field_juiced_footer_tagline',
@@ -614,7 +760,7 @@ add_action(
 						'label'        => 'Facebook URL',
 						'name'         => 'footer_facebook_url',
 						'type'         => 'url',
-						'instructions' => 'Your Facebook page link. Leave blank to hide the Facebook icon. (Instagram comes from the Community tab.)',
+						'instructions' => 'Your Facebook page link. Leave blank to use https://www.facebook.com/juicedjourney/. (Instagram comes from the Community tab.)',
 					),
 					array(
 						'key'          => 'field_juiced_footer_tiktok_url',

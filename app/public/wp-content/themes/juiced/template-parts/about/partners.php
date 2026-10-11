@@ -2,7 +2,7 @@
 /**
  * About page Section — Proud to Partner With.
  *
- * A white strip after the owners: centered heading, then up to six partner
+ * A cream strip (hairline on top) after the owners: centered heading, then up to six partner
  * logos in a row. Like the owners, the partners live as plain fields on the
  * About page's ACF group (inc/acf-about-page.php) — six fixed slots, each a
  * name, a logo, and an optional link.
@@ -34,16 +34,16 @@ if ( ! $partners ) {
 	return;
 }
 ?>
-<section class="bg-white">
-	<div class="mx-auto max-w-7xl px-4 py-12 md:py-16">
+<section class="bg-brand-cream">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-26">
 
 		<?php if ( $heading ) : ?>
-			<h2 class="text-center font-display text-2xl text-brand-bark md:text-3xl">
+			<h2 class="text-center font-display text-2xl font-bold text-brand-forest md:text-3xl">
 				<?php echo esc_html( $heading ); ?>
 			</h2>
 		<?php endif; ?>
 
-		<div class="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 md:mt-10 md:gap-x-16">
+		<div class="mt-11 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 md:gap-x-16">
 			<?php foreach ( $partners as $partner ) : ?>
 
 				<?php if ( $partner['url'] ) : ?>

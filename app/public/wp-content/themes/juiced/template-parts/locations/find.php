@@ -2,12 +2,13 @@
 /**
  * Locations page Section 2 — Find Your Juiced!
  *
- * Centered two-tone heading over one white card split into two location
+ * Homepage-style heading row (small eyebrow, big two-tone forest/rust heading)
+ * over one white card split into two location
  * columns, divided by a hairline. Each column: pin + location name + address,
  * icon rows for phone / hours / parking, an interior photo, a map image, and
  * a tinted card with a Get Directions button and that location's DoorDash
- * ordering button. Location 1 dresses in brand green, location 2 in the
- * mockup's pink — matching the hero's pills.
+ * ordering button. Location 1 dresses in orange, location 2 in forest green —
+ * the homepage's neighborhood panels' pairing — though both names, pins and Get Directions buttons are green.
  *
  * Each location's name, address, phone, hours, parking and directions link
  * are the site-wide business info in Appearance → Customize → Business Info
@@ -23,22 +24,24 @@
  * @package Juiced
  */
 
-$lead   = juiced_page_field( 'locations_find_lead', 'Find Your' );
-$accent = juiced_page_field( 'locations_find_accent', 'Juiced!' );
+$eyebrow = juiced_page_field( 'locations_find_eyebrow', 'Visit us' );
+$lead    = juiced_page_field( 'locations_find_lead', 'Find Your' );
+$accent  = juiced_page_field( 'locations_find_accent', 'Juiced!' );
 
 $directions_label = juiced_page_field( 'locations_directions_label', 'Get Directions' );
 
-// Per-slot palette, matching the hero pills (slot 1 green, slot 2 pink).
+// Per-slot palette (slot 1 orange, slot 2 forest), like the homepage's
+// neighborhood panels. Orange text uses rust for contrast on white.
 $palettes = array(
 	1 => array(
-		'text'   => 'text-brand-green',
-		'tint'   => 'bg-brand-green/10',
-		'button' => 'bg-brand-green',
+		'text'   => 'text-brand-rust',
+		'tint'   => 'bg-brand-gold/15',
+		'button' => 'bg-brand-forest text-brand-cream hover:bg-brand-gold hover:text-brand-ink',
 	),
 	2 => array(
-		'text'   => 'text-[#dd1f69]',
-		'tint'   => 'bg-[#dd1f69]/10',
-		'button' => 'bg-[#dd1f69]',
+		'text'   => 'text-brand-forest',
+		'tint'   => 'bg-brand-forest/10',
+		'button' => 'bg-brand-forest text-brand-cream hover:bg-brand-gold hover:text-brand-ink',
 	),
 );
 
@@ -82,17 +85,24 @@ $juiced_detail_icons = array(
 	'parking' => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13 6.5 8a2 2 0 0 1 1.9-1.5h7.2A2 2 0 0 1 17.5 8L19 13" /><path d="M4 13h16a1 1 0 0 1 1 1v3h-2.2M3 17V14a1 1 0 0 1 1-1" /><circle cx="7.2" cy="17" r="1.8" /><circle cx="16.8" cy="17" r="1.8" /><path d="M9 17h6" /></svg>',
 );
 ?>
-<section class="bg-brand-cream bg-grain">
-	<div class="mx-auto max-w-7xl px-4 py-14 md:py-20">
+<section class="bg-brand-cream text-brand-ink">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-22">
 
-		<?php if ( $lead || $accent ) : ?>
-			<h2 class="text-center font-display text-3xl text-brand-bark md:text-4xl">
-				<?php echo esc_html( $lead ); ?>
-				<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
-			</h2>
+		<?php if ( $eyebrow || $lead || $accent ) : ?>
+			<div class="flex flex-col gap-3.5">
+				<?php if ( $eyebrow ) : ?>
+					<span class="text-xs font-bold uppercase tracking-[.22em] text-brand-forest"><?php echo esc_html( $eyebrow ); ?></span>
+				<?php endif; ?>
+				<?php if ( $lead || $accent ) : ?>
+					<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
+						<?php echo esc_html( $lead ); ?>
+						<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+					</h2>
+				<?php endif; ?>
+			</div>
 		<?php endif; ?>
 
-		<div class="mt-10 grid rounded-3xl bg-white shadow-sm md:mt-12 md:grid-cols-2 md:divide-x md:divide-brand-bark/10">
+		<div class="mt-10 grid rounded-3xl border border-brand-forest/15 bg-white md:mt-12 md:grid-cols-2 md:divide-x md:divide-brand-forest/15">
 			<?php foreach ( $locations as $location ) : ?>
 				<?php $palette = $location['palette']; ?>
 				<div class="p-6 md:p-10">
@@ -101,12 +111,12 @@ $juiced_detail_icons = array(
 						<div class="grow">
 
 							<div class="flex items-start gap-4">
-								<span class="shrink-0 <?php echo esc_attr( $palette['text'] ); ?>">
+								<span class="shrink-0 text-brand-forest">
 									<svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor" aria-hidden="true"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.3 6.4 11.6 6.9 12.1a.9.9 0 0 0 1.2 0c.5-.5 6.9-6.8 6.9-12.1A7.5 7.5 0 0 0 12 2Zm0 10.2a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8Z" /></svg>
 								</span>
 								<div>
 									<?php if ( $location['name'] ) : ?>
-										<h3 class="font-display text-2xl <?php echo esc_attr( $palette['text'] ); ?>">
+										<h3 class="font-display text-[28px] font-bold leading-tight text-brand-forest">
 											<?php echo esc_html( $location['name'] ); ?>
 										</h3>
 									<?php endif; ?>
@@ -150,7 +160,7 @@ $juiced_detail_icons = array(
 
 							<?php if ( $directions_label && $location['directions'] ) : ?>
 								<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
-								   class="inline-flex items-center gap-2 rounded-full <?php echo esc_attr( $palette['button'] ); ?> px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-gold">
+								   class="inline-flex items-center gap-2 rounded-full <?php echo esc_attr( $palette['button'] ); ?> px-5 py-2.5 text-sm font-bold transition-colors">
 									<?php echo esc_html( $directions_label ); ?>
 									<span aria-hidden="true">&rarr;</span>
 								</a>

@@ -69,7 +69,7 @@ add_action(
 						'label'        => 'Headline — white part',
 						'name'         => 'about_hero_lead',
 						'type'         => 'text',
-						'instructions' => 'Shown in white, wraps naturally. e.g. "More Than a Juice Bar.".',
+						'instructions' => 'Shown in cream, wraps naturally. e.g. "More Than a Juice Bar.".',
 					),
 					array(
 						'key'          => 'field_juiced_ab_hero_accent',
@@ -92,7 +92,7 @@ add_action(
 						'type'          => 'image',
 						'return_format' => 'array',
 						'preview_size'  => 'medium',
-						'instructions'  => 'Fills the right side of the hero and fades into the dark background. A wide shot of the shop interior works best — subject to the right of centre, since the headline covers the left.',
+						'instructions'  => 'Fills the right side of the hero and fades into the green background. A wide shot of the shop interior works best — subject to the right of centre, since the headline covers the left.',
 					),
 
 					// --- Our Mission (Section 2) -------------------------------
@@ -113,7 +113,7 @@ add_action(
 						'label'        => 'Heading — accent part',
 						'name'         => 'about_mission_accent',
 						'type'         => 'text',
-						'instructions' => 'Shown in orange after the dark part. e.g. "Mission".',
+						'instructions' => 'Shown in orange after the green part. e.g. "Mission".',
 					),
 					array(
 						'key'   => 'field_juiced_ab_mission_body',
@@ -136,22 +136,6 @@ add_action(
 						'type'         => 'text',
 						'instructions' => 'Where the button goes. Defaults to "#our-story", which scrolls to the Our Story section further down this page.',
 					),
-					array(
-						'key'          => 'field_juiced_ab_believe_heading',
-						'label'        => 'We Believe In — heading',
-						'name'         => 'about_believe_heading',
-						'type'         => 'text',
-						'instructions' => 'Sits above the value cards to the right of the mission. e.g. "We Believe In".',
-					),
-					array(
-						'key'          => 'field_juiced_ab_believe_items',
-						'label'        => 'We Believe In — values',
-						'name'         => 'about_believe_items',
-						'type'         => 'textarea',
-						'rows'         => 5,
-						'instructions' => 'One per line as "Title | Short description". The icon is picked from keywords in the title (health, community, positivity, growth). Clearing this hides the value cards and the mission takes the full band.',
-					),
-
 					// --- Our Story (Section 3) ---------------------------------
 					array(
 						'key'   => 'field_juiced_ab_story_tab',
@@ -170,7 +154,7 @@ add_action(
 						'label'        => 'Heading — line 1',
 						'name'         => 'about_story_lead',
 						'type'         => 'text',
-						'instructions' => 'First line, shown dark. e.g. "Blended with Purpose.".',
+						'instructions' => 'First line, shown in green. e.g. "Blended with Purpose.".',
 					),
 					array(
 						'key'          => 'field_juiced_ab_story_accent',
@@ -181,20 +165,19 @@ add_action(
 					),
 					array(
 						'key'          => 'field_juiced_ab_story_body',
-						'label'        => 'Story',
+						'label'        => 'Intro',
 						'name'         => 'about_story_body',
 						'type'         => 'textarea',
-						'rows'         => 7,
-						'instructions' => 'Separate paragraphs with a blank line.',
+						'rows'         => 4,
+						'instructions' => 'Sits under the heading, beside the timeline. Separate paragraphs with a blank line.',
 					),
 					array(
-						'key'           => 'field_juiced_ab_story_image',
-						'label'         => 'Photo',
-						'name'          => 'about_story_image',
-						'type'          => 'image',
-						'return_format' => 'array',
-						'preview_size'  => 'medium',
-						'instructions'  => 'Sits to the left of the story, rounded. Without one the text takes the full width.',
+						'key'          => 'field_juiced_ab_timeline_items',
+						'label'        => 'Timeline',
+						'name'         => 'about_timeline_items',
+						'type'         => 'textarea',
+						'rows'         => 6,
+						'instructions' => 'One milestone per line as "Year | Title | Description", oldest first. The year can be a word like "Next". The last line gets the orange dot. Clearing this hides the timeline and the intro takes the full width.',
 					),
 					array(
 						'key'          => 'field_juiced_ab_story_button_label',
@@ -211,7 +194,36 @@ add_action(
 						'instructions' => 'Where the button goes. The button stays hidden until this is set.',
 					),
 
-					// --- Owners (Section 4) ------------------------------------
+					// --- We Believe In (Section 4) -----------------------------
+					array(
+						'key'   => 'field_juiced_ab_believe_tab',
+						'label' => 'We Believe In',
+						'type'  => 'tab',
+					),
+					array(
+						'key'          => 'field_juiced_ab_believe_heading',
+						'label'        => 'Heading — green part',
+						'name'         => 'about_believe_heading',
+						'type'         => 'text',
+						'instructions' => 'e.g. "We Believe".',
+					),
+					array(
+						'key'          => 'field_juiced_ab_believe_accent',
+						'label'        => 'Heading — accent part',
+						'name'         => 'about_believe_accent',
+						'type'         => 'text',
+						'instructions' => 'Shown in orange. e.g. "In".',
+					),
+					array(
+						'key'          => 'field_juiced_ab_believe_items',
+						'label'        => 'Values',
+						'name'         => 'about_believe_items',
+						'type'         => 'textarea',
+						'rows'         => 5,
+						'instructions' => 'One card per line as "Title | Short description". The icon is picked from keywords in the title (health, community, positivity, growth). Clearing this hides the section.',
+					),
+
+					// --- Owners (Section 5) ------------------------------------
 					array(
 						'key'   => 'field_juiced_ab_owners_tab',
 						'label' => 'Owners',
@@ -283,7 +295,7 @@ add_action(
 						'instructions'  => 'Shown as a circle — a square crop works best.',
 					),
 
-					// --- Partners (Section 5) ----------------------------------
+					// --- Partners (Section 6) ----------------------------------
 					array(
 						'key'   => 'field_juiced_ab_partners_tab',
 						'label' => 'Partners',
@@ -298,7 +310,7 @@ add_action(
 					),
 				), $partner_fields, array(
 
-					// --- Community quote (Section 6) ---------------------------
+					// --- Community quote (Section 7) ---------------------------
 					array(
 						'key'   => 'field_juiced_ab_quote_tab',
 						'label' => 'Community Quote',
@@ -317,7 +329,7 @@ add_action(
 						'label'        => 'Attribution',
 						'name'         => 'about_quote_attribution',
 						'type'         => 'text',
-						'instructions' => 'Who said it, shown in green with a dash. e.g. "Community Member".',
+						'instructions' => 'Who said it, shown in orange with a dash. e.g. "Community Member".',
 					),
 					array(
 						'key'           => 'field_juiced_ab_quote_image',
@@ -326,7 +338,7 @@ add_action(
 						'type'          => 'image',
 						'return_format' => 'array',
 						'preview_size'  => 'medium',
-						'instructions'  => 'Fills the right side of the band and fades into the dark background — subject to the right of centre, since the quote covers the left.',
+						'instructions'  => 'Fills the right side of the band and fades into the green background — subject to the right of centre, since the quote covers the left.',
 					),
 				) ),
 				'location' => array(

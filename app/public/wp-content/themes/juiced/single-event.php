@@ -2,23 +2,19 @@
 /**
  * Single Event — /event/{slug}.
  *
- * Built from the approved detail-header mockup: breadcrumb up top, then a
- * two-column header on the same cream ground as the Events page — photo left,
- * details right. The details column runs category pill, title, description,
- * icon meta rows (date / time / location, with the cost as a soft pill on the
- * date row), then the RSVP and Add to Calendar buttons. Below it, a "More
- * Upcoming Events" strip reuses the Events page's poster cards, so clicking
- * around events never changes visual language.
- *
- * The accent color comes from the event's category (juiced_event_category_style),
- * not the listing's positional palette — a card's color depends on where it
- * happened to sit that week, which is nothing to anchor a permalink page to.
+ * Garden look, matching the Events page: a green band under the leafy header
+ * (header.php turns the garden on for is_singular('event')) holding the
+ * breadcrumb, category eyebrow, big title and excerpt, then When / Time /
+ * Where as three boxed facts, and the price beside the Sign up and Add to
+ * Calendar buttons. The flyer sits to the right when there is one. Below, on
+ * cream, the full write-up ("The details") and "More coming up" — the next
+ * few events as card-row.php rows.
  *
  * Everything renders from the fields the client already fills in on the Event
- * itself (plugin: juiced-cpt); there are no page-local ACF fields here. Rows
+ * itself (plugin: juiced-cpt); there are no page-local ACF fields here. Facts
  * with nothing behind them hide — except cost, which defaults to "Free" to
- * match the cards. RSVP stays hidden until signup_url is set, so it can never
- * lead nowhere; a one-off whose run is over drops both buttons and says so.
+ * match the cards. Sign up stays hidden until signup_url is set, so it can
+ * never lead nowhere; a one-off whose run is over drops the buttons and says so.
  *
  * @package Juiced
  */
@@ -130,158 +126,162 @@ while ( have_posts() ) :
 	}
 	?>
 
-	<section class="bg-brand-cream bg-grain">
-		<div class="mx-auto max-w-7xl px-4 pt-6 pb-14 md:pt-8 md:pb-16">
+	<!-- Header: the Garden green band, details left, flyer right. -->
+	<section class="relative -mt-px bg-brand-forest bg-garden text-brand-cream">
+		<div class="mx-auto max-w-7xl px-4 pt-6 pb-14 md:pt-8 md:pb-20">
 
 			<!-- Breadcrumb -->
 			<nav aria-label="<?php esc_attr_e( 'Breadcrumb', 'juiced' ); ?>" class="flex flex-wrap items-center gap-2 text-sm">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="text-brand-bark/60 transition-colors hover:text-brand-green"><?php esc_html_e( 'Home', 'juiced' ); ?></a>
-				<span class="text-brand-bark/40" aria-hidden="true">&rsaquo;</span>
-				<a href="<?php echo esc_url( juiced_events_page_url() ); ?>" class="text-brand-bark/60 transition-colors hover:text-brand-green"><?php esc_html_e( 'Events', 'juiced' ); ?></a>
-				<span class="text-brand-bark/40" aria-hidden="true">&rsaquo;</span>
-				<span class="font-semibold text-brand-bark" aria-current="page"><?php the_title(); ?></span>
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="text-brand-mint/80 transition-colors hover:text-brand-gold"><?php esc_html_e( 'Home', 'juiced' ); ?></a>
+				<span class="text-brand-mint/50" aria-hidden="true">&rsaquo;</span>
+				<a href="<?php echo esc_url( juiced_events_page_url() ); ?>" class="text-brand-mint/80 transition-colors hover:text-brand-gold"><?php esc_html_e( 'Events', 'juiced' ); ?></a>
+				<span class="text-brand-mint/50" aria-hidden="true">&rsaquo;</span>
+				<span class="font-semibold text-brand-cream" aria-current="page"><?php the_title(); ?></span>
 			</nav>
 
-			<!-- Detail header: photo left, details right -->
-			<div class="mt-6 grid items-start gap-8 md:mt-8 <?php echo $image ? 'lg:grid-cols-2 lg:gap-12' : ''; ?>">
+			<div class="mt-8 grid items-center gap-10 md:mt-10 <?php echo $image ? 'lg:grid-cols-12 lg:gap-14' : ''; ?>">
 
-				<?php if ( $image ) : ?>
-					<img src="<?php echo esc_url( $image ); ?>"
-						 alt="<?php echo esc_attr( sprintf( /* translators: %s: event title. */ __( 'Flyer for %s', 'juiced' ), get_the_title() ) ); ?>"
-						 class="w-full rounded-2xl shadow-sm ring-1 ring-black/5" loading="eager" fetchpriority="high" />
-				<?php endif; ?>
-
-				<div class="<?php echo $image ? '' : 'max-w-2xl'; ?>">
+				<div class="<?php echo $image ? 'lg:col-span-7' : 'max-w-3xl'; ?>">
 
 					<?php if ( $term ) : ?>
-						<span class="inline-flex items-center gap-1.5 rounded-full <?php echo esc_attr( $style['bg'] ); ?> px-3.5 py-1.5 text-sm font-semibold text-white">
+						<p class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.22em] text-brand-gold">
 							<?php echo $style['icon']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 							<?php echo esc_html( $term->name ); ?>
-						</span>
+						</p>
 					<?php endif; ?>
 
-					<h1 class="mt-4 font-display text-4xl leading-[1.05] text-brand-bark md:text-5xl">
+					<h1 class="mt-4 font-display font-bold leading-[.95] tracking-[-.02em] text-[clamp(2.75rem,6vw,4.5rem)]">
 						<?php the_title(); ?>
 					</h1>
 
 					<?php if ( has_excerpt() ) : ?>
-						<p class="mt-3 text-lg font-semibold leading-snug text-brand-bark md:text-xl">
+						<p class="mt-5 max-w-xl text-lg font-medium leading-relaxed text-brand-mint md:text-xl">
 							<?php echo esc_html( wp_strip_all_tags( get_the_excerpt() ) ); ?>
 						</p>
 					<?php endif; ?>
 
-					<?php if ( get_the_content() ) : ?>
-						<div class="entry-content mt-5">
-							<?php the_content(); ?>
-						</div>
+					<!-- When / time / where, as three boxed facts. -->
+					<?php if ( $date_row || $start || $location ) : ?>
+						<dl class="mt-8 grid gap-3 sm:grid-cols-3">
+							<?php
+							$facts = array(
+								array( 'calendar', __( 'When', 'juiced' ), $date_row ),
+								array( 'clock', __( 'Time', 'juiced' ), $start ? $start . ( $end ? ' – ' . $end : '' ) : '' ),
+								array( 'pin', __( 'Where', 'juiced' ), $location ),
+							);
+							foreach ( $facts as $fact ) :
+								if ( ! $fact[2] ) {
+									continue;
+								}
+								?>
+								<div class="rounded-2xl border border-brand-mint/25 px-4 py-3.5">
+									<dt class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.18em] text-brand-mint/80">
+										<span class="text-brand-gold"><?php echo $icons[ $fact[0] ]; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?></span>
+										<?php echo esc_html( $fact[1] ); ?>
+									</dt>
+									<dd class="mt-1.5 font-display text-lg font-semibold leading-snug"><?php echo esc_html( $fact[2] ); ?></dd>
+								</div>
+							<?php endforeach; ?>
+						</dl>
 					<?php endif; ?>
 
-					<!-- Meta rows. Cost rides the date row as a soft pill, per the mockup. -->
-					<div class="mt-7 space-y-3.5">
-						<?php if ( $date_row ) : ?>
-							<div class="flex flex-wrap items-center gap-3">
-								<span class="inline-flex items-center gap-3 font-medium text-brand-bark">
-									<span class="<?php echo esc_attr( $style['text'] ); ?>"><?php echo $icons['calendar']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?></span>
-									<?php echo esc_html( $date_row ); ?>
-								</span>
-								<?php if ( $is_past ) : ?>
-									<!-- Ended events have no action row, so the cost pill rides
-										 the date row here instead of sitting beside the buttons. -->
-									<span class="ml-auto rounded-xl <?php echo esc_attr( $style['soft'] . ' ' . $style['text'] ); ?> px-4 py-1.5 text-sm font-semibold">
-										<?php echo esc_html( $cost ); ?>
-									</span>
-								<?php endif; ?>
-							</div>
-						<?php endif; ?>
-
-						<?php if ( $start ) : ?>
-							<div class="flex items-center gap-3 font-medium text-brand-bark">
-								<span class="<?php echo esc_attr( $style['text'] ); ?>"><?php echo $icons['clock']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?></span>
-								<?php echo esc_html( $start . ( $end ? ' – ' . $end : '' ) ); ?>
-							</div>
-						<?php endif; ?>
-
-						<?php if ( $location ) : ?>
-							<div class="flex items-center gap-3 font-medium text-brand-bark">
-								<span class="<?php echo esc_attr( $style['text'] ); ?>"><?php echo $icons['pin']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?></span>
-								<?php echo esc_html( $location ); ?>
-							</div>
-						<?php endif; ?>
-					</div>
-
 					<?php if ( $is_past ) : ?>
-						<p class="mt-6 rounded-xl bg-black/[0.04] px-4 py-3 text-sm text-brand-bark/60">
+						<p class="mt-8 rounded-2xl bg-brand-cream/10 px-5 py-4 text-brand-mint">
 							<?php esc_html_e( 'This event has ended — but there’s always something coming up below.', 'juiced' ); ?>
 						</p>
 					<?php else : ?>
-						<div class="mt-8">
-							<div class="flex flex-wrap items-center gap-3">
-							<span class="rounded-xl <?php echo esc_attr( $style['soft'] . ' ' . $style['text'] ); ?> px-5 py-2.5 text-lg font-bold">
-								<?php echo esc_html( $cost ); ?>
-							</span>
+						<div class="mt-8 flex flex-wrap items-center gap-3">
+
+							<span class="mr-2 font-display text-3xl font-bold text-brand-gold"><?php echo esc_html( $cost ); ?></span>
+
+							<!-- External RSVP / tickets (Eventbrite, Meetup, …) — the event's
+								 signup_url field. Hidden until it's filled in, so it can never
+								 lead nowhere. -->
+							<?php if ( $signup ) : ?>
+								<a href="<?php echo esc_url( $signup ); ?>" target="_blank" rel="noopener"
+								   class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-7 py-3.5 font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+									<?php esc_html_e( 'Sign up', 'juiced' ); ?>
+									<span aria-hidden="true">&rarr;</span>
+								</a>
+							<?php endif; ?>
 
 							<?php if ( $span ) : ?>
 								<!-- A native <details> dropdown: works with JS off, closes on
 									 a second click, and needs no Alpine on this template. -->
 								<details class="relative">
-									<summary class="inline-flex cursor-pointer select-none list-none items-center gap-2 rounded-full border border-brand-bark/20 bg-white px-6 py-3 font-semibold text-brand-bark transition-colors hover:border-brand-green hover:text-brand-green [&::-webkit-details-marker]:hidden">
+									<summary class="inline-flex cursor-pointer select-none list-none items-center gap-2 rounded-full border-2 border-brand-cream px-6 py-3 font-bold text-brand-cream transition-colors hover:bg-brand-cream hover:text-brand-forest [&::-webkit-details-marker]:hidden">
 										<?php echo $icons['calendar']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 										<?php esc_html_e( 'Add to Calendar', 'juiced' ); ?>
 										<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
 									</summary>
-									<div class="absolute left-0 top-full z-10 mt-2 w-60 rounded-2xl bg-white p-1.5 shadow-lg ring-1 ring-black/10">
+									<div class="absolute left-0 top-full z-10 mt-2 w-64 rounded-2xl bg-white p-1.5 text-brand-ink shadow-lg ring-1 ring-brand-forest/15">
 										<a href="<?php echo esc_url( $gcal ); ?>" target="_blank" rel="noopener"
-										   class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-brand-bark transition-colors hover:bg-black/[0.04]">
+										   class="block rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors hover:bg-brand-forest/5 hover:text-brand-forest">
 											<?php esc_html_e( 'Google Calendar', 'juiced' ); ?>
 										</a>
 										<a href="<?php echo esc_url( $outlook ); ?>" target="_blank" rel="noopener"
-										   class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-brand-bark transition-colors hover:bg-black/[0.04]">
+										   class="block rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors hover:bg-brand-forest/5 hover:text-brand-forest">
 											<?php esc_html_e( 'Outlook.com', 'juiced' ); ?>
 										</a>
 										<a href="<?php echo esc_url( $ics ); ?>"
-										   class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-brand-bark transition-colors hover:bg-black/[0.04]">
+										   class="block rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors hover:bg-brand-forest/5 hover:text-brand-forest">
 											<?php esc_html_e( 'Apple Calendar & others (.ics)', 'juiced' ); ?>
 										</a>
 									</div>
 								</details>
 							<?php endif; ?>
-							</div>
 
-							<!-- External RSVP / tickets (Eventbrite, Meetup, …) — the event's
-								 signup_url field, on its own line under the row above. Hidden
-								 until it's filled in, so it can never lead nowhere. -->
-							<?php if ( $signup ) : ?>
-								<a href="<?php echo esc_url( $signup ); ?>" target="_blank" rel="noopener"
-								   class="mt-4 inline-flex items-center gap-2 rounded-full bg-brand-gold px-7 py-3 font-semibold text-white transition-colors hover:bg-brand-green">
-									<?php esc_html_e( 'RSVP', 'juiced' ); ?>
-									<span aria-hidden="true">&rarr;</span>
-								</a>
-							<?php endif; ?>
 						</div>
 					<?php endif; ?>
 
 				</div>
+
+				<?php if ( $image ) : ?>
+					<div class="lg:col-span-5">
+						<img src="<?php echo esc_url( $image ); ?>"
+							 alt="<?php echo esc_attr( sprintf( /* translators: %s: event title. */ __( 'Flyer for %s', 'juiced' ), get_the_title() ) ); ?>"
+							 class="mx-auto w-full max-w-md rounded-3xl ring-4 ring-brand-cream/15 lg:max-w-none" loading="eager" fetchpriority="high" />
+					</div>
+				<?php endif; ?>
+
 			</div>
 		</div>
 	</section>
 
-	<!-- More upcoming events — the Events page's list-view rows, stacked. -->
+	<!-- The full write-up, on cream. -->
+	<?php if ( get_the_content() ) : ?>
+		<section class="bg-brand-cream text-brand-ink">
+			<div class="mx-auto grid max-w-7xl gap-6 px-4 py-14 md:py-20 lg:grid-cols-12 lg:gap-14">
+				<div class="lg:col-span-4">
+					<p class="text-xs font-bold uppercase tracking-[.22em] text-brand-rust"><?php esc_html_e( 'About this event', 'juiced' ); ?></p>
+					<h2 class="mt-3 font-display text-[clamp(2.25rem,4.5vw,3.25rem)] font-bold leading-none text-brand-forest">
+						<?php esc_html_e( 'The', 'juiced' ); ?> <span class="text-brand-gold"><?php esc_html_e( 'details', 'juiced' ); ?></span>
+					</h2>
+				</div>
+				<div class="entry-content lg:col-span-8">
+					<?php the_content(); ?>
+				</div>
+			</div>
+		</section>
+	<?php endif; ?>
+
+	<!-- More upcoming events — text-only rows. -->
 	<?php if ( $more ) : ?>
-		<section class="bg-brand-cream bg-grain">
-			<div class="mx-auto max-w-7xl px-4 pb-16 md:pb-24">
+		<section class="bg-brand-cream text-brand-ink <?php echo get_the_content() ? 'border-t border-brand-forest/15' : ''; ?>">
+			<div class="mx-auto max-w-7xl px-4 py-14 md:py-20">
 
 				<div class="flex flex-wrap items-end justify-between gap-4">
-					<h2 class="font-display text-2xl text-brand-bark md:text-3xl">
-						<?php esc_html_e( 'More Upcoming Events', 'juiced' ); ?>
+					<h2 class="font-display text-[clamp(2.25rem,4.5vw,3.25rem)] font-bold leading-none text-brand-forest">
+						<?php esc_html_e( 'More', 'juiced' ); ?> <span class="text-brand-gold"><?php esc_html_e( 'coming up', 'juiced' ); ?></span>
 					</h2>
 					<a href="<?php echo esc_url( juiced_events_page_url() ); ?>"
-					   class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-gold hover:underline">
-						<?php esc_html_e( 'View All Events', 'juiced' ); ?>
+					   class="inline-flex items-center gap-1.5 rounded-full border-2 border-brand-forest px-5 py-2.5 text-sm font-bold text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream">
+						<?php esc_html_e( 'View all events', 'juiced' ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</a>
 				</div>
 
-				<div class="mt-6 flex flex-col gap-4">
+				<div class="mt-8 flex flex-col gap-4">
 					<?php foreach ( $more as $i => $row ) : ?>
 						<?php
 						$card = juiced_event_card_data( $row, $i );

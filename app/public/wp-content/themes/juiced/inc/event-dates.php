@@ -388,7 +388,10 @@ function juiced_event_occurs_on( array $event, DateTimeImmutable $date, DateTime
 }
 
 /**
- * Every published event's date config plus its calendar dot color, read once.
+ * Every published event's date config plus what the day panel shows, read once.
+ *
+ * Sorted by start time (then title) so a day's events list in the order they
+ * happen — the planner keeps this order when it groups events by day.
  *
  * @return array<int, array>
  */
@@ -408,92 +411,103 @@ function juiced_event_calendar_config() {
 
     $events = [];
     foreach ( $query->posts as $post ) {
-        $terms = get_the_terms( $post->ID, 'event_category' );
-        $slug  = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
-        $style = juiced_event_category_style( $slug );
+        $event_date = get_field( 'event_date', $post->ID );
+        $start_raw  = get_field( 'start_time', $post->ID );
+        $start      = juiced_format_event_time( $start_raw );
+        $end        = juiced_format_event_time( get_field( 'end_time', $post->ID ) );
+        $cost       = get_field( 'cost', $post->ID );
 
         $events[] = [
             'title'      => $post->post_title,
             'url'        => get_permalink( $post->ID ),
-            'dot'        => $style['bg'],
-            'event_date' => get_field( 'event_date', $post->ID ),
+            'schedule'   => juiced_event_schedule_label( $post->ID ),
+            'time'       => $start && $end ? $start . ' – ' . $end : $start,
+            'location'   => (string) get_field( 'location', $post->ID ),
+            'cost'       => $cost ? $cost : __( 'Free', 'juiced' ),
+            'signup'     => (string) get_field( 'signup_url', $post->ID ),
+            'sort'       => $start_raw ? sprintf( '%02d:%02d', ...juiced_parse_time( $start_raw ) ) : '99:99',
+            'event_date' => $event_date,
             'end_date'   => get_field( 'end_date', $post->ID ),
             'days'       => juiced_normalize_days( get_field( 'day_of_week', $post->ID ) ),
             'ordinals'   => get_field( 'monthly_ordinals', $post->ID ),
         ];
     }
+
+    usort(
+        $events,
+        static function ( $a, $b ) {
+            return [ $a['sort'], $a['title'] ] <=> [ $b['sort'], $b['title'] ];
+        }
+    );
     return $events;
 }
 
 /**
- * Calendar data for a run of months starting with the current one.
+ * Data for the Events page planner (template-parts/events/planner.php): a run
+ * of months from the current one, plus one table of the events they reference.
  *
- * Shaped for the sidebar widget (template-parts/events/calendar.php), which
- * draws the grid client-side: each month carries only what a grid can't derive
- * — its label, how many days it has, which weekday it starts on, and its dots —
- * and the component fills in the cells. Sending finished cell arrays instead
- * would be several times the JSON for the same picture.
+ * Shaped for a grid drawn client-side: each month carries only what a grid
+ * can't derive — label, length, starting weekday — and `ev`, mapping a day
+ * number to the indexes of the events on it. Events sit once in `events` rather
+ * than repeated on every day a weekly one falls on, which keeps the JSON to a
+ * fraction of the size.
  *
- * Dots are keyed by day number. The design has one dot per day, so where
- * several events share a day the first by title wins the color and the link;
- * 'n' carries the true count, which the widget shows as a badge, and 'm' the
- * other titles for the tooltip. The rest of that day's events are reachable
- * from the list beside the calendar, not from the dot — a known limit of one
- * dot per day.
+ * An event's `s` flag marks a one-off ("special") so the calendar can dot it
+ * orange; recurring events dot green.
  *
  * @param int $count How many months, including the current one.
- * @return array<int, array>
+ * @return array{events: array<int, array>, months: array<int, array>}
  */
-function juiced_event_calendar_months( $count = 12 ) {
+function juiced_event_planner_data( $count = 12 ) {
     $tz     = wp_timezone();
-    $cursor = ( new DateTimeImmutable( 'now', $tz ) )->modify( 'first day of this month' )->setTime( 0, 0, 0 );
-    $events = juiced_event_calendar_config();
+    $now    = new DateTimeImmutable( 'now', $tz );
+    $cursor = $now->modify( 'first day of this month' )->setTime( 0, 0, 0 );
+    $config = juiced_event_calendar_config();
+
+    $events = [];
+    foreach ( $config as $event ) {
+        $events[] = [
+            't' => $event['title'],
+            'u' => $event['url'],
+            'k' => $event['schedule'],
+            'h' => $event['time'],
+            'l' => $event['location'],
+            'p' => $event['cost'],
+            'g' => $event['signup'] ? esc_url_raw( $event['signup'] ) : '',
+            's' => ! empty( $event['event_date'] ),
+        ];
+    }
 
     $months = [];
     for ( $m = 0; $m < (int) $count; $m++ ) {
         $first = $cursor->modify( "+{$m} months" );
         $days  = (int) $first->format( 't' );
-        $dots  = [];
+        $on    = [];
 
         for ( $d = 1; $d <= $days; $d++ ) {
             $date = $first->setDate( (int) $first->format( 'Y' ), (int) $first->format( 'n' ), $d );
-
-            $hits = [];
-            foreach ( $events as $event ) {
+            foreach ( $config as $k => $event ) {
                 if ( juiced_event_occurs_on( $event, $date, $tz ) ) {
-                    $hits[] = $event;
+                    $on[ $d ][] = $k;
                 }
             }
-            if ( ! $hits ) {
-                continue;
-            }
-            $dot = [
-                'c' => $hits[0]['dot'],
-                't' => $hits[0]['title'],
-                'u' => $hits[0]['url'],
-                'n' => count( $hits ),
-            ];
-            // Only carried when there's something to name — most days have one
-            // event, and an empty key on all 116 of them is dead weight.
-            if ( count( $hits ) > 1 ) {
-                $dot['m'] = wp_list_pluck( array_slice( $hits, 1 ), 'title' );
-            }
-            $dots[ (string) $d ] = $dot;
         }
 
         $months[] = [
             'key'      => $first->format( 'Y-m' ),
             'label'    => $first->format( 'F Y' ),
+            'y'        => (int) $first->format( 'Y' ),
+            'm'        => (int) $first->format( 'n' ),
             'lead'     => (int) $first->format( 'w' ), // Blank cells before the 1st.
             'days'     => $days,
             'prevDays' => (int) $first->modify( '-1 day' )->format( 't' ),
-            'today'    => $first->format( 'Y-m' ) === ( new DateTimeImmutable( 'now', $tz ) )->format( 'Y-m' )
-                ? (int) ( new DateTimeImmutable( 'now', $tz ) )->format( 'j' )
-                : 0,
-            'dots'     => $dots,
+            'today'    => 0 === $m ? (int) $now->format( 'j' ) : 0,
+            // An object even when empty, so the client can index it by day.
+            'ev'       => (object) $on,
         ];
     }
-    return $months;
+
+    return [ 'events' => $events, 'months' => $months ];
 }
 
 /**
@@ -534,4 +548,27 @@ function juiced_upcoming_events( $limit = 3 ) {
     );
 
     return array_slice( $rows, 0, $limit );
+}
+
+/**
+ * The featured event among upcoming rows (from juiced_upcoming_events()): the
+ * event picked in $pick if it is still upcoming, else the soonest one-off
+ * (non-recurring) event. Null when there is neither.
+ *
+ * @param array $rows Upcoming rows, soonest first.
+ * @param int   $pick Event post ID chosen in the admin, or 0.
+ * @return array|null
+ */
+function juiced_featured_event( array $rows, $pick = 0 ) {
+    $pick     = (int) $pick;
+    $fallback = null;
+    foreach ( $rows as $row ) {
+        if ( $pick && $row['post']->ID === $pick ) {
+            return $row;
+        }
+        if ( ! $fallback && ! $row['recurring'] ) {
+            $fallback = $row;
+        }
+    }
+    return $fallback;
 }

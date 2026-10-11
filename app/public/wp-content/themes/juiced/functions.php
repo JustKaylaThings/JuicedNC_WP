@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'JUICED_VERSION', '0.1.0' );
+define( 'JUICED_VERSION', '0.1.2' );
 
 /**
  * Theme supports + navigation menus.

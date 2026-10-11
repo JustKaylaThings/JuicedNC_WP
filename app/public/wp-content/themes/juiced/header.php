@@ -5,8 +5,9 @@
  * Opens <html>, prints <head> via wp_head(), and renders the dark site header:
  * optional scheduled announcement bar, logo, primary nav, and the Order Ahead
  * button. The header sits on the page's first section, so it shares its
- * background: deep green on the homepage (2026 "Garden" redesign), ink on the
- * other pages until they're redesigned too.
+ * background: deep green with the leaf pattern on the pages redesigned in the
+ * 2026 "Garden" look (homepage, Locations, Events, About, Contact), ink on the others
+ * until they're redesigned too.
  *
  * Below md the nav collapses behind the hamburger, which toggles an Alpine
  * drawer under the bar: the same wp_nav_menu stacked (.mobile-nav), plus an
@@ -44,9 +45,20 @@ if ( $juiced_announcement ) :
 	</div>
 <?php endif; ?>
 
-<header class="<?php echo is_front_page() ? 'bg-brand-forest' : 'bg-brand-ink'; ?> text-brand-cream" x-data="{ menuOpen: false }"
+<?php $juiced_garden = is_front_page() || is_page_template( array( 'page-templates/locations.php', 'page-templates/events.php', 'page-templates/about.php', 'page-templates/contact.php', 'page-templates/host-event.php', 'page-templates/careers.php', 'page-templates/menu.php', 'page-templates/community.php' ) ) || is_singular( array( 'event', 'spotlight' ) ); ?>
+<!-- Sticky: stays pinned while scrolling and compacts (smaller logo, less
+	 padding, a shadow) once the page leaves the top. Compacting makes the
+	 header about 54px shorter, and the browser's scroll anchoring pulls the
+	 scroll position back by that much, so one threshold would flip it straight
+	 back and the header twitches. It compacts past 72px and only expands again
+	 under 8px, a gap wider than that jump. -->
+<header class="site-header <?php echo $juiced_garden ? 'bg-brand-forest bg-garden bg-garden-above' : 'bg-brand-ink'; ?> text-brand-cream"
+		x-data="{ menuOpen: false, scrolled: false }"
+		x-init="scrolled = window.scrollY > 72"
+		@scroll.window.passive="scrolled = window.scrollY > (scrolled ? 8 : 72)"
+		:class="{ 'is-scrolled': scrolled }"
 		@click.outside="menuOpen = false" @keydown.escape.window="menuOpen = false">
-	<div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 py-4">
+	<div class="site-header__bar mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 py-4">
 
 		<div class="shrink-0">
 			<?php if ( has_custom_logo() ) : ?>
@@ -98,7 +110,7 @@ if ( $juiced_announcement ) :
 		 x-transition:enter-start="-translate-y-2 opacity-0"
 		 x-transition:enter-end="translate-y-0 opacity-100"
 		 aria-label="<?php esc_attr_e( 'Primary', 'juiced' ); ?>">
-		<div class="mx-auto max-w-7xl px-4 py-4">
+		<div class="mx-auto max-w-7xl px-4 py-4 max-h-[calc(100dvh-5rem)] overflow-y-auto">
 			<?php
 			wp_nav_menu(
 				array(

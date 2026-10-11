@@ -126,7 +126,7 @@ add_action(
 						'label'        => 'Photo 1 — location pill',
 						'name'         => 'locations_hero_label1',
 						'type'         => 'text',
-						'instructions' => 'The green pill over photo 1. e.g. "North Raleigh". Clearing this hides the pill.',
+						'instructions' => 'The orange pill over photo 1. e.g. "North Raleigh". Clearing this hides the pill.',
 					),
 					array(
 						'key'           => 'field_juiced_loc_hero_image2',
@@ -142,7 +142,7 @@ add_action(
 						'label'        => 'Photo 2 — location pill',
 						'name'         => 'locations_hero_label2',
 						'type'         => 'text',
-						'instructions' => 'The pink pill over photo 2. e.g. "Downtown Raleigh". Clearing this hides the pill.',
+						'instructions' => 'The cream pill over photo 2. e.g. "Downtown Raleigh". Clearing this hides the pill.',
 					),
 
 					// --- Find Your Juiced! (Section 2) -------------------------
@@ -152,8 +152,15 @@ add_action(
 						'type'  => 'tab',
 					),
 					array(
+						'key'          => 'field_juiced_loc_find_eyebrow',
+						'label'        => 'Small label above the heading',
+						'name'         => 'locations_find_eyebrow',
+						'type'         => 'text',
+						'instructions' => 'e.g. "Visit us". Clearing this hides it.',
+					),
+					array(
 						'key'          => 'field_juiced_loc_find_lead',
-						'label'        => 'Heading — dark part',
+						'label'        => 'Heading — green part',
 						'name'         => 'locations_find_lead',
 						'type'         => 'text',
 						'instructions' => 'e.g. "Find Your".',
@@ -163,7 +170,7 @@ add_action(
 						'label'        => 'Heading — accent part',
 						'name'         => 'locations_find_accent',
 						'type'         => 'text',
-						'instructions' => 'Shown in orange after the dark part. e.g. "Juiced!".',
+						'instructions' => 'Shown in orange after the green part. e.g. "Juiced!".',
 					),
 					array(
 						'key'          => 'field_juiced_loc_directions_label',

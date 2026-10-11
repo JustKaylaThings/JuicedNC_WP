@@ -22,4 +22,6 @@ get_template_part( 'template-parts/contact/connect' );
 
 get_template_part( 'template-parts/contact/visit' );
 
+get_template_part( 'template-parts/contact/host' );
+
 get_footer();

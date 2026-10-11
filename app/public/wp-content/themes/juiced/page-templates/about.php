@@ -21,6 +21,8 @@ get_template_part( 'template-parts/about/mission' );
 
 get_template_part( 'template-parts/about/story' );
 
+get_template_part( 'template-parts/about/believe' );
+
 get_template_part( 'template-parts/about/owners' );
 
 get_template_part( 'template-parts/about/partners' );

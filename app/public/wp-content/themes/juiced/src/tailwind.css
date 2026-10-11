@@ -48,10 +48,26 @@
   --font-body: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
 }
 
-html,
+/* The page is cream, but the canvas behind it is the footer's deep green, so
+   a short page, or the trackpad bounce past the bottom, runs on as footer
+   instead of showing a cream strip under it. (The header is green too, so the
+   bounce at the top matches.) overscroll-behavior only takes effect on the
+   root element. */
+html {
+  background: var(--color-brand-forest-deep);
+  overscroll-behavior-y: none;
+}
+
 body {
   background: var(--color-brand-paper);
   color: var(--color-brand-ink);
+}
+
+/* In-page links (e.g. About's "Our Story" button) glide instead of jumping. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -59,7 +75,6 @@ body {
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
-  overscroll-behavior-y: none;
 }
 
 /* Editorial defaults — rounded display face sets the tone. (The optical-sizing
@@ -88,6 +103,94 @@ body {
     radial-gradient(rgba(92, 64, 51, 0.04) 1px, transparent 1px);
   background-size: 6px 6px, 11px 11px;
   background-position: 0 0, 3px 4px;
+}
+
+/* "Garden" leaf pattern on the homepage's deep-green header, hero and community band.
+   The header anchors the tile to its bottom edge and the hero to its top,
+   so the leaves run on across the seam as one surface. The tile carries its
+   own faint opacity; the base colour comes from the element's bg class. */
+.bg-garden {
+  background-image: url("images/garden-leaves.svg");
+  background-size: 220px 220px;
+  background-position: left top;
+}
+.bg-garden-above {
+  background-position: left bottom;
+}
+
+/* Header logo. the_custom_logo() prints the upload at its natural size, so a
+   taller file pushes the hero (and its ticker) below the fold. Cap it at the
+   height the header was designed around. */
+.custom-logo {
+  display: block;
+  width: auto;
+  max-height: 94px;
+}
+
+/* Sticky header. Logged-in editors get WordPress's admin bar pinned at the
+   top, so the header sits below it; at 600px and under the admin bar scrolls
+   away with the page, so the header pins to the very top there. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  transition: box-shadow 0.2s ease;
+}
+.admin-bar .site-header {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+@media (max-width: 600px) {
+  .admin-bar .site-header {
+    top: 0;
+  }
+}
+.site-header__bar {
+  transition: padding 0.2s ease;
+}
+.site-header .custom-logo {
+  transition: max-height 0.2s ease;
+}
+.site-header.is-scrolled {
+  box-shadow: 0 6px 20px rgba(18, 58, 27, 0.25);
+}
+.site-header.is-scrolled .site-header__bar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.site-header.is-scrolled .custom-logo {
+  max-height: 56px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header__bar,
+  .site-header .custom-logo {
+    transition: none;
+  }
+}
+
+/* Keep in-page jumps (skip link, #anchors) from landing under the sticky header. */
+html {
+  scroll-padding-top: 7rem;
+}
+
+/* Menu page section bar: sticks just under the site header (main.js sets
+   --site-header-h as the header compacts). */
+.menu-section-bar {
+  position: sticky;
+  top: var(--site-header-h, 72px);
+  z-index: 30;
+}
+.admin-bar .menu-section-bar {
+  top: calc(var(--wp-admin--admin-bar--height, 32px) + var(--site-header-h, 72px));
+}
+@media (max-width: 600px) {
+  .admin-bar .menu-section-bar {
+    top: var(--site-header-h, 72px);
+  }
+}
+/* …and in-page jumps clear both bars. */
+html:has(.menu-section-bar) {
+  scroll-padding-top: calc(var(--site-header-h, 72px) + 6.5rem);
 }
 
 /* Hairline divider */
@@ -245,8 +348,19 @@ body {
 .juiced-marquee {
   animation: juiced-marquee 45s linear infinite;
 }
+/* Homepage reviews strip (community.php): slower, pauses on hover or focus.
+   Reduced motion drops the loop copy and lets the row scroll by hand. */
+.juiced-marquee--reviews {
+  animation-duration: 60s;
+}
+.juiced-reviews:hover .juiced-marquee,
+.juiced-reviews:focus-within .juiced-marquee {
+  animation-play-state: paused;
+}
 @media (prefers-reduced-motion: reduce) {
   .juiced-marquee { animation: none; }
+  .juiced-reviews { overflow-x: auto; }
+  .juiced-reviews .juiced-marquee > [aria-hidden="true"] { display: none; }
 }
 
 /* Mobile nav reveal */

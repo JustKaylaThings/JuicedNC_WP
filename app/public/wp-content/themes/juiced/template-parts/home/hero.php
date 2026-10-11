@@ -5,7 +5,9 @@
  * Deep-green band that continues the header: a huge two-tone headline, a short
  * intro with two buttons (top right on wide screens, under the headline below
  * that), a row of four captioned community photos along the bottom edge, and
- * a scrolling orange ticker of weekly events.
+ * a scrolling orange ticker of weekly events. The faint leaf pattern (.bg-garden,
+ * src/tailwind.css) continues from the header above; -mt-px tucks the hero
+ * under the header so no hairline of the page background shows at the seam.
  *
  * All copy, photos and ticker items are ACF-editable on the Home page
  * (inc/acf-homepage.php); defaults match the approved mockup. Photo slots with
@@ -16,7 +18,7 @@
 
 $lead      = juiced_field( 'hero_headline_lead', 'Health &' );
 $accent    = juiced_field( 'hero_headline_accent', 'Community.' );
-$subtext   = juiced_field( 'hero_subtext', 'Two Raleigh neighborhoods. One Juiced! family. Fresh juice, real people, and something happening every week.' );
+$subtext   = juiced_field( 'hero_subtext', 'Your neighborhood juice bar. Serving our Southeast Raleigh community with fresh juices, smoothies, herbal teas, and much more.' );
 $primary   = juiced_field( 'hero_primary_label', 'Join us this week' );
 $primary_u = juiced_field( 'hero_primary_url', juiced_events_page_url() );
 $second    = juiced_field( 'hero_secondary_label', 'Order' );
@@ -37,10 +39,10 @@ foreach ( $default_captions as $i => $default_caption ) {
 	);
 }
 
-$ticker = juiced_field( 'hero_ticker', "Open Mic Thursdays\nIsekai Nights\nWork Remote Mondays\nBoard Game Nights\nFresh Juice\nSea Moss\nHerb Library" );
+$ticker = juiced_field( 'hero_ticker', "Open Mic Thursdays\nIsekai Nights\nWork Remote Mondays\nBoard Game Nights\nFresh Juice\nSea Moss" );
 $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (string) $ticker ) ) ) );
 ?>
-<section class="relative bg-brand-forest text-brand-cream overflow-hidden">
+<section class="relative -mt-px bg-brand-forest bg-garden text-brand-cream overflow-hidden">
 	<div class="mx-auto max-w-7xl px-4 pt-6 md:pt-10">
 
 		<div class="xl:relative">

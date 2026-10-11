@@ -8,115 +8,159 @@
 (function () {
   'use strict';
 
-  /**
-   * Events page — filter + layout state.
-   *
-   * A store rather than an x-data component because two sibling sections use
-   * it: the "Find Your Vibe" filter bar (template-parts/events/filters.php)
-   * writes it, and the listing below reacts to it. A shared store keeps them
-   * independent partials instead of forcing one to nest inside the other's
-   * scope just to share three fields.
-   *
-   * category: 'all' or an event_category term slug.
-   * layout:   'grid' or 'list'.
-   * query:    the filter bar's search box, matched against each card's haystack.
-   *
-   * Both sections render fully server-side, so with JS off every event stays
-   * visible in the default layout — the filter just stops narrowing.
-   */
   document.addEventListener('alpine:init', function () {
-    window.Alpine.store('events', {
-      category: 'all',
-      layout: 'grid',
-      query: '',
-
-      /**
-       * Should a card show under the current filter? `card` is one entry of
-       * the listing's positional array: s = its term slugs, t = its lowercased
-       * search haystack.
-       */
-      matches: function (card) {
-        var q = this.query.toLowerCase().trim();
-        var okCategory = this.category === 'all' || card.s.indexOf(this.category) !== -1;
-        var okQuery = !q || card.t.indexOf(q) !== -1;
-        return okCategory && okQuery;
-      },
-    });
-
     /**
-     * Events page — the "Upcoming Events" listing (template-parts/events/listing.php).
+     * Site-wide email sign-up popup (template-parts/newsletter-popup.php).
      *
-     * The section renders every upcoming event server-side and this component
-     * decides which are on screen: those matching the store's category filter,
-     * capped at `perPage` until "View More Events" is pressed.
-     *
-     * `cards` is a positional array — cards[i] describes card i, carrying `s`
-     * (its term slugs) and `t` (a lowercased haystack for the search box) — so
-     * the markup only has to pass each card its own index.
-     *
-     * Paging counts filtered cards, not all cards, so "View More" appears when
-     * the *current* filter has more than a page worth. Changing filter collapses
-     * back to one page: an expanded list from a previous category would open the
-     * new one mid-scroll with no way to tell how much had been skipped.
+     * Opens once, after OPEN_DELAY or when the visitor scrolls past
+     * OPEN_SCROLL of the page, whichever comes first. Closing it snoozes it
+     * for SNOOZE_DAYS; signing up (here or in the footer band, which comes
+     * back with ?joined=yes) hides it for good. The memory lives in
+     * localStorage, so with storage blocked the popup shows each visit.
      */
-    window.Alpine.data('eventsListing', function (cards, perPage) {
+    var POPUP_KEY = 'juiced_signup';
+    var OPEN_DELAY = 12000;
+    var OPEN_SCROLL = 0.4;
+    var SNOOZE_DAYS = 14;
+
+    function popupMemory(value) {
+      try {
+        if (value === undefined) {
+          return window.localStorage.getItem(POPUP_KEY);
+        }
+        window.localStorage.setItem(POPUP_KEY, value);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    window.Alpine.data('signupPopup', function () {
       return {
-        expanded: false,
+        open: false,
+        state: 'idle', // idle | sending | error | done
+        lastFocus: null,
 
         init: function () {
-          this.$watch('$store.events.category', function () {
-            this.expanded = false;
-          }.bind(this));
-          this.$watch('$store.events.query', function () {
-            this.expanded = false;
-          }.bind(this));
-        },
+          var self = this;
 
-        /** Indices of cards passing the filter, in render order. */
-        get matching() {
-          var store = this.$store.events;
-          return cards.reduce(function (out, card, i) {
-            if (store.matches(card)) {
-              out.push(i);
+          if (/[?&]joined=yes\b/.test(window.location.search)) {
+            popupMemory('joined');
+          }
+          var seen = popupMemory();
+          if (seen === 'joined' || (seen && Date.now() < Number(seen))) {
+            return;
+          }
+
+          var timer;
+          var onScroll = function () {
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            if (max > 0 && window.scrollY / max >= OPEN_SCROLL) {
+              show();
             }
-            return out;
-          }, []);
+          };
+          var show = function () {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', onScroll);
+            self.show();
+          };
+          timer = setTimeout(show, OPEN_DELAY);
+          window.addEventListener('scroll', onScroll, { passive: true });
         },
 
-        get visible() {
-          return this.expanded ? this.matching : this.matching.slice(0, perPage);
+        show: function () {
+          var self = this;
+          this.lastFocus = document.activeElement;
+          this.open = true;
+          this.$nextTick(function () {
+            if (self.$refs.email) {
+              self.$refs.email.focus();
+            }
+          });
         },
 
-        isVisible: function (i) {
-          return this.visible.indexOf(i) !== -1;
+        dismiss: function () {
+          if (!this.open) {
+            return;
+          }
+          this.open = false;
+          if (this.state !== 'done') {
+            popupMemory(String(Date.now() + SNOOZE_DAYS * 864e5));
+          }
+          if (this.lastFocus && this.lastFocus.focus) {
+            this.lastFocus.focus();
+          }
         },
 
-        get hasMore() {
-          return this.matching.length > perPage;
+        /** Keep Tab inside the dialog while it is open. */
+        trap: function (e) {
+          var items = Array.prototype.filter.call(
+            this.$refs.dialog.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]):not([tabindex="-1"])'),
+            function (el) { return el.offsetParent !== null; }
+          );
+          if (!items.length) {
+            return;
+          }
+          var first = items[0];
+          var last = items[items.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         },
 
-        get isEmpty() {
-          return this.matching.length === 0;
+        submit: function (form) {
+          var self = this;
+          var body = new FormData(form);
+          body.append('ajax', '1');
+          this.state = 'sending';
+
+          // getAttribute, not form.action: the hidden <input name="action"> shadows
+          // the property, which would post to "[object HTMLInputElement]".
+          fetch(form.getAttribute('action'), { method: 'POST', body: body, credentials: 'same-origin' })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || !json.success) {
+                throw new Error('signup failed');
+              }
+              self.state = 'done';
+              popupMemory('joined');
+            })
+            .catch(function () {
+              self.state = 'error';
+              // Turnstile tokens are single-use — fetch a fresh one for the retry.
+              var widget = form.querySelector('.cf-turnstile');
+              if (widget && window.turnstile) {
+                window.turnstile.reset(widget);
+              }
+            });
         },
       };
     });
 
     /**
-     * Events page — the sidebar month calendar (template-parts/events/calendar.php).
+     * Events page — the planner (template-parts/events/planner.php): a month
+     * grid where clicking a day lists what's on it.
      *
-     * `months` is juiced_event_calendar_months() output: a run of months from
-     * the current one, each carrying its label, length, starting weekday and
-     * dots, but not its cells. Building the 42 cells here rather than shipping
-     * them keeps the JSON to a fraction of the size for the same grid.
+     * `data` is juiced_event_planner_data() output. `events` is a table of every
+     * event; each month's `ev` maps a day number to indexes into it, so a
+     * weekly event sits in the JSON once however many days it dots. Building
+     * the cells here rather than shipping them keeps the payload small.
      *
-     * Navigation is clamped to the months PHP sent — there is no endpoint to
-     * fetch more, so the arrows disable at both ends rather than paging into
-     * empty months.
+     * `i` is the month on screen; `sel` the picked day, which can sit in a
+     * different month once the visitor pages away. Navigation is clamped to the
+     * months PHP sent — there is no endpoint to fetch more.
      */
-    window.Alpine.data('eventsCalendar', function (months) {
+    window.Alpine.data('eventsPlanner', function (data) {
+      var lang = document.documentElement.lang || undefined;
+
       return {
-        months: months,
+        months: data.months,
+        events: data.events,
         i: 0,
+        sel: { i: 0, d: data.months[0].today || 1 },
 
         get month() {
           return this.months[this.i];
@@ -130,11 +174,26 @@
           return this.i < this.months.length - 1;
         },
 
+        /** Event indexes on day `d` of month `mi`. */
+        on: function (mi, d) {
+          return this.months[mi].ev[d] || [];
+        },
+
+        /** "Monday, October 5" for day `d` of month `mi`. */
+        dateLabel: function (mi, d) {
+          var m = this.months[mi];
+          return new Date(m.y, m.m - 1, d).toLocaleDateString(lang, {
+            weekday: 'long', month: 'long', day: 'numeric',
+          });
+        },
+
         /**
-         * The 6x7 grid: trailing days of the previous month, this month, then
-         * leading days of the next, so every week row is full.
+         * Full weeks: trailing days of the previous month, this month, then
+         * leading days of the next. Each real day carries one dot per event
+         * (capped at three) — true for a one-off, false for a recurring event.
          */
         get cells() {
+          var self = this;
           var m = this.month;
           var out = [];
           var d;
@@ -143,11 +202,15 @@
             out.push({ n: m.prevDays - d + 1, muted: true });
           }
           for (d = 1; d <= m.days; d++) {
+            var ids = this.on(this.i, d);
+            var titles = ids.map(function (k) { return self.events[k].t; });
             out.push({
               n: d,
               muted: false,
               today: d === m.today,
-              dot: m.dots[d] || null,
+              on: this.sel.i === this.i && this.sel.d === d,
+              dots: ids.slice(0, 3).map(function (k) { return self.events[k].s; }),
+              label: this.dateLabel(this.i, d) + (titles.length ? ': ' + titles.join(', ') : ''),
             });
           }
           for (d = 1; out.length % 7 !== 0; d++) {
@@ -156,16 +219,43 @@
           return out;
         },
 
-        /**
-         * Tooltip/screen-reader text for a day: every event on it by name, not
-         * just the one the dot links to. The badge says how many there are; this
-         * is what says which.
-         */
-        label: function (cell) {
-          if (!cell.dot) {
-            return '';
+        pick: function (d) {
+          this.sel = { i: this.i, d: d };
+        },
+
+        get selLabel() {
+          return this.dateLabel(this.sel.i, this.sel.d);
+        },
+
+        get selEvents() {
+          var self = this;
+          return this.on(this.sel.i, this.sel.d).map(function (k) { return self.events[k]; });
+        },
+
+        /** The first day after the picked one that has an event, or null. */
+        get nextDay() {
+          for (var mi = this.sel.i; mi < this.months.length; mi++) {
+            var start = mi === this.sel.i ? this.sel.d + 1 : 1;
+            for (var d = start; d <= this.months[mi].days; d++) {
+              if (this.on(mi, d).length) {
+                return { i: mi, d: d, label: this.dateLabel(mi, d) };
+              }
+            }
           }
-          return [cell.dot.t].concat(cell.dot.m || []).join(', ');
+          return null;
+        },
+
+        jump: function () {
+          var next = this.nextDay;
+          if (next) {
+            this.i = next.i;
+            this.sel = { i: next.i, d: next.d };
+          }
+        },
+
+        /** "7:00 PM – 11:00 PM · 434 Hill Street · Free" */
+        meta: function (ev) {
+          return [ev.h, ev.l, ev.p].filter(Boolean).join(' · ');
         },
       };
     });
@@ -246,5 +336,56 @@
         },
       };
     });
+
+    /**
+     * Careers page — the three-step job application
+     * (template-parts/careers/apply.php).
+     *
+     * Each step is a fieldset with x-ref="stepN". Next only moves on once the
+     * step's own fields pass the browser's validation, so a missing required
+     * field is flagged where it is rather than on the last step. Moving focuses
+     * the new step's legend, which also scrolls it into view on phones.
+     */
+    window.Alpine.data('jobApplication', function () {
+      return {
+        step: 1,
+
+        next: function () {
+          var fields = this.$refs['step' + this.step].querySelectorAll('input, select, textarea');
+          for (var i = 0; i < fields.length; i++) {
+            if (!fields[i].reportValidity()) {
+              return;
+            }
+          }
+          this.go(this.step + 1);
+        },
+
+        back: function () {
+          this.go(this.step - 1);
+        },
+
+        go: function (n) {
+          var self = this;
+          this.step = n;
+          this.$nextTick(function () {
+            self.$refs['step' + n].querySelector('legend').focus();
+          });
+        },
+      };
+    });
   });
+})();
+
+/**
+ * Menu page: keep the section bar (.menu-section-bar) pinned just under the
+ * sticky site header, whose height changes as it compacts on scroll.
+ */
+(function () {
+  var header = document.querySelector('.site-header');
+  if (!header || !document.querySelector('.menu-section-bar') || !window.ResizeObserver) {
+    return;
+  }
+  new ResizeObserver(function () {
+    document.documentElement.style.setProperty('--site-header-h', header.offsetHeight + 'px');
+  }).observe(header);
 })();

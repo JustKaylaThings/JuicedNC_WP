@@ -68,6 +68,11 @@ function juiced_handle_contact_form() {
 		$finish( 'sent' );
 	}
 
+	// Turnstile (inc/captcha.php) — passes when spam protection is off.
+	if ( ! juiced_captcha_verify() ) {
+		$finish( 'error' );
+	}
+
 	$first   = isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
 	$last    = isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
 	$email   = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';

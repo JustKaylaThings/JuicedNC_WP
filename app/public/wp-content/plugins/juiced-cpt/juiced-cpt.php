@@ -15,5 +15,6 @@ define( 'JUICED_CPT_DIR', plugin_dir_path( __FILE__ ) );
 require_once JUICED_CPT_DIR . 'includes/herb.php';
 require_once JUICED_CPT_DIR . 'includes/menu-item.php';
 require_once JUICED_CPT_DIR . 'includes/event.php';
+require_once JUICED_CPT_DIR . 'includes/spotlight.php';
 require_once JUICED_CPT_DIR . 'includes/site-settings.php';
 require_once JUICED_CPT_DIR . 'includes/site-announcement.php';

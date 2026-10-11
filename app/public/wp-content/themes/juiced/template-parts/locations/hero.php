@@ -2,17 +2,18 @@
 /**
  * Locations page Section 1 — Hero.
  *
- * Dark band opening the page: two-tone headline ("Two Locations." white,
- * "One Community." orange), an intro paragraph, and a row of small icon
- * badges — with the two storefront photos bleeding to the viewport edge on
- * the right, cut along parallel diagonals (clip-path) like the mockup, each
- * wearing a location pill (slot 1 green, slot 2 pink).
+ * Deep-green band in the homepage's "Garden" look, continuing the header's
+ * leaf pattern (.bg-garden; -mt-px hides the seam): two-tone headline ("Two
+ * Locations." cream, "One Community." orange), an intro paragraph, and a row
+ * of small orange icon badges — with the two storefront photos bleeding to
+ * the viewport edge on the right, cut along parallel diagonals (clip-path),
+ * each wearing a white location pill.
  *
  * ACF is free (no repeaters), so the badges are a textarea, one per line;
  * the icon is keyword-matched from the line via the local map below
  * (fresh/ingredients → leaf, health → heart, community → people). The photos
  * are two fixed slots; a slot with no image is skipped, and with neither
- * photo the copy stands alone on solid ink — same doctrine as the other
+ * photo the copy stands alone on the green — same doctrine as the other
  * heroes.
  *
  * Copy is ACF-editable on the Locations page (inc/acf-locations-page.php);
@@ -38,12 +39,7 @@ foreach ( preg_split( '/\r\n|\r|\n/', (string) $badges_raw ) as $line ) {
 	}
 }
 
-// Storefront photos — one fixed slot per location, pill colors from the
-// mockup (North Raleigh green, Downtown Raleigh pink).
-$pill_colors = array(
-	1 => 'bg-brand-green',
-	2 => 'bg-[#dd1f69]',
-);
+// Storefront photos — one fixed slot per location, both with a white pill.
 
 $photos = array();
 foreach ( range( 1, 2 ) as $i ) {
@@ -54,14 +50,14 @@ foreach ( range( 1, 2 ) as $i ) {
 	$photos[] = array(
 		'image' => $image,
 		'label' => juiced_page_field( "locations_hero_label{$i}", 1 === $i ? 'North Raleigh' : 'Downtown Raleigh' ),
-		'pill'  => $pill_colors[ $i ],
+		'pill'  => 'bg-white text-brand-forest',
 	);
 }
 
 // Diagonal cuts and pill anchors, chosen by how many photos are set. The
 // clip-path values are literal strings so the Tailwind scanner sees them;
 // all the edges share the same slope so the cuts read as parallel. With two
-// photos the sliver of dark background left between the polygons is the
+// photos the sliver of green background left between the polygons is the
 // diagonal seam.
 if ( 2 === count( $photos ) ) {
 	$photos[0]['clip']  = '[clip-path:polygon(0_0,54%_0,46%_100%,0_100%)] md:[clip-path:polygon(12%_0,56%_0,46%_100%,2%_100%)]';
@@ -84,41 +80,36 @@ if ( 2 === count( $photos ) ) {
  */
 $juiced_badge_icons = array(
 	'fresh'      => array(
-		'text' => 'text-brand-green',
 		'icon' => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-8" /><path d="M12 12C12 8.5 9.5 6 5.5 6 5.5 9.5 8 12 12 12Z" /><path d="M12 12c0-3.5 2.5-6 6.5-6 0 3.5-2.5 6-6.5 6Z" /></svg>',
 	),
 	'ingredient' => array(
-		'text' => 'text-brand-green',
 		'icon' => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-8" /><path d="M12 12C12 8.5 9.5 6 5.5 6 5.5 9.5 8 12 12 12Z" /><path d="M12 12c0-3.5 2.5-6 6.5-6 0 3.5-2.5 6-6.5 6Z" /></svg>',
 	),
 	'health'     => array(
-		'text' => 'text-[#dd1f69]',
 		'icon' => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5 4.7 13a5 5 0 1 1 7.3-6.8A5 5 0 1 1 19.3 13Z" /></svg>',
 	),
 	'communi'    => array(
-		'text' => 'text-brand-yellow',
 		'icon' => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3" /><path d="M4 19c0-3 2.2-5 5-5s5 2 5 5" /><circle cx="16.5" cy="9" r="2.5" /><path d="M16.5 14.5c2.4.3 3.5 2 3.5 4.5" /></svg>',
 	),
 );
 
 $juiced_badge_fallback = array(
-	'text' => 'text-brand-green',
 	'icon' => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6" /></svg>',
 );
 ?>
-<section class="relative isolate bg-brand-ink text-brand-cream overflow-hidden bg-grain">
+<section class="relative isolate -mt-px bg-brand-forest bg-garden text-brand-cream overflow-hidden">
 	<div class="mx-auto max-w-7xl px-4">
 
 		<div class="py-14 md:flex md:min-h-[480px] md:w-[45%] md:items-center md:py-16">
 			<div class="max-w-xl">
 
-				<h1 class="font-display text-5xl md:text-6xl leading-[1.03]">
-					<span class="block text-white"><?php echo esc_html( $lead ); ?></span>
+				<h1 class="font-display font-bold leading-[.9] tracking-[-.03em] text-[clamp(3rem,9vw,4.5rem)] md:text-[clamp(2.75rem,5.2vw,4.5rem)]">
+					<span class="block"><?php echo esc_html( $lead ); ?></span>
 					<span class="block text-brand-gold"><?php echo esc_html( $accent ); ?></span>
 				</h1>
 
 				<?php if ( $subtext ) : ?>
-					<p class="mt-6 max-w-md text-base md:text-lg text-brand-cream/80 leading-relaxed">
+					<p class="mt-6 max-w-md text-lg md:text-xl font-medium leading-relaxed">
 						<?php echo esc_html( $subtext ); ?>
 					</p>
 				<?php endif; ?>
@@ -137,10 +128,10 @@ $juiced_badge_fallback = array(
 							}
 							?>
 							<div class="flex flex-col items-center gap-2 px-5 text-center first:pl-0 <?php echo $i > 0 ? 'border-l border-white/15' : ''; ?>">
-								<span class="<?php echo esc_attr( $topic['text'] ); ?>">
+								<span class="text-brand-gold">
 									<?php echo $topic['icon']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 								</span>
-								<span class="text-xs font-bold"><?php echo esc_html( $badge ); ?></span>
+								<span class="text-xs font-bold text-brand-mint"><?php echo esc_html( $badge ); ?></span>
 							</div>
 						<?php endforeach; ?>
 					</div>
@@ -165,7 +156,7 @@ $juiced_badge_fallback = array(
 
 			<?php foreach ( $photos as $photo ) : ?>
 				<?php if ( $photo['label'] ) : ?>
-					<span class="absolute bottom-5 <?php echo esc_attr( $photo['pos'] ); ?> whitespace-nowrap rounded-full <?php echo esc_attr( $photo['pill'] ); ?> px-4 py-1.5 text-xs font-bold text-white">
+					<span class="absolute bottom-5 <?php echo esc_attr( $photo['pos'] ); ?> whitespace-nowrap rounded-full <?php echo esc_attr( $photo['pill'] ); ?> px-3 py-1.5 text-[13px] font-bold">
 						<?php echo esc_html( $photo['label'] ); ?>
 					</span>
 				<?php endif; ?>

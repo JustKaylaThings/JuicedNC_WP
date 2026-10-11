@@ -22,7 +22,8 @@ get_template_part( 'template-parts/home/menu' );
 
 get_template_part( 'template-parts/home/locations' );
 
-get_template_part( 'template-parts/home/testimonials' );
+// Google reviews now run inside the community section's Instagram card, which
+// replaced the old testimonials carousel.
 
 // The "Stay in the Loop" newsletter band + editorial footer are site-wide and
 // live in footer.php (rendered by get_footer below).

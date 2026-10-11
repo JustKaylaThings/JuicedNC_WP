@@ -166,11 +166,12 @@ function juiced_image_url( $image, $size = 'large' ) {
  */
 function juiced_benefit_icon( $index ) {
 	$icons = array(
-		// Leaf (fresh ingredients) — brand green.
-		'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5cc070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>',
-		// Heart (healthy options) — magenta accent.
-		'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#e0559a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
-		// People (community focused) — brand gold.
+		// Leaf (fresh ingredients). All three are brand orange: they sit on the
+		// deep-green hero, where the old green/magenta mix clashed.
+		'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f2811f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>',
+		// Heart (healthy options).
+		'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f2811f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
+		// People (community focused).
 		'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f2811f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
 	);
 	return isset( $icons[ $index ] ) ? $icons[ $index ] : '';
@@ -223,14 +224,15 @@ function juiced_menu_section_style( $slug ) {
  * @return array{text:string,bg:string,soft:string,icon:string} Tailwind classes + SVG.
  */
 function juiced_event_category_style( $slug ) {
-	// Shared palette — the same accents used by the homepage events strip.
-	// 'soft' is the 10% tint, for pills that carry the color without shouting.
+	// Brand-only palette ("Garden" redesign: deep green + orange — the old
+	// purple / pink / blue made the Events page busy). 'soft' is the 10% tint,
+	// for pills that carry the color without shouting.
 	$palette = array(
-		array( 'text' => 'text-brand-green', 'bg' => 'bg-brand-green', 'soft' => 'bg-brand-green/10' ), // 0 green
-		array( 'text' => 'text-[#6c4fd6]', 'bg' => 'bg-[#6c4fd6]', 'soft' => 'bg-[#6c4fd6]/10' ),       // 1 purple
-		array( 'text' => 'text-brand-gold', 'bg' => 'bg-brand-gold', 'soft' => 'bg-brand-gold/10' ),    // 2 gold
-		array( 'text' => 'text-[#e0559a]', 'bg' => 'bg-[#e0559a]', 'soft' => 'bg-[#e0559a]/10' ),       // 3 pink
-		array( 'text' => 'text-[#3aa0e0]', 'bg' => 'bg-[#3aa0e0]', 'soft' => 'bg-[#3aa0e0]/10' ),       // 4 blue
+		array( 'text' => 'text-brand-forest', 'bg' => 'bg-brand-forest', 'soft' => 'bg-brand-forest/10' ), // 0 forest
+		array( 'text' => 'text-brand-rust', 'bg' => 'bg-brand-rust', 'soft' => 'bg-brand-rust/10' ),       // 1 rust
+		array( 'text' => 'text-brand-gold', 'bg' => 'bg-brand-gold', 'soft' => 'bg-brand-gold/10' ),       // 2 orange
+		array( 'text' => 'text-brand-green', 'bg' => 'bg-brand-green', 'soft' => 'bg-brand-green/10' ),    // 3 leaf green
+		array( 'text' => 'text-brand-ink', 'bg' => 'bg-brand-ink', 'soft' => 'bg-brand-ink/10' ),          // 4 ink
 	);
 
 	$svg = static function ( $paths ) {
@@ -280,37 +282,15 @@ function juiced_event_category_style( $slug ) {
 }
 
 /**
- * event_category terms that have at least one published event, for the filter
- * pills. Empty terms are hidden — a pill that always yields nothing is noise.
- *
- * @return WP_Term[] Terms, or empty array on failure.
- */
-function juiced_event_categories() {
-	$terms = get_terms(
-		array(
-			'taxonomy'   => 'event_category',
-			'hide_empty' => true,
-			'orderby'    => 'name',
-			'order'      => 'ASC',
-		)
-	);
-
-	return ( is_array( $terms ) && ! is_wp_error( $terms ) ) ? $terms : array();
-}
-
-/**
  * Everything an event card renders, resolved once.
  *
- * The Events page draws each event twice — as a poster in grid view and as a
- * row in list view (template-parts/events/card-poster.php and card-row.php) —
- * and the two must agree on every value. Reading the fields here rather than in
- * each partial means a field can't be formatted one way in one view and another
- * way in the other, and adding a field is one edit rather than three.
+ * Used by the single-event page's "More Upcoming Events" rows
+ * (template-parts/events/card-row.php). Reading the fields here keeps the
+ * formatting in one place.
  *
- * The accent rotates by position through the same purple/green/pink palette as
- * the homepage strip (template-parts/home/events.php), so the two event
- * surfaces read as one system. Class names are literal strings so Tailwind's
- * @source scan picks up the arbitrary hex values.
+ * The accent alternates by position between the brand's forest green and
+ * rust orange ("Garden" redesign). Class names are literal strings so
+ * Tailwind's @source scan compiles them.
  *
  * @param array $row   A juiced_upcoming_events() row: { post, when, recurring }.
  * @param int   $index Position in the listing; picks the accent color.
@@ -323,26 +303,19 @@ function juiced_event_card_data( $row, $index = 0 ) {
 
 	$palette = array(
 		array(
-			'bg'     => 'bg-[#6c4fd6]',
-			'text'   => 'text-[#6c4fd6]',
-			'soft'   => 'bg-[#6c4fd6]/10',
-			'border' => 'border-[#6c4fd6]',
-			'hover'  => 'hover:bg-[#6c4fd6]',
-		), // purple
+			'bg'     => 'bg-brand-forest',
+			'text'   => 'text-brand-forest',
+			'soft'   => 'bg-brand-forest/10',
+			'border' => 'border-brand-forest',
+			'hover'  => 'hover:bg-brand-forest',
+		), // forest
 		array(
-			'bg'     => 'bg-brand-green',
-			'text'   => 'text-brand-green',
-			'soft'   => 'bg-brand-green/10',
-			'border' => 'border-brand-green',
-			'hover'  => 'hover:bg-brand-green',
-		), // green
-		array(
-			'bg'     => 'bg-[#e0559a]',
-			'text'   => 'text-[#e0559a]',
-			'soft'   => 'bg-[#e0559a]/10',
-			'border' => 'border-[#e0559a]',
-			'hover'  => 'hover:bg-[#e0559a]',
-		), // pink
+			'bg'     => 'bg-brand-rust',
+			'text'   => 'text-brand-rust',
+			'soft'   => 'bg-brand-rust/10',
+			'border' => 'border-brand-rust',
+			'hover'  => 'hover:bg-brand-rust',
+		), // rust
 	);
 
 	$id   = $row['post']->ID;
@@ -442,7 +415,7 @@ function juiced_map_pin( $color = '#38a54c' ) {
 
 /**
  * Render a 0–5 star rating as inline gold SVGs (filled up to the rounded rating,
- * faint for the rest). Used by the testimonials section on the dark background.
+ * faint for the rest). Used by the homepage Google reviews strip.
  *
  * @param float|int $rating Star rating (rounded to a whole star).
  * @param int       $size   Pixel size per star.
@@ -663,5 +636,103 @@ function juiced_herb_card_data( $post ) {
 		'tags'      => $tags,
 		'slugs'     => $slugs,
 		'haystack'  => mb_strtolower( $haystack ),
+	);
+}
+
+/**
+ * Delivery apps with a store link, for the Menu page's order buttons:
+ * label => [url, button classes]. The links are the store links on the Home
+ * page's Top five tab (DoorDash falls back to the Order Ahead URL); an app
+ * without one is left out.
+ *
+ * @return array
+ */
+function juiced_delivery_apps() {
+	return array_filter(
+		array(
+			'DoorDash'  => array( juiced_field( 'top_doordash_url', juiced_field( 'order_ahead_url', '' ) ), 'bg-[#ff3008] text-white hover:bg-[#d62a07]' ),
+			'Uber Eats' => array( juiced_field( 'top_ubereats_url', '' ), 'bg-[#06c167] text-brand-ink hover:bg-[#05a357]' ),
+			'Grubhub'   => array( juiced_field( 'top_grubhub_url', '' ), 'bg-[#ff8000] text-brand-ink hover:bg-[#e67300]' ),
+		),
+		function ( $app ) {
+			return (bool) $app[0];
+		}
+	);
+}
+
+/**
+ * URL of the page using the Community Page template.
+ *
+ * The Spotlight CPT has no archive (see the juiced-cpt plugin), so the
+ * Community page is both its index and its archive. Falls back to /community.
+ *
+ * @return string
+ */
+function juiced_community_page_url() {
+	$pages = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_key'       => '_wp_page_template',
+			'meta_value'     => 'page-templates/community.php',
+		)
+	);
+
+	return $pages ? get_permalink( $pages[0] ) : home_url( '/community' );
+}
+
+/**
+ * Everything a spotlight card or feature needs, in one shape.
+ *
+ * The intro falls back to the start of the story when no excerpt is set, so a
+ * card never sits empty because the client skipped the Excerpt box.
+ *
+ * @param int|WP_Post $post Spotlight post.
+ * @return array|null Null when the post is missing.
+ */
+function juiced_spotlight_card_data( $post ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return null;
+	}
+
+	$is_business = function_exists( 'get_field' ) && 'business' === get_field( 'spotlight_type', $post->ID );
+	$intro       = has_excerpt( $post ) ? get_the_excerpt( $post ) : wp_trim_words( wp_strip_all_tags( strip_shortcodes( $post->post_content ) ), 30 );
+
+	return array(
+		'id'        => $post->ID,
+		'title'     => get_the_title( $post ),
+		'permalink' => get_permalink( $post ),
+		'image'     => get_the_post_thumbnail_url( $post, 'large' ),
+		'thumb'     => get_the_post_thumbnail_url( $post, 'juiced_card' ),
+		'type'      => $is_business ? 'business' : 'person',
+		'badge'     => $is_business ? __( 'Local Business', 'juiced' ) : __( 'Community Member', 'juiced' ),
+		'role'      => function_exists( 'get_field' ) ? (string) get_field( 'spotlight_role', $post->ID ) : '',
+		'quote'     => function_exists( 'get_field' ) ? trim( (string) get_field( 'spotlight_quote', $post->ID ) ) : '',
+		'intro'     => $intro,
+		'month'     => get_the_date( 'F Y', $post ),
+		'month_key' => get_the_date( 'Y-m', $post ),
+	);
+}
+
+/**
+ * Inline icon for a spotlight's type badge — a person or a storefront.
+ *
+ * @param string $type 'person' | 'business'.
+ * @param int    $size Pixel size.
+ * @return string SVG markup.
+ */
+function juiced_spotlight_icon( $type, $size = 15 ) {
+	$paths = 'business' === $type
+		? '<path d="M3 9l1.5-5h15L21 9" /><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" /><path d="M5 12v8h14v-8" /><path d="M10 20v-5h4v5" />'
+		: '<circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />';
+
+	return sprintf(
+		'<svg viewBox="0 0 24 24" width="%1$d" height="%1$d" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%2$s</svg>',
+		(int) $size,
+		$paths
 	);
 }

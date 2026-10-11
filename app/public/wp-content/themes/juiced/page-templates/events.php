@@ -21,9 +21,9 @@ get_header();
 
 get_template_part( 'template-parts/events/hero' );
 
-get_template_part( 'template-parts/events/filters' );
+get_template_part( 'template-parts/events/featured' );
 
-get_template_part( 'template-parts/events/listing' );
+get_template_part( 'template-parts/events/planner' );
 
 get_template_part( 'template-parts/events/community' );
 

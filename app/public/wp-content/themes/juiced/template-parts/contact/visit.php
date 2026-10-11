@@ -2,8 +2,8 @@
 /**
  * Contact page Section 3 — Visit Us.
  *
- * "Visit Us" heading and tagline over the two white location cards, side by
- * side on one row (pin + name + address + storefront photo + Get Directions).
+ * Two-tone "Visit Us" heading (green + orange, like the hero) and a tagline over the two white location cards,
+ * side by side on one row (pin + name + address + storefront photo + Get Directions).
  *
  * The location names, addresses and directions links are the site-wide
  * business info in Appearance → Customize → Business Info (inc/customizer.php)
@@ -19,16 +19,12 @@
  * @package Juiced
  */
 
-$heading = juiced_page_field( 'contact_visit_heading', 'Visit Us' );
+$heading = juiced_page_field( 'contact_visit_heading', 'Visit' );
+$accent  = juiced_page_field( 'contact_visit_accent', 'Us' );
 $subtext = juiced_page_field( 'contact_visit_subtext', 'Two locations. One community.' );
 
 $directions_label = juiced_page_field( 'contact_visit_directions_label', 'Get Directions' );
 
-// Per-slot pin color, matching the mockup (slot 1 green, slot 2 gold).
-$pin_colors = array(
-	1 => 'text-brand-green',
-	2 => 'text-brand-gold',
-);
 
 $locations = array();
 foreach ( range( 1, 2 ) as $i ) {
@@ -44,12 +40,18 @@ foreach ( range( 1, 2 ) as $i ) {
 			. rawurlencode( trim( preg_replace( '/\s+/', ' ', $name . ' ' . $address ) ) );
 	}
 
+	// Cards read "Rock Quarry Store" — suffix added here only, so the
+	// site-wide name stays bare everywhere else (and isn't doubled if the
+	// client already typed "Store").
+	if ( $name && ! preg_match( '/\bstore$/i', $name ) ) {
+		$name .= ' Store';
+	}
+
 	$locations[] = array(
 		'name'       => $name,
 		'address'    => $address,
 		'photo'      => juiced_image_url( juiced_page_field( "contact_visit_loc{$i}_photo", '' ), 'juiced_card' ),
 		'directions' => $directions,
-		'pin'        => $pin_colors[ $i ],
 	);
 }
 
@@ -57,39 +59,41 @@ if ( ! $locations ) {
 	return;
 }
 ?>
-<section class="bg-brand-cream bg-grain">
+<section class="bg-brand-cream text-brand-ink">
 	<div class="mx-auto max-w-7xl px-4 pb-14 md:pb-20">
 
-		<?php if ( $heading ) : ?>
-			<h2 class="font-display text-3xl text-brand-bark md:text-4xl">
+		<?php if ( $heading || $accent ) : ?>
+			<?php // Two-tone like the hero: lead green, accent orange. ?>
+			<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.5rem)]">
 				<?php echo esc_html( $heading ); ?>
+				<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
 			</h2>
 		<?php endif; ?>
 
 		<?php if ( $subtext ) : ?>
-			<p class="mt-2 text-sm text-brand-bark/70 md:text-base"><?php echo esc_html( $subtext ); ?></p>
+			<p class="mt-3 font-display text-xl font-semibold text-brand-bark/70 md:text-2xl"><?php echo esc_html( $subtext ); ?></p>
 		<?php endif; ?>
 
 		<!-- Location cards — side by side from md up, stacked on small screens -->
 		<div class="mt-8 grid gap-6 md:grid-cols-2 lg:gap-8">
 			<?php foreach ( $locations as $location ) : ?>
-				<div class="flex items-center gap-5 rounded-2xl bg-white p-5 shadow-sm">
+				<div class="flex items-center gap-5 rounded-3xl border border-brand-forest/15 bg-white p-6">
 
-					<span class="shrink-0 self-start <?php echo esc_attr( $location['pin'] ); ?>" aria-hidden="true">
+					<span class="shrink-0 self-start text-brand-forest" aria-hidden="true">
 						<svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.3 6.4 11.6 6.9 12.1a.9.9 0 0 0 1.2 0c.5-.5 6.9-6.8 6.9-12.1A7.5 7.5 0 0 0 12 2Zm0 10.2a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8Z"/></svg>
 					</span>
 
 					<div class="grow">
 						<?php if ( $location['name'] ) : ?>
-							<h3 class="font-display text-lg text-brand-bark"><?php echo esc_html( $location['name'] ); ?></h3>
+							<h3 class="font-display text-2xl font-bold text-brand-ink"><?php echo esc_html( $location['name'] ); ?></h3>
 						<?php endif; ?>
 						<?php if ( $location['address'] ) : ?>
 							<?php // Tags hug the text: whitespace-pre-line would render the template's own newlines. ?>
-							<p class="mt-1 whitespace-pre-line text-sm leading-relaxed text-brand-bark/70"><?php echo esc_html( $location['address'] ); ?></p>
+							<p class="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-brand-ink/75"><?php echo esc_html( $location['address'] ); ?></p>
 						<?php endif; ?>
 						<?php if ( $directions_label && $location['directions'] ) : ?>
 							<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
-							   class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-green transition-colors hover:text-brand-gold">
+							   class="mt-4 inline-flex items-center gap-1.5 rounded-full border-2 border-brand-forest px-5 py-2 text-sm font-bold text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream">
 								<?php echo esc_html( $directions_label ); ?>
 								<span aria-hidden="true">&rarr;</span>
 							</a>
@@ -98,7 +102,7 @@ if ( ! $locations ) {
 
 					<?php if ( $location['photo'] ) : ?>
 						<img src="<?php echo esc_url( $location['photo'] ); ?>" alt=""
-							 class="hidden h-24 w-32 shrink-0 rounded-xl object-cover sm:block" loading="lazy" />
+							 class="hidden h-28 w-36 shrink-0 rounded-2xl object-cover sm:block" loading="lazy" />
 					<?php endif; ?>
 
 				</div>

@@ -6,7 +6,7 @@
  * directions links, Google Place IDs, business email) are entered once in
  * Appearance → Customize → Business Info — right below Site Identity, where the
  * logo lives — and read everywhere via juiced_business_field() (inc/helpers.php):
- * the homepage locations cards and testimonials, the Locations page, the Contact
+ * the homepage locations cards and Google reviews, the Locations page, the Contact
  * page and the footer. The Customizer's live preview shows edits on whichever
  * page is open before publishing.
  *
@@ -95,7 +95,7 @@ function juiced_customize_register( $wp_customize ) {
 		$business_fields[] = array(
 			'name'        => "loc{$i}_place_id",
 			'label'       => "{$loc} — " . __( 'Google Place ID', 'juiced' ),
-			'description' => __( 'Used to pull this shop\'s live Google reviews into the homepage testimonials.', 'juiced' ),
+			'description' => __( 'Used to pull this shop\'s live Google reviews into the reviews strip on the homepage.', 'juiced' ),
 			'type'        => 'text',
 			'sanitize'    => 'sanitize_text_field',
 		);

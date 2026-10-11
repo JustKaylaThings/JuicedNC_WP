@@ -1,11 +1,9 @@
 <?php
 /**
- * Events page — one event as a wide row (the filter bar's "list" view).
+ * One event as a wide row — the single-event page's "More Upcoming Events".
  *
  * Flyer down the left, details in the middle, action and price on the right.
- * The companion is card-poster.php, which draws the same event as a poster for
- * "grid" view; both take their values from juiced_event_card_data() so they
- * can't disagree.
+ * Values come from juiced_event_card_data().
  *
  * Expects, via get_template_part()'s $args:
  *   card   array  A juiced_event_card_data() result.
@@ -15,8 +13,8 @@
  *
  * The accent (date badge, title, Learn More, price) comes from the card's
  * palette slot. The category tag is colored by its term instead —
- * juiced_event_category_style() — keeping it matched to its pill in the filter
- * bar above.
+ * juiced_event_category_style() — keeping it matched to the single-event
+ * page's own category color.
  *
  * @package Juiced
  */
@@ -31,7 +29,7 @@ if ( empty( $juiced_card ) ) {
 $juiced_color = $juiced_card['color'];
 $juiced_term  = $juiced_card['term'];
 ?>
-<article class="group flex overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-all hover:shadow-md hover:ring-black/10">
+<article class="group flex overflow-hidden rounded-2xl bg-white ring-1 ring-brand-forest/15 transition-all hover:shadow-md hover:ring-brand-forest/30">
 
 	<!-- Flyer -->
 	<?php if ( ! $juiced_flyer ) : ?>
@@ -98,7 +96,7 @@ $juiced_term  = $juiced_card['term'];
 					if ( $juiced_term ) :
 						$juiced_style = juiced_event_category_style( $juiced_term->slug );
 						?>
-						<span class="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-3 py-1 text-sm font-medium text-brand-bark/75">
+						<span class="inline-flex items-center gap-1.5 rounded-full bg-brand-forest/[0.06] px-3 py-1 text-sm font-medium text-brand-bark/75">
 							<span class="<?php echo esc_attr( $juiced_style['text'] ); ?>">
 								<?php echo $juiced_style['icon']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 							</span>
@@ -107,7 +105,7 @@ $juiced_term  = $juiced_card['term'];
 					<?php endif; ?>
 
 					<?php if ( $juiced_card['audience'] ) : ?>
-						<span class="inline-flex items-center rounded-full bg-black/[0.04] px-3 py-1 text-sm font-medium text-brand-bark/75">
+						<span class="inline-flex items-center rounded-full bg-brand-forest/[0.06] px-3 py-1 text-sm font-medium text-brand-bark/75">
 							<?php echo esc_html( $juiced_card['audience'] ); ?>
 						</span>
 					<?php endif; ?>
@@ -121,7 +119,7 @@ $juiced_term  = $juiced_card['term'];
 				<?php echo esc_html( $juiced_card['cost'] ); ?>
 			</span>
 			<a href="<?php echo esc_url( $juiced_card['permalink'] ); ?>"
-			   class="inline-flex items-center justify-center rounded-lg border px-3.5 py-2 text-xs font-semibold transition-colors <?php echo esc_attr( $juiced_color['border'] . ' ' . $juiced_color['text'] . ' ' . $juiced_color['hover'] ); ?> hover:text-white">
+			   class="inline-flex items-center justify-center rounded-full border-2 px-4 py-2 text-xs font-bold transition-colors <?php echo esc_attr( $juiced_color['border'] . ' ' . $juiced_color['text'] . ' ' . $juiced_color['hover'] ); ?> hover:text-white">
 				<?php esc_html_e( 'Learn More', 'juiced' ); ?>
 			</a>
 		</div>

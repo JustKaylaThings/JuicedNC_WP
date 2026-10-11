@@ -37,7 +37,7 @@ $juiced_hood_styles = array(
 		'link'   => 'text-brand-cream hover:text-brand-gold',
 		'block'  => 'bg-brand-forest-deep',
 		'circle' => 'bg-brand-forest',
-		'label_default' => 'Neighborhood 02 · Events home',
+		'label_default' => 'Washington Terrace · Events home',
 		'focus'  => 'object-[50%_52%]', // Hill Street: tall shot, crop past the sky to the mural wall.
 	),
 );

@@ -36,27 +36,27 @@ if ( ! $owners ) {
 	return;
 }
 ?>
-<section class="bg-brand-cream bg-grain">
-	<div class="mx-auto max-w-7xl px-4 py-14 md:py-20">
+<section class="bg-brand-paper text-brand-ink">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-26">
 
 		<?php if ( $lead || $accent || $tail ) : ?>
-			<h2 class="text-center font-display text-3xl text-brand-bark md:text-4xl">
+			<h2 class="text-center font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
 				<?php echo esc_html( $lead ); ?>
 				<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
 				<?php echo esc_html( $tail ); ?>
 			</h2>
 		<?php endif; ?>
 
-		<div class="mt-10 flex flex-wrap items-start justify-center gap-12 md:gap-24">
+		<div class="mt-11 flex flex-wrap items-start justify-center gap-12 md:gap-24">
 			<?php foreach ( $owners as $owner ) : ?>
 				<div class="text-center">
 
 					<?php if ( $owner['photo'] ) : ?>
 						<img src="<?php echo esc_url( $owner['photo'] ); ?>"
 							 alt="<?php echo esc_attr( $owner['name'] ); ?>"
-							 class="mx-auto aspect-square w-40 rounded-full object-cover md:w-48" loading="lazy" />
+							 class="mx-auto aspect-square w-40 rounded-full border-4 border-white object-cover md:w-48" loading="lazy" />
 					<?php else : ?>
-						<div class="mx-auto grid aspect-square w-40 place-items-center rounded-full bg-brand-green/10 text-brand-green md:w-48">
+						<div class="mx-auto grid aspect-square w-40 place-items-center rounded-full bg-brand-forest/10 text-brand-forest md:w-48">
 							<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
 								<circle cx="12" cy="8.5" r="4" />
 								<path d="M4.5 20c1-3.8 4-6 7.5-6s6.5 2.2 7.5 6" />

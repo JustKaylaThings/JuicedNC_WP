@@ -3,18 +3,17 @@
  * Contact page Section 2 — Let's Connect + Send Us a Message.
  *
  * Two columns on the cream band: the left lists the ways to reach the shop
- * (phone / email / address / hours, each with a colored circle icon); the
- * right is the message form. The form posts to admin-post.php and is handled
+ * (phone / email / address / hours, each with a circle icon alternating
+ * forest green and orange); the right is the message form in a white card. The form posts to admin-post.php and is handled
  * by inc/contact-form.php, which redirects back here with ?contact=sent|error
  * — the notice above the form reads that flag.
  *
  * The business info itself (phone / email / address / hours) comes from the
  * site-wide settings in Appearance → Customize → Business Info
  * (inc/customizer.php) so the client enters it once and every page stays in
- * sync. Phone and hours render one labelled line per location when the two
- * locations' values differ, and a single unlabelled line when they match (or
- * only one is set); the address is location 1's — the primary shop — since
- * Visit Us below lists both in full. Headings and the form copy are
+ * sync. Phone, address and hours render one labelled line per location when
+ * the two locations' values differ, and a single unlabelled line when they
+ * match (or only one is set). Headings and the form copy are
  * ACF-editable on the Contact page itself (inc/acf-contact-page.php), all
  * with mockup defaults. A row hides when its fields are cleared; the topic
  * dropdown hides when the topics field is cleared.
@@ -31,11 +30,18 @@ $loc2_name = juiced_business_field( 'loc2_name', 'Downtown Raleigh' );
 $phone1    = juiced_business_field( 'loc1_phone', '(919) 123-JUICE (5842)' );
 $phone2    = juiced_business_field( 'loc2_phone', '' );
 $email     = juiced_business_field( 'business_email', 'hello@juicedjuicebar.com' );
-$address   = juiced_business_field( 'loc1_address', "8521 Six Forks Rd, Ste 101\nRaleigh, NC 27615" );
+$address1  = juiced_business_field( 'loc1_address', "8521 Six Forks Rd, Ste 101\nRaleigh, NC 27615" );
+$address2  = juiced_business_field( 'loc2_address', "220 W Martin St\nRaleigh, NC 27601" );
 $hours1    = juiced_business_field( 'loc1_hours', "Mon – Fri: 7:00 AM – 8:00 PM\nSat: 8:00 AM – 8:00 PM\nSun: 9:00 AM – 6:00 PM" );
 $hours2    = juiced_business_field( 'loc2_hours', '' );
 
 $button_label = juiced_page_field( 'contact_form_button', 'Send Message' );
+
+// Host an Event form — offered when the topic is Events & Partnerships.
+$host_url = juiced_host_event_page_url();
+if ( $host_url ) {
+	$host_url .= '#event-form';
+}
 
 // Dropdown topics — one per line in ACF, mockup defaults here.
 $topics = array_filter( array_map( 'trim', explode( "\n", (string) juiced_page_field(
@@ -65,13 +71,14 @@ $juiced_per_location = static function ( $value1, $value2, $href_cb = null ) use
 };
 
 // Contact rows: label + lines + circle color + inline icon. A row drops out
-// when its fields are cleared. Colors follow the mockup (green / pink /
-// orange / gold) — literal classes so Tailwind's @source scan compiles them.
+// when its fields are cleared. Circles alternate forest (cream icon) and orange
+// (ink icon, for contrast) — literal classes so Tailwind's @source scan
+// compiles them.
 $rows = array(
 	array(
 		'label'  => __( 'Phone', 'juiced' ),
 		'lines'  => $juiced_per_location( $phone1, $phone2, $juiced_tel ),
-		'circle' => 'bg-brand-green',
+		'circle' => 'bg-brand-forest text-brand-cream',
 		'icon'   => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l1.5 4.5-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2L20 15v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>',
 	),
 	array(
@@ -83,25 +90,19 @@ $rows = array(
 				'href'  => 'mailto:' . $email,
 			),
 		) : array(),
-		'circle' => 'bg-[#e0559a]',
+		'circle' => 'bg-brand-gold text-brand-ink',
 		'icon'   => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
 	),
 	array(
 		'label'  => __( 'Address', 'juiced' ),
-		'lines'  => $address ? array(
-			array(
-				'label' => '',
-				'text'  => $address,
-				'href'  => '',
-			),
-		) : array(),
-		'circle' => 'bg-brand-gold',
+		'lines'  => $juiced_per_location( $address1, $address2 ),
+		'circle' => 'bg-brand-forest text-brand-cream',
 		'icon'   => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
 	),
 	array(
 		'label'  => __( 'Hours', 'juiced' ),
 		'lines'  => $juiced_per_location( $hours1, $hours2 ),
-		'circle' => 'bg-brand-yellow',
+		'circle' => 'bg-brand-gold text-brand-ink',
 		'icon'   => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
 	),
 );
@@ -109,9 +110,9 @@ $rows = array(
 // Result flag set by the redirect from inc/contact-form.php.
 $status = isset( $_GET['contact'] ) ? sanitize_key( wp_unslash( $_GET['contact'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only flag.
 
-$input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py-3 text-sm text-brand-bark placeholder:text-brand-bark/45 focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/25';
+$input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream px-4 py-3 text-[15px] text-brand-ink placeholder:text-brand-ink/45 focus:border-brand-forest focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-forest/20';
 ?>
-<section class="bg-brand-cream bg-grain" id="message">
+<section class="bg-brand-cream text-brand-ink" id="message">
 	<div class="mx-auto max-w-7xl px-4 py-14 md:py-20">
 		<div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
 
@@ -119,7 +120,7 @@ $input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py
 			<div class="lg:col-span-2">
 
 				<?php if ( $connect_heading ) : ?>
-					<h2 class="font-display text-3xl text-brand-bark md:text-4xl">
+					<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.5rem)]">
 						<?php echo esc_html( $connect_heading ); ?>
 					</h2>
 				<?php endif; ?>
@@ -128,21 +129,24 @@ $input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py
 					<?php foreach ( $rows as $row ) : ?>
 						<?php if ( ! $row['lines'] ) : continue; endif; ?>
 						<li class="flex items-start gap-4">
-							<span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white <?php echo esc_attr( $row['circle'] ); ?>">
+							<span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full <?php echo esc_attr( $row['circle'] ); ?>">
 								<?php echo $row['icon']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 							</span>
 							<div>
-								<h3 class="font-semibold text-brand-bark"><?php echo esc_html( $row['label'] ); ?></h3>
+								<h3 class="font-display text-xl font-bold text-brand-forest"><?php echo esc_html( $row['label'] ); ?></h3>
 								<?php foreach ( $row['lines'] as $line ) : ?>
-									<?php $text = ( $line['label'] ? $line['label'] . ': ' : '' ) . $line['text']; ?>
+									<?php
+									// Store name in bold ahead of its value, when the row splits by location.
+									$label_html = $line['label'] ? '<strong class="font-bold text-brand-ink">' . esc_html( $line['label'] ) . ':</strong> ' : '';
+									?>
 									<?php if ( $line['href'] ) : ?>
 										<a href="<?php echo esc_url( $line['href'] ); ?>"
-										   class="mt-0.5 block text-sm text-brand-bark/70 transition-colors hover:text-brand-green md:text-base">
-											<?php echo esc_html( $text ); ?>
+										   class="mt-0.5 block text-sm text-brand-ink/75 transition-colors hover:text-brand-rust md:text-base">
+											<?php echo $label_html . esc_html( $line['text'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- label escaped above. ?>
 										</a>
 									<?php else : ?>
 										<?php // Tags hug the text: whitespace-pre-line would render the template's own newlines. ?>
-										<p class="mt-0.5 whitespace-pre-line text-sm leading-relaxed text-brand-bark/70 md:text-base"><?php echo esc_html( $text ); ?></p>
+										<p class="mt-0.5 whitespace-pre-line text-sm leading-relaxed text-brand-ink/75 md:text-base"><?php echo $label_html . esc_html( $line['text'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- label escaped above. ?></p>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</div>
@@ -153,25 +157,41 @@ $input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py
 			</div>
 
 			<!-- Send Us a Message -->
-			<div class="lg:col-span-3">
+			<div class="rounded-3xl bg-white p-6 ring-1 ring-brand-forest/15 sm:p-8 md:p-10 lg:col-span-3">
 
 				<?php if ( $form_heading ) : ?>
-					<h2 class="font-display text-3xl text-brand-bark md:text-4xl">
+					<h2 class="font-display text-3xl font-bold text-brand-forest md:text-4xl">
 						<?php echo esc_html( $form_heading ); ?>
 					</h2>
 				<?php endif; ?>
 
 				<?php if ( 'sent' === $status ) : ?>
-					<div class="mt-6 rounded-xl bg-brand-green/10 px-5 py-4 text-sm font-semibold text-brand-green" role="status">
+					<div class="mt-6 rounded-xl bg-brand-forest/10 px-5 py-4 text-sm font-semibold text-brand-forest" role="status">
 						<?php esc_html_e( 'Thanks for reaching out — your message is on its way. We\'ll get back to you soon!', 'juiced' ); ?>
 					</div>
 				<?php elseif ( 'error' === $status ) : ?>
-					<div class="mt-6 rounded-xl bg-[#dd1f69]/10 px-5 py-4 text-sm font-semibold text-[#dd1f69]" role="alert">
+					<div class="mt-6 rounded-xl bg-brand-rust/10 px-5 py-4 text-sm font-semibold text-brand-rust" role="alert">
 						<?php esc_html_e( 'Something went wrong sending your message. Please try again, or email us directly.', 'juiced' ); ?>
 					</div>
 				<?php endif; ?>
 
-				<form class="mt-6 space-y-4" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<form class="mt-6 space-y-4" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+					  x-data="{
+						topic: '',
+						get isEvent() { return /event|partner/i.test(this.topic); },
+						toHost() {
+							// Hand what they've typed to the Host an Event form via
+							// sessionStorage (same tab, cleared on close) rather than the
+							// URL, so names and emails stay out of links and server logs.
+							const f = this.$root.elements;
+							try {
+								sessionStorage.setItem('juicedHostPrefill', JSON.stringify({
+									first_name: f.first_name.value, last_name: f.last_name.value,
+									email: f.email.value, phone: f.phone.value, details: f.message.value,
+								}));
+							} catch (e) {}
+						}
+					  }">
 					<input type="hidden" name="action" value="juiced_contact" />
 					<?php wp_nonce_field( 'juiced_contact', 'juiced_contact_nonce' ); ?>
 
@@ -213,17 +233,33 @@ $input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py
 					<?php if ( $topics ) : ?>
 						<div class="relative">
 							<label for="juiced-topic" class="sr-only"><?php esc_html_e( 'How can we help you?', 'juiced' ); ?></label>
-							<select id="juiced-topic" name="topic"
-									class="<?php echo esc_attr( $input_classes ); ?> appearance-none pr-10 text-brand-bark/70">
+							<select id="juiced-topic" name="topic" x-model="topic"
+									class="<?php echo esc_attr( $input_classes ); ?> appearance-none pr-10 text-brand-ink/70">
 								<option value=""><?php esc_html_e( 'How can we help you?', 'juiced' ); ?></option>
 								<?php foreach ( $topics as $topic ) : ?>
 									<option value="<?php echo esc_attr( $topic ); ?>"><?php echo esc_html( $topic ); ?></option>
 								<?php endforeach; ?>
 							</select>
-							<span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-brand-bark/50" aria-hidden="true">
+							<span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-brand-forest/60" aria-hidden="true">
 								<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
 							</span>
 						</div>
+
+						<?php if ( $host_url ) : ?>
+							<?php // Events & Partnerships → point them at the dedicated booking form. ?>
+							<div x-show="isEvent" x-cloak x-transition.opacity
+								 class="flex flex-col gap-3 rounded-2xl bg-brand-forest/8 p-5 sm:flex-row sm:items-center sm:justify-between">
+								<p class="text-sm leading-relaxed text-brand-ink/80">
+									<strong class="font-bold text-brand-forest"><?php esc_html_e( 'Planning an event?', 'juiced' ); ?></strong>
+									<?php esc_html_e( 'Our Host an Event form gets the details to our events team fastest. We\'ll bring over what you\'ve typed.', 'juiced' ); ?>
+								</p>
+								<a href="<?php echo esc_url( $host_url ); ?>" @click="toHost()"
+								   class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-brand-gold px-5 py-2.5 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-forest hover:text-brand-cream sm:self-center">
+									<?php esc_html_e( 'Host an Event', 'juiced' ); ?>
+									<span aria-hidden="true">&rarr;</span>
+								</a>
+							</div>
+						<?php endif; ?>
 					<?php endif; ?>
 
 					<div>
@@ -233,8 +269,10 @@ $input_classes = 'w-full rounded-xl border border-brand-bark/15 bg-white px-4 py
 								  class="<?php echo esc_attr( $input_classes ); ?> resize-y"></textarea>
 					</div>
 
+					<?php juiced_captcha_field(); ?>
+
 					<button type="submit"
-							class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-green">
+							class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
 						<?php echo esc_html( $button_label ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</button>
