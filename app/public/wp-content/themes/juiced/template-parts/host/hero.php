@@ -26,7 +26,7 @@ $subtext = juiced_page_field( 'host_hero_subtext', 'Run clubs, workshops, pop-up
 $primary = juiced_page_field( 'host_hero_primary', 'Pitch Your Event' );
 
 $space_heading = juiced_page_field( 'host_space_heading', 'The Space' );
-$space_intro   = juiced_page_field( 'host_space_intro', 'A cozy café and lounge in historic Washington Terrace, made for gathering.' );
+$space_intro   = juiced_page_field( 'host_space_intro', 'A cozy café and lounge in historic Washington Terrace Shopping Center, made for gathering.' );
 $peerspace     = juiced_page_field( 'host_peerspace_url', 'https://www.peerspace.com/pages/listings/66e062ef67ea994f5373c45c' );
 $ps_rating     = juiced_page_field( 'host_peerspace_rating', '4.9' );
 $ps_reviews    = juiced_page_field( 'host_peerspace_reviews', '26' );

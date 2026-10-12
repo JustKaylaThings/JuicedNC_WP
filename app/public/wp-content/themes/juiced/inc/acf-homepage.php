@@ -623,7 +623,7 @@ add_action(
 						'label'       => 'Location 1 — small label',
 						'name'        => 'locations_label_1',
 						'type'        => 'text',
-						'placeholder' => 'Neighborhood 01',
+						'placeholder' => 'Cultural Commerce Shopping Center',
 						'wrapper'     => array( 'width' => '50' ),
 					),
 					array(
@@ -641,7 +641,7 @@ add_action(
 						'label'       => 'Location 2 — small label',
 						'name'        => 'locations_label_2',
 						'type'        => 'text',
-						'placeholder' => 'Washington Terrace · Events home',
+						'placeholder' => 'Washington Terrace Shopping Center· Events home',
 						'wrapper'     => array( 'width' => '50' ),
 					),
 					array(

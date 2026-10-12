@@ -130,6 +130,44 @@ function juiced_form_recipient( $page_url, $field ) {
 }
 
 /**
+ * Careers availability choices: the days and shifts the shops staff,
+ * value => label. Shared by the form (template-parts/careers/apply.php) and
+ * the handler, which only accepts these values.
+ *
+ * @return array{days:array<string,string>,times:array<string,string>}
+ */
+function juiced_job_availability_options() {
+	return array(
+		'days'  => array(
+			'Monday'    => __( 'Mon', 'juiced' ),
+			'Tuesday'   => __( 'Tue', 'juiced' ),
+			'Wednesday' => __( 'Wed', 'juiced' ),
+			'Thursday'  => __( 'Thu', 'juiced' ),
+			'Friday'    => __( 'Fri', 'juiced' ),
+			'Saturday'  => __( 'Sat', 'juiced' ),
+		),
+		'times' => array(
+			'7am–11am' => __( '7am – 11am', 'juiced' ),
+			'11am–3pm' => __( '11am – 3pm', 'juiced' ),
+			'3pm–7pm'  => __( '3pm – 7pm', 'juiced' ),
+		),
+	);
+}
+
+/**
+ * The ticked boxes of a checkbox group, kept to the allowed values in order.
+ *
+ * @param string   $key     POST key (without the []).
+ * @param string[] $allowed Allowed values.
+ * @return string[]
+ */
+function juiced_posted_choices( $key, $allowed ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify the nonce first.
+	$raw = isset( $_POST[ $key ] ) ? (array) wp_unslash( $_POST[ $key ] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- kept to $allowed below.
+	return array_values( array_intersect( $allowed, $raw ) );
+}
+
+/**
  * Format "Label: value" lines for the email body, skipping empty values.
  *
  * @param array $pairs Label => value.
@@ -270,9 +308,12 @@ function juiced_handle_job_application_form() {
 	$last         = juiced_posted( 'last_name' );
 	$email        = sanitize_email( juiced_posted( 'email' ) );
 	$phone        = juiced_posted( 'phone' );
-	$availability = juiced_posted( 'availability', true );
+	$avail        = juiced_job_availability_options();
+	$days         = juiced_posted_choices( 'avail_days', array_keys( $avail['days'] ) );
+	$times        = juiced_posted_choices( 'avail_times', array_keys( $avail['times'] ) );
+	$avail_notes  = juiced_posted( 'availability', true );
 
-	if ( ! $first || ! $last || ! is_email( $email ) || ! $phone || ! $availability ) {
+	if ( ! $first || ! $last || ! is_email( $email ) || ! $phone || ! $days || ! $times ) {
 		juiced_form_finish( $back, 'apply', 'error', 'apply' );
 	}
 
@@ -296,7 +337,11 @@ function juiced_handle_job_application_form() {
 	);
 	$lines[] = '';
 	$lines[] = __( 'Availability:', 'juiced' );
-	$lines[] = $availability;
+	$lines[] = __( 'Days:', 'juiced' ) . ' ' . implode( ', ', $days );
+	$lines[] = __( 'Times:', 'juiced' ) . ' ' . implode( ', ', $times );
+	if ( $avail_notes ) {
+		$lines[] = $avail_notes;
+	}
 	if ( $about ) {
 		$lines[] = '';
 		$lines[] = __( 'About them:', 'juiced' );

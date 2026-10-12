@@ -12,10 +12,16 @@
  * enqueued on the front page in functions.php, swaps for a hosted card), so the
  * section still shows real posts before anyone curates it.
  *
- * Under the photos, a dark strip runs live Google reviews from both shops as a
- * marquee (option H, Oct 2026), with the combined rating and review count.
+ * Along the bottom of the section, a full-width dark strip runs live Google
+ * reviews from both shops as a marquee (option H, Oct 2026; moved out of the
+ * Instagram card to span the section), with the combined rating and review count.
+ * On desktop the whole section, reviews strip included, is exactly one viewport
+ * tall (never under 640px), with a band of green under the strip; the card is
+ * capped to the space above the strip
+ * and clips the bottom of a tall Instagram embed. On phones it's at least one
+ * viewport tall and grows with the stacked content.
  * Reviews come from inc/google-reviews.php; with no API key or no qualifying
- * reviews the strip is left out and the card looks as before. This replaced
+ * reviews the strip is left out. This replaced
  * the separate testimonials carousel (Section 7).
  *
  * All copy, the photos and the Instagram URL are ACF-editable on the Home page
@@ -53,8 +59,8 @@ $juiced_rv_summary = $juiced_reviews ? juiced_reviews_summary( juiced_review_pla
 
 $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r="0.8" fill="currentColor"/></svg>';
 ?>
-<section class="bg-brand-forest bg-garden text-brand-cream">
-	<div class="mx-auto max-w-7xl px-4 py-16 md:py-20 grid gap-12 items-center <?php echo $juiced_ig_url ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,540px)] lg:gap-18' : ''; ?>">
+<section class="flex min-h-svh flex-col pb-16 md:pb-24 lg:h-svh lg:min-h-[640px] bg-brand-forest bg-garden text-brand-cream">
+	<div class="mx-auto w-full max-w-7xl flex-1 content-center px-4 py-8 grid gap-9 items-center lg:min-h-0 lg:grid-rows-[minmax(0,1fr)] <?php echo $juiced_ig_url ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-18' : ''; ?>">
 
 		<!-- Text column -->
 		<div class="flex flex-col gap-6">
@@ -94,12 +100,12 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 
 		<?php if ( $juiced_ig_url ) : ?>
 			<!-- Instagram card -->
-			<div class="w-full max-w-[540px] justify-self-center lg:justify-self-end overflow-hidden rounded-3xl bg-brand-cream p-3 text-brand-ink shadow-[0_18px_40px_rgba(0,0,0,.25)]">
+			<div class="w-full max-w-[440px] justify-self-center lg:justify-self-end lg:max-h-full overflow-hidden rounded-3xl bg-brand-cream p-3 text-brand-ink shadow-[0_18px_40px_rgba(0,0,0,.25)]">
 				<?php if ( $juiced_c_photos ) : ?>
 					<!-- Profile header. The live embed draws its own, so it's only
 						 needed over the curated grid. -->
-					<div class="flex items-center gap-3 px-2 pb-2 h-14">
-						<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold font-display text-lg font-bold text-brand-forest" aria-hidden="true">J!</span>
+					<div class="flex items-center gap-3 px-1.5 pb-1.5 h-[50px]">
+						<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-gold font-display text-lg font-bold text-brand-forest" aria-hidden="true">J!</span>
 						<span class="flex min-w-0 flex-col leading-tight">
 							<strong class="text-[15px]"><?php echo esc_html( $juiced_ig_handle ? $juiced_ig_handle : 'Instagram' ); ?></strong>
 							<span class="text-[13px] text-[#4a4036]">Juiced! NC · Raleigh</span>
@@ -115,7 +121,7 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 					   aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Instagram handle. */ __( 'See more on Instagram @%s', 'juiced' ), $juiced_ig_handle ) ); ?>">
 						<?php foreach ( $juiced_c_photos as $photo ) : ?>
 							<img src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['alt'] ); ?>"
-								 class="aspect-square md:aspect-auto md:h-[180px] w-full object-cover hover:opacity-90 transition-opacity" loading="lazy" />
+								 class="aspect-square md:aspect-auto md:h-[136px] w-full object-cover hover:opacity-90 transition-opacity" loading="lazy" />
 						<?php endforeach; ?>
 					</a>
 				<?php else : ?>
@@ -134,66 +140,67 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 						</blockquote>
 					</div>
 				<?php endif; ?>
-
-				<?php if ( $juiced_reviews ) : ?>
-					<!-- Google reviews strip. The list is printed twice so the CSS
-						 loop is seamless; the copy is hidden from screen readers. -->
-					<div class="-mx-3 -mb-3 mt-3 bg-brand-forest-deep pt-3.5 pb-4 text-brand-cream">
-						<div class="flex items-center justify-between gap-3 px-5 pb-3 text-[13px] font-semibold text-brand-mint">
-							<span class="flex items-center gap-2">
-								<?php if ( $juiced_rv_summary ) : ?>
-									<strong class="font-display text-xl leading-none text-brand-cream"><?php echo esc_html( number_format_i18n( $juiced_rv_summary['rating'], 1 ) ); ?></strong>
-									<?php echo juiced_stars( $juiced_rv_summary['rating'], 13 ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in helper. ?>
-									<?php esc_html_e( 'on Google', 'juiced' ); ?>
-								<?php else : ?>
-									<?php esc_html_e( 'Reviews from Google', 'juiced' ); ?>
-								<?php endif; ?>
-							</span>
-							<?php if ( $juiced_rv_summary ) : ?>
-								<span>
-									<?php
-									/* translators: %s: number of Google reviews. */
-									echo esc_html( sprintf( _n( '%s review', '%s reviews', $juiced_rv_summary['count'], 'juiced' ), number_format_i18n( $juiced_rv_summary['count'] ) ) );
-									?>
-								</span>
-							<?php endif; ?>
-						</div>
-
-						<div class="juiced-reviews overflow-hidden">
-							<div class="juiced-marquee juiced-marquee--reviews flex w-max">
-								<?php for ( $copy = 0; $copy < 2; $copy++ ) : ?>
-									<ul class="flex shrink-0 gap-2.5 pr-2.5" <?php echo $copy ? 'aria-hidden="true"' : 'aria-label="' . esc_attr__( 'Google reviews', 'juiced' ) . '"'; ?>>
-										<?php
-										foreach ( $juiced_reviews as $k => $review ) :
-											$juiced_rv_tag  = empty( $review['link'] ) ? 'span' : 'a';
-											$juiced_rv_attr = 'a' === $juiced_rv_tag ? ' href="' . esc_url( $review['link'] ) . '" target="_blank" rel="noopener noreferrer"' . ( $copy ? ' tabindex="-1"' : '' ) : '';
-											$juiced_rv_tone = 1 === $k % 3 ? 'bg-brand-cream text-brand-ink' : 'bg-brand-forest text-brand-cream';
-											?>
-											<li>
-												<<?php echo $juiced_rv_tag . $juiced_rv_attr; // phpcs:ignore WordPress.Security.EscapeOutput -- tag is fixed, attributes escaped above. ?> class="flex items-center gap-2.5 rounded-full py-2 pr-4 pl-2 <?php echo esc_attr( $juiced_rv_tone ); ?>">
-													<?php if ( $review['photo'] ) : ?>
-														<img src="<?php echo esc_url( $review['photo'] ); ?>" alt="" referrerpolicy="no-referrer" loading="lazy" class="h-[30px] w-[30px] shrink-0 rounded-full bg-brand-gold object-cover" />
-													<?php else : ?>
-														<span class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-brand-gold font-display text-[13px] font-semibold text-brand-ink" aria-hidden="true"><?php echo esc_html( strtoupper( mb_substr( $review['author'], 0, 1 ) ) ); ?></span>
-													<?php endif; ?>
-													<span class="min-w-0">
-														<span class="block max-w-[200px] truncate text-[13.5px] leading-snug sm:max-w-[280px]"><?php echo esc_html( wp_trim_words( $review['text'], 30 ) ); ?></span>
-														<span class="mt-0.5 flex items-center gap-2 text-xs opacity-80">
-															<?php echo juiced_stars( $review['rating'], 11 ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in helper. ?>
-															<?php echo esc_html( $review['author'] ); ?>
-														</span>
-													</span>
-												</<?php echo $juiced_rv_tag; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed tag name. ?>>
-											</li>
-										<?php endforeach; ?>
-									</ul>
-								<?php endfor; ?>
-							</div>
-						</div>
-					</div>
-				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
 	</div>
+
+	<?php if ( $juiced_reviews ) : ?>
+		<!-- Google reviews strip, full-bleed along the bottom of the section.
+		 The list is printed twice so the CSS loop is seamless; the copy is
+		 hidden from screen readers. -->
+		<div class="bg-brand-forest-deep pt-5 pb-8 md:pb-10 text-brand-cream">
+			<div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 pb-4 text-[15px] md:text-base font-semibold text-brand-mint">
+				<span class="flex items-center gap-2.5">
+					<?php if ( $juiced_rv_summary ) : ?>
+						<strong class="font-display text-3xl leading-none text-brand-cream"><?php echo esc_html( number_format_i18n( $juiced_rv_summary['rating'], 1 ) ); ?></strong>
+						<?php echo juiced_stars( $juiced_rv_summary['rating'], 17 ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in helper. ?>
+						<?php esc_html_e( 'on Google', 'juiced' ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Reviews from Google', 'juiced' ); ?>
+					<?php endif; ?>
+				</span>
+				<?php if ( $juiced_rv_summary ) : ?>
+					<span>
+						<?php
+						/* translators: %s: number of Google reviews. */
+						echo esc_html( sprintf( _n( '%s review', '%s reviews', $juiced_rv_summary['count'], 'juiced' ), number_format_i18n( $juiced_rv_summary['count'] ) ) );
+						?>
+					</span>
+				<?php endif; ?>
+			</div>
+
+			<div class="juiced-reviews overflow-hidden">
+				<div class="juiced-marquee juiced-marquee--reviews flex w-max">
+					<?php for ( $copy = 0; $copy < 2; $copy++ ) : ?>
+						<ul class="flex shrink-0 gap-4 pr-4" <?php echo $copy ? 'aria-hidden="true"' : 'aria-label="' . esc_attr__( 'Google reviews', 'juiced' ) . '"'; ?>>
+							<?php
+							foreach ( $juiced_reviews as $k => $review ) :
+								$juiced_rv_tag  = empty( $review['link'] ) ? 'span' : 'a';
+								$juiced_rv_attr = 'a' === $juiced_rv_tag ? ' href="' . esc_url( $review['link'] ) . '" target="_blank" rel="noopener noreferrer"' . ( $copy ? ' tabindex="-1"' : '' ) : '';
+								$juiced_rv_tone = 1 === $k % 3 ? 'bg-brand-cream text-brand-ink' : 'bg-brand-forest text-brand-cream';
+								?>
+								<li>
+									<<?php echo $juiced_rv_tag . $juiced_rv_attr; // phpcs:ignore WordPress.Security.EscapeOutput -- tag is fixed, attributes escaped above. ?> class="flex items-center gap-3.5 rounded-full py-3 pr-7 pl-3 <?php echo esc_attr( $juiced_rv_tone ); ?>">
+										<?php if ( $review['photo'] ) : ?>
+											<img src="<?php echo esc_url( $review['photo'] ); ?>" alt="" referrerpolicy="no-referrer" loading="lazy" class="h-12 w-12 shrink-0 rounded-full bg-brand-gold object-cover" />
+										<?php else : ?>
+											<span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-gold font-display text-lg font-semibold text-brand-ink" aria-hidden="true"><?php echo esc_html( strtoupper( mb_substr( $review['author'], 0, 1 ) ) ); ?></span>
+										<?php endif; ?>
+										<span class="min-w-0">
+											<span class="block max-w-[260px] truncate text-base leading-snug sm:max-w-[380px]"><?php echo esc_html( wp_trim_words( $review['text'], 30 ) ); ?></span>
+											<span class="mt-1 flex items-center gap-2 text-sm opacity-80">
+												<?php echo juiced_stars( $review['rating'], 14 ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in helper. ?>
+												<?php echo esc_html( $review['author'] ); ?>
+											</span>
+										</span>
+									</<?php echo $juiced_rv_tag; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed tag name. ?>>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endfor; ?>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
 </section>

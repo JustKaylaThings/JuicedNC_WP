@@ -28,7 +28,7 @@ $juiced_hood_styles = array(
 		'link'   => 'text-brand-ink hover:text-brand-forest-deep',
 		'block'  => 'bg-brand-rust',
 		'circle' => 'bg-brand-gold',
-		'label_default' => 'Neighborhood 01',
+		'label_default' => 'Cultural Commerce Shopping Center',
 		'focus'  => 'object-[50%_22%]', // Rock Quarry storefront: keep the "Juice Bar" sign in frame.
 	),
 	2 => array(
@@ -37,7 +37,7 @@ $juiced_hood_styles = array(
 		'link'   => 'text-brand-cream hover:text-brand-gold',
 		'block'  => 'bg-brand-forest-deep',
 		'circle' => 'bg-brand-forest',
-		'label_default' => 'Washington Terrace · Events home',
+		'label_default' => 'Washington Terrace Shopping Center · Events home',
 		'focus'  => 'object-[50%_52%]', // Hill Street: tall shot, crop past the sky to the mural wall.
 	),
 );

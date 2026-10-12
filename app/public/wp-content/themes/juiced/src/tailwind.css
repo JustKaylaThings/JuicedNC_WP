@@ -351,7 +351,7 @@ html:has(.menu-section-bar) {
 /* Homepage reviews strip (community.php): slower, pauses on hover or focus.
    Reduced motion drops the loop copy and lets the row scroll by hand. */
 .juiced-marquee--reviews {
-  animation-duration: 60s;
+  animation-duration: 80s;
 }
 .juiced-reviews:hover .juiced-marquee,
 .juiced-reviews:focus-within .juiced-marquee {

@@ -7,7 +7,7 @@
  * featured items (Menu Items with Featured on) in one row on cream; a sticky
  * bar with the section links and delivery buttons; then the Super Smoothies
  * as a menu list (sizes and benefit key above it, Create Your Own below), the
- * add-on price tiers, and the rest of the menu (juices, seamoss, snacks and
+ * add-on price tiers, and the rest of the menu (juices, seamoss and
  * so on) by section. Copy comes from ACF fields on this page
  * (inc/acf-menu-page.php); the drinks are Menu Items (plugins/juiced-cpt).
  *

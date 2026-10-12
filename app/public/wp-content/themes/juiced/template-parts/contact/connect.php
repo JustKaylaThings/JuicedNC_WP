@@ -37,7 +37,7 @@ $hours2    = juiced_business_field( 'loc2_hours', '' );
 
 $button_label = juiced_page_field( 'contact_form_button', 'Send Message' );
 
-// Host an Event form — offered when the topic is Events & Partnerships.
+// Host an Event form — offered when the topic mentions an event.
 $host_url = juiced_host_event_page_url();
 if ( $host_url ) {
 	$host_url .= '#event-form';
@@ -46,7 +46,7 @@ if ( $host_url ) {
 // Dropdown topics — one per line in ACF, mockup defaults here.
 $topics = array_filter( array_map( 'trim', explode( "\n", (string) juiced_page_field(
 	'contact_form_topics',
-	"General Question\nEvents & Partnerships\nFeedback\nSomething Else"
+	"General Question\nHost an Event\nPartnership Opportunity\nFeedback\nSomething Else"
 ) ) ) );
 
 // tel: href from a display number's digits ("(919) 123-JUICE (5842)" → 9191235842,
@@ -178,7 +178,8 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 				<form class="mt-6 space-y-4" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
 					  x-data="{
 						topic: '',
-						get isEvent() { return /event|partner/i.test(this.topic); },
+						hint: false,
+						get isEvent() { return /event/i.test(this.topic); },
 						toHost() {
 							// Hand what they've typed to the Host an Event form via
 							// sessionStorage (same tab, cleared on close) rather than the
@@ -246,7 +247,7 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 						</div>
 
 						<?php if ( $host_url ) : ?>
-							<?php // Events & Partnerships → point them at the dedicated booking form. ?>
+							<?php // Host an Event → point them at the dedicated booking form. ?>
 							<div x-show="isEvent" x-cloak x-transition.opacity
 								 class="flex flex-col gap-3 rounded-2xl bg-brand-forest/8 p-5 sm:flex-row sm:items-center sm:justify-between">
 								<p class="text-sm leading-relaxed text-brand-ink/80">
@@ -271,11 +272,27 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 
 					<?php juiced_captcha_field(); ?>
 
-					<button type="submit"
-							class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
-						<?php echo esc_html( $button_label ); ?>
-						<span aria-hidden="true">&rarr;</span>
-					</button>
+					<?php
+					// With Host an Event picked, sending is switched off: those requests go
+					// through the booking form. The button drops pointer events while
+					// disabled so the wrapper still sees the hover and shows the toast.
+					?>
+					<div class="relative inline-flex"
+						 @mouseenter="hint = <?php echo $host_url ? 'isEvent' : 'false'; ?>" @mouseleave="hint = false">
+						<button type="submit"
+								<?php if ( $host_url ) : ?>:disabled="isEvent" :class="isEvent && 'pointer-events-none opacity-45'"<?php endif; ?>
+								class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+							<?php echo esc_html( $button_label ); ?>
+							<span aria-hidden="true">&rarr;</span>
+						</button>
+						<?php if ( $host_url ) : ?>
+							<div x-show="hint" x-cloak x-transition.opacity role="status"
+								 class="absolute bottom-full left-0 z-10 mb-3 w-72 rounded-xl bg-brand-ink px-4 py-3 text-sm leading-snug text-brand-cream shadow-lg">
+								<?php esc_html_e( 'Event requests go through our Host an Event form. Use the button above to send yours.', 'juiced' ); ?>
+								<span class="absolute top-full left-8 border-x-8 border-t-8 border-x-transparent border-t-brand-ink" aria-hidden="true"></span>
+							</div>
+						<?php endif; ?>
+					</div>
 				</form>
 
 			</div>

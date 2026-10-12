@@ -351,7 +351,19 @@
         step: 1,
 
         next: function () {
-          var fields = this.$refs['step' + this.step].querySelectorAll('input, select, textarea');
+          var stepEl = this.$refs['step' + this.step];
+          // Checkbox groups marked data-required-group need at least one tick;
+          // an empty one shows its inline message and takes focus.
+          var groups = stepEl.querySelectorAll('[data-required-group]');
+          for (var g = 0; g < groups.length; g++) {
+            var empty = !groups[g].querySelector('input:checked');
+            groups[g].querySelector('[data-group-error]').hidden = !empty;
+            if (empty) {
+              groups[g].querySelector('input').focus();
+              return;
+            }
+          }
+          var fields = stepEl.querySelectorAll('input, select, textarea');
           for (var i = 0; i < fields.length; i++) {
             if (!fields[i].reportValidity()) {
               return;

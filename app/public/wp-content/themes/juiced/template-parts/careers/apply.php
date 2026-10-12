@@ -41,6 +41,7 @@ $heading      = juiced_page_field( 'careers_form_heading', 'Apply Now' );
 $intro        = juiced_page_field( 'careers_form_intro', 'It takes about five minutes. We read every application.' );
 $button_label = juiced_page_field( 'careers_form_button', 'Submit Application' );
 $locations    = juiced_location_names();
+$avail        = juiced_job_availability_options();
 
 $steps = array(
 	1 => __( 'About you', 'juiced' ),
@@ -99,13 +100,14 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 		</div>
 	</div>
 
-	<div x-data="jobApplication">
-		<div class="mx-auto max-w-2xl px-4 pt-8 pb-14 sm:px-8 md:pt-10 md:pb-20 lg:ml-0 lg:mr-auto lg:max-w-[640px] lg:pl-16 lg:pr-4">
+	<?php // After sending, the thank-you sits in the middle of the column's height. ?>
+	<div x-data="jobApplication"<?php echo 'sent' === $status ? ' class="flex flex-col justify-center"' : ''; ?>>
+		<div class="w-full mx-auto max-w-2xl px-4 pt-8 pb-14 sm:px-8 md:pt-10 md:pb-20 lg:ml-0 lg:mr-auto lg:max-w-[640px] lg:pl-16 lg:pr-4">
 
 			<?php if ( 'sent' === $status ) : ?>
 
 				<!-- Sent: the thank-you stands in for the whole form. -->
-				<div class="flex flex-col items-start gap-5" role="status">
+				<div class="flex flex-col items-center gap-5 text-center" role="status">
 					<span class="flex h-14 w-14 items-center justify-center rounded-full bg-brand-forest text-brand-cream" aria-hidden="true">
 						<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
 					</span>
@@ -180,12 +182,17 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 					<?php if ( $locations ) : ?>
 						<div>
 							<label for="apply-location" class="<?php echo esc_attr( $label ); ?>"><?php esc_html_e( 'Which shop?', 'juiced' ); ?></label>
-							<select id="apply-location" name="location" class="<?php echo esc_attr( $input ); ?>">
-								<option value=""><?php esc_html_e( 'Either is fine', 'juiced' ); ?></option>
-								<?php foreach ( $locations as $location ) : ?>
-									<option value="<?php echo esc_attr( $location ); ?>"><?php echo esc_html( $location ); ?></option>
-								<?php endforeach; ?>
-							</select>
+							<div class="relative">
+								<select id="apply-location" name="location" class="<?php echo esc_attr( $input ); ?> appearance-none pr-10">
+									<option value=""><?php esc_html_e( 'Either is fine', 'juiced' ); ?></option>
+									<?php foreach ( $locations as $location ) : ?>
+										<option value="<?php echo esc_attr( $location ); ?>"><?php echo esc_html( $location ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-brand-forest/60" aria-hidden="true">
+									<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+								</span>
+							</div>
 						</div>
 					<?php endif; ?>
 					<div class="flex justify-end pt-2" x-cloak>
@@ -207,10 +214,37 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 						<label for="apply-start" class="<?php echo esc_attr( $label ); ?>"><?php esc_html_e( 'When can you start?', 'juiced' ); ?></label>
 						<input type="date" id="apply-start" name="start_date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" class="<?php echo esc_attr( $input ); ?>" />
 					</div>
+					<?php
+					// Days and shifts as toggle chips; at least one of each is
+					// required (checked in jobApplication.next() and by the handler).
+					$avail_groups = array(
+						'avail_days'  => array( __( 'Which days can you work?', 'juiced' ), $avail['days'], 'grid-cols-3 sm:grid-cols-6' ),
+						'avail_times' => array( __( 'Which times?', 'juiced' ), $avail['times'], 'grid-cols-1 sm:grid-cols-3' ),
+					);
+					foreach ( $avail_groups as $avail_name => list( $avail_legend, $avail_options, $avail_cols ) ) :
+						?>
+						<fieldset data-required-group
+								  @change="$el.querySelector('[data-group-error]').hidden = true">
+							<legend class="<?php echo esc_attr( $label ); ?>"><?php echo esc_html( $avail_legend ); ?> <span class="text-brand-rust">*</span>
+								<span class="ml-1 font-normal text-brand-ink/60"><?php esc_html_e( 'Select all that apply.', 'juiced' ); ?></span>
+							</legend>
+							<div class="grid gap-2 <?php echo esc_attr( $avail_cols ); ?>">
+								<?php foreach ( $avail_options as $avail_value => $avail_label ) : ?>
+									<label class="relative cursor-pointer">
+										<input type="checkbox" name="<?php echo esc_attr( $avail_name ); ?>[]" value="<?php echo esc_attr( $avail_value ); ?>" class="peer sr-only" />
+										<span class="flex h-12 items-center justify-center rounded-xl border-2 border-brand-forest/20 bg-white px-3 text-[15px] font-semibold text-brand-forest transition-colors hover:border-brand-forest peer-checked:border-brand-forest peer-checked:bg-brand-forest peer-checked:text-brand-cream peer-focus-visible:ring-2 peer-focus-visible:ring-brand-gold peer-focus-visible:ring-offset-2">
+											<?php echo esc_html( $avail_label ); ?>
+										</span>
+									</label>
+								<?php endforeach; ?>
+							</div>
+							<p class="mt-1.5 text-sm font-semibold text-brand-rust" data-group-error hidden role="alert"><?php esc_html_e( 'Pick at least one.', 'juiced' ); ?></p>
+						</fieldset>
+					<?php endforeach; ?>
 					<div>
-						<label for="apply-availability" class="<?php echo esc_attr( $label ); ?>"><?php esc_html_e( 'Your availability', 'juiced' ); ?> <span class="text-brand-rust">*</span></label>
-						<textarea id="apply-availability" name="availability" rows="4" required
-								  placeholder="<?php esc_attr_e( 'Which days and times can you work? e.g. weekday mornings, all day Saturday.', 'juiced' ); ?>"
+						<label for="apply-availability" class="<?php echo esc_attr( $label ); ?>"><?php esc_html_e( 'Anything else about your schedule?', 'juiced' ); ?></label>
+						<textarea id="apply-availability" name="availability" rows="3"
+								  placeholder="<?php esc_attr_e( 'e.g. classes until 2pm on Tuesdays, can\'t work the first week of December.', 'juiced' ); ?>"
 								  class="<?php echo esc_attr( $input ); ?> resize-y"></textarea>
 					</div>
 					<div class="flex items-center justify-between gap-4 pt-2" x-cloak>

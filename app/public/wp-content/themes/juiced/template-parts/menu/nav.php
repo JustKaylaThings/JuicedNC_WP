@@ -12,7 +12,7 @@ $juiced_nav_links = array(
 	'#featured'  => __( 'Featured', 'juiced' ),
 	'#smoothies' => __( 'Super smoothies', 'juiced' ),
 	'#add-ons'   => __( 'Add ons', 'juiced' ),
-	'#more'      => __( 'Juices & more', 'juiced' ),
+	'#more'      => __( 'Juices & More', 'juiced' ),
 );
 $juiced_nav_apps  = juiced_delivery_apps();
 ?>

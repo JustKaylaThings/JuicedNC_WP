@@ -103,7 +103,6 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 	</div>
 </section>
 <?php endif; ?>
-
 <footer class="bg-brand-forest-deep text-brand-mint">
 	<div class="mx-auto max-w-7xl px-4 py-12 md:py-14 flex flex-col gap-10 md:flex-row md:justify-between">
 

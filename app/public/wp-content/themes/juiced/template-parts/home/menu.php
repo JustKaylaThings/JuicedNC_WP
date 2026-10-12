@@ -184,7 +184,10 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 							</div>
 							<?php if ( $drink['order'] ) : ?>
 								<div class="flex flex-wrap items-center gap-2">
-									<span class="mr-1 text-xs font-bold uppercase tracking-[.16em] text-brand-forest"><?php esc_html_e( 'Order on', 'juiced' ); ?></span>
+									<span class="mr-1 flex flex-col text-xs font-bold uppercase leading-tight tracking-[.16em] text-brand-forest">
+										<span><?php esc_html_e( 'Order', 'juiced' ); ?></span>
+										<span><?php esc_html_e( 'Delivery', 'juiced' ); ?></span>
+									</span>
 									<?php foreach ( $drink['order'] as $app ) : ?>
 										<a href="<?php echo esc_url( $app['url'] ); ?>" target="_blank" rel="noopener noreferrer"
 										   :tabindex="i === <?php echo (int) $k; ?> ? 0 : -1"
