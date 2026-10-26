@@ -251,6 +251,15 @@ add_action(
 						'instructions' => 'e.g. "Owners".',
 					),
 					array(
+						'key'           => 'field_juiced_ab_owners_photo',
+						'label'         => 'Shared photo (both owners)',
+						'name'          => 'about_owners_photo',
+						'type'          => 'image',
+						'return_format' => 'array',
+						'preview_size'  => 'medium',
+						'instructions'  => 'One photo of the owners together, shown wide above their names. When set, the individual circle photos below are not used. A landscape (5:4) crop works best.',
+					),
+					array(
 						'key'          => 'field_juiced_ab_owner1_name',
 						'label'        => 'Owner 1 — name',
 						'name'         => 'about_owner1_name',

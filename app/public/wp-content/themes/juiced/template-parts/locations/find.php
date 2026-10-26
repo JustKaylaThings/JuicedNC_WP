@@ -5,9 +5,12 @@
  * Homepage-style heading row (small eyebrow, big two-tone forest/rust heading)
  * over one white card split into two location
  * columns, divided by a hairline. Each column: pin + location name + address,
- * icon rows for phone / hours / parking, an interior photo, a map image, and
- * a tinted card with a Get Directions button and that location's DoorDash
- * ordering button. Location 1 dresses in orange, location 2 in forest green —
+ * icon rows for phone / hours / parking, an interior photo, a live Google map
+ * (juiced_location_map_url(); the page's map image stands in when the live
+ * map is switched off in Customize → Google Reviews & Maps), and
+ * a tinted card with a Get Directions button and that location's DoorDash /
+ * Uber Eats / Grubhub buttons (its links in Business Info; with none, the
+ * older single DoorDash button from this page's fields). Location 1 dresses in orange, location 2 in forest green —
  * the homepage's neighborhood panels' pairing — though both names, pins and Get Directions buttons are green.
  *
  * Each location's name, address, phone, hours, parking and directions link
@@ -67,6 +70,17 @@ foreach ( range( 1, 2 ) as $i ) {
 		'parking'     => juiced_business_field( "loc{$i}_parking", '' ),
 		'photo'       => juiced_image_url( juiced_page_field( "locations_loc{$i}_photo", '' ), 'juiced_card' ),
 		'map'         => juiced_image_url( juiced_page_field( "locations_loc{$i}_map", '' ), 'large' ),
+		'map_embed'   => juiced_location_map_url( $i, $address ),
+		// This shop's app links from Business Info (shared with the Order Ahead
+		// picker). With none, the older per-page DoorDash field still works.
+		'apps'        => array_filter(
+			array_map(
+				function ( $app ) use ( $i ) {
+					return juiced_business_field( "loc{$i}_{$app}", '' );
+				},
+				array_combine( array_keys( juiced_order_apps() ), array_keys( juiced_order_apps() ) )
+			)
+		),
 		'order_url'   => juiced_page_field( "locations_order_url{$i}", '' ),
 		'order_label' => juiced_page_field( "locations_order_label{$i}", 1 === $i ? 'Order Rock Quarry' : 'Order Hill Street' ),
 		'directions'  => $directions,
@@ -150,13 +164,18 @@ $juiced_detail_icons = array(
 						<?php endif; ?>
 					</div>
 
-					<?php if ( $location['map'] ) : ?>
+					<?php if ( $location['map_embed'] ) : ?>
+						<iframe src="<?php echo esc_url( $location['map_embed'] ); ?>"
+								title="<?php /* translators: %s: location name. */ echo esc_attr( sprintf( __( 'Map of Juiced! %s', 'juiced' ), $location['name'] ) ); ?>"
+								loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+								class="mt-6 block h-64 w-full rounded-2xl border-0 bg-brand-paper md:h-72"></iframe>
+					<?php elseif ( $location['map'] ) : ?>
 						<img src="<?php echo esc_url( $location['map'] ); ?>" alt=""
 							 class="mt-6 h-48 w-full rounded-2xl object-cover md:h-56" loading="lazy" />
 					<?php endif; ?>
 
-					<?php if ( ( $directions_label && $location['directions'] ) || $location['order_url'] ) : ?>
-						<div class="mt-6 flex flex-wrap items-center gap-3 rounded-2xl <?php echo esc_attr( $palette['tint'] ); ?> p-5 md:p-6">
+					<?php if ( ( $directions_label && $location['directions'] ) || $location['apps'] || $location['order_url'] ) : ?>
+						<div class="mt-6 flex flex-col items-start gap-4 rounded-2xl <?php echo esc_attr( $palette['tint'] ); ?> p-5 md:p-6">
 
 							<?php if ( $directions_label && $location['directions'] ) : ?>
 								<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
@@ -166,7 +185,19 @@ $juiced_detail_icons = array(
 								</a>
 							<?php endif; ?>
 
-							<?php if ( $location['order_url'] ) : ?>
+							<?php if ( $location['apps'] ) : ?>
+								<div class="flex flex-wrap items-center gap-2">
+									<span class="w-full text-xs font-bold uppercase tracking-[.14em] text-brand-forest"><?php esc_html_e( 'Order ahead', 'juiced' ); ?></span>
+									<?php foreach ( $location['apps'] as $app => $url ) : ?>
+										<?php $meta = juiced_order_apps()[ $app ]; ?>
+										<a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer"
+										   aria-label="<?php echo esc_attr( sprintf( /* translators: 1: delivery app, 2: location */ __( 'Order from %2$s on %1$s (opens in a new tab)', 'juiced' ), $meta['label'], $location['name'] ) ); ?>"
+										   class="whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold transition-colors <?php echo esc_attr( $meta['class'] ); ?>">
+											<?php echo esc_html( $meta['label'] ); ?>
+										</a>
+									<?php endforeach; ?>
+								</div>
+							<?php elseif ( $location['order_url'] ) : ?>
 								<!-- DoorDash-branded button: DoorDash red with the wing mark,
 									 since the ordering links go to DoorDash. -->
 								<a href="<?php echo esc_url( $location['order_url'] ); ?>" target="_blank" rel="noopener"

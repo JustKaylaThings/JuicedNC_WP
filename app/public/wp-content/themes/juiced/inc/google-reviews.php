@@ -9,19 +9,20 @@
  * section (template-parts/home/community.php) merges the two locations, keeps
  * 4-star-and-up, and runs them as a marquee under the Instagram card.
  *
- * ── API KEY (required) ────────────────────────────────────────────────────────
- * The key is read from a PHP constant so it never lives in the theme repo. Add
- * this to wp-config.php (above the "That's all, stop editing" line):
+ * ── SETTINGS ──────────────────────────────────────────────────────────────────
+ * Everything is set in Appearance → Customize → Google Reviews & Maps
+ * (inc/customizer.php): show/hide, the API key, each shop's Place ID
+ * (see juiced_review_place_ids()), the lowest star rating and how many to show.
+ * Saving that section clears the cache so changes show right away.
+ *
+ * The API key can instead be defined in wp-config.php, which wins over the
+ * Customizer field:
  *
  *     define( 'JUICED_GOOGLE_PLACES_API_KEY', 'your-key-here' );
  *
  * The key needs "Places API (New)" enabled in Google Cloud (NOT the legacy
- * "Places API") with billing on. Restrict it to the Places API + your server IP.
- * If the constant is absent, every function here returns [] and the reviews
- * strip simply hides — nothing breaks.
- *
- * Place IDs are configured per location in Appearance → Customize → Business
- * Info (see juiced_review_place_ids()).
+ * "Places API") with billing on. With no key, every function here returns []
+ * and the reviews strip simply hides — nothing breaks.
  *
  * @package Juiced
  */
@@ -35,11 +36,21 @@ const JUICED_GR_ENDPOINT = 'https://places.googleapis.com/v1/places/';
 /** Only request the fields we render, to keep the response small. */
 const JUICED_GR_FIELDMASK = 'id,displayName,rating,userRatingCount,googleMapsUri,reviews';
 
-/** The Places API key, from wp-config.php, or '' when unset. */
+/** The Places API key — wp-config.php first, then the Customizer — or ''. */
 function juiced_google_api_key() {
-	return ( defined( 'JUICED_GOOGLE_PLACES_API_KEY' ) && JUICED_GOOGLE_PLACES_API_KEY )
-		? (string) JUICED_GOOGLE_PLACES_API_KEY
-		: '';
+	if ( defined( 'JUICED_GOOGLE_PLACES_API_KEY' ) && JUICED_GOOGLE_PLACES_API_KEY ) {
+		return (string) JUICED_GOOGLE_PLACES_API_KEY;
+	}
+	return trim( (string) get_theme_mod( 'google_places_api_key', '' ) );
+}
+
+/**
+ * Whether the homepage reviews strip is switched on in the Customizer.
+ *
+ * @return bool
+ */
+function juiced_reviews_enabled() {
+	return (bool) get_theme_mod( 'reviews_show', true );
 }
 
 /**
@@ -120,22 +131,28 @@ function juiced_place_reviews( $place_id ) {
 }
 
 /**
- * Merge reviews across all given Place IDs: keep 4-star-and-up with real text,
- * sort newest first, and cap the count. Mirrors the storefront's
+ * Merge reviews across all given Place IDs: keep those at or above the
+ * Customizer's lowest rating (4 by default) with real text, sort newest first,
+ * and cap at the Customizer's count (8 by default). Mirrors the storefront's
  * GoogleReviewsSection filtering.
  *
  * @param array<int, string> $place_ids Place IDs to pull from.
- * @param int                $limit     Max reviews to return.
+ * @param int|null           $limit     Max reviews to return; null uses the Customizer setting.
  * @return array<int, array{author:string,photo:string,rating:int,relative:string,text:string,time:int}>
  */
-function juiced_community_reviews( $place_ids, $limit = 9 ) {
+function juiced_community_reviews( $place_ids, $limit = null ) {
+	if ( ! juiced_reviews_enabled() ) {
+		return array();
+	}
+	$min    = max( 1, min( 5, (int) get_theme_mod( 'reviews_min_rating', 4 ) ) );
+	$limit  = null === $limit ? max( 1, (int) get_theme_mod( 'reviews_count', 8 ) ) : $limit;
 	$merged = array();
 	foreach ( (array) $place_ids as $place_id ) {
 		if ( ! $place_id ) {
 			continue;
 		}
 		foreach ( juiced_place_reviews( $place_id ) as $review ) {
-			if ( $review['rating'] >= 4 && '' !== trim( (string) $review['text'] ) ) {
+			if ( $review['rating'] >= $min && '' !== trim( (string) $review['text'] ) ) {
 				$merged[] = $review;
 			}
 		}
@@ -218,3 +235,38 @@ function juiced_reviews_summary( $place_ids ) {
 
 	return $count ? array( 'rating' => round( $sum / $count, 1 ), 'count' => $count ) : array();
 }
+
+/**
+ * A line for each shop's Place ID control in the Customizer saying whether its
+ * reviews are loading, e.g. "Connected: 4.8 stars from 175 Google reviews."
+ *
+ * @param int $i Location number (1 or 2).
+ * @return string Leading space included; '' when there's nothing to say.
+ */
+function juiced_review_status_note( $i ) {
+	if ( '' === juiced_google_api_key() ) {
+		return ' ' . __( 'Not connected yet: add the API key above.', 'juiced' );
+	}
+	$ids   = juiced_review_place_ids();
+	$stats = isset( $ids[ $i - 1 ] ) ? juiced_place_stats( $ids[ $i - 1 ] ) : array();
+	if ( empty( $stats['count'] ) ) {
+		return ' ' . __( 'Not connected: Google sent nothing back. Check the API key (Places API (New) enabled, billing on) and the Place ID.', 'juiced' );
+	}
+	/* translators: 1: star rating, 2: number of reviews. */
+	return ' ' . sprintf( __( 'Connected: %1$s stars from %2$s Google reviews.', 'juiced' ), number_format_i18n( $stats['rating'], 1 ), number_format_i18n( $stats['count'] ) );
+}
+
+/**
+ * Drop the cached reviews and ratings for the current Place IDs, so the next
+ * page load refetches. Hooked before and after a Customizer save, which clears
+ * both the old and the new IDs when one is changed, so a new key, Place ID or
+ * setting shows at once.
+ */
+function juiced_flush_review_cache() {
+	foreach ( juiced_review_place_ids() as $place_id ) {
+		delete_transient( 'juiced_greviews_' . md5( trim( (string) $place_id ) ) );
+		delete_transient( juiced_place_stats_key( $place_id ) );
+	}
+}
+add_action( 'customize_save', 'juiced_flush_review_cache' );
+add_action( 'customize_save_after', 'juiced_flush_review_cache' );

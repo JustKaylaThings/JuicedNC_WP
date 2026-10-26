@@ -9,7 +9,7 @@
  * selling the space than a heading could.
  *
  * The button link reads events_host_cta_url — the field the old host box under
- * the calendar used — so the link already saved there carried over.
+ * the calendar used — and goes to the Host an Event page when that is blank.
  *
  * The carousel is a native scroll-snap track, so it swipes on touch and works
  * with no JS at all; Alpine only adds the arrows, dots, and a slow autoplay
@@ -29,7 +29,7 @@ if ( ! $juiced_heading ) {
 
 $juiced_body  = juiced_page_field( 'events_gallery_body', "Birthdays, workshops, pop-ups, book clubs, and wellness meetups — we've hosted them all." );
 $juiced_label = juiced_page_field( 'events_gallery_cta_label', 'Inquire Today' );
-$juiced_url   = juiced_page_field( 'events_host_cta_url', '' );
+$juiced_url   = juiced_page_field( 'events_host_cta_url', juiced_host_event_page_url() );
 
 // 'large' (1024w): a slide is up to ~60% of the container, so the card size
 // goes soft on a 2x display. Alt and caption come from the Media Library, so

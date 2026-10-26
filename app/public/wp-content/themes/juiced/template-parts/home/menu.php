@@ -15,11 +15,14 @@
  * falls back to the client's Oct 2026 list (two juices, three smoothies),
  * looked up by slug; a slug with no published menu item is skipped.
  *
- * Order buttons: each drink can have its own DoorDash / Uber Eats / Grubhub
- * link (top_dd_N, top_ue_N, top_gh_N), e.g. straight to that item in the app.
- * A blank one falls back to the section-wide store link for that app
- * (top_doordash_url etc.; DoorDash falls back once more to Order Ahead URL).
- * An app with no link at all gets no button. The
+ * Order buttons: one per app, listing the shops with a link for it in
+ * Business Info (juiced_delivery_apps()); with two, the button opens a
+ * "pick a shop" menu (juiced_app_button()). A drink's own link (top_dd_N, top_ue_N,
+ * top_gh_N), e.g. straight to that item in the app, replaces Location 1's.
+ * With no Business Info links for an app it is a single link: the drink's
+ * own, else the section-wide store link (top_doordash_url etc.; DoorDash
+ * falls back once more to Order Ahead URL). An app with no link at all gets
+ * no button. The
  * photo, ingredients and price come from the menu item; the size is the part
  * of its title in brackets, e.g. "Berry Boost (32oz)". A drink without a photo
  * shows a colour block instead. Renders nothing when no drinks are found.
@@ -35,23 +38,13 @@ $juiced_default_top = array(
 	'bright-early-6oz' => 'Most nutrient dense',
 );
 
-// Section-wide store links, used where a drink has no link of its own.
-$juiced_apps = array(
-	'dd' => array(
-		'label' => 'DoorDash',
-		'url'   => juiced_field( 'top_doordash_url', juiced_field( 'order_ahead_url', '' ) ),
-		'class' => 'bg-[#ff3008] text-white hover:bg-[#d62a07]',
-	),
-	'ue' => array(
-		'label' => 'Uber Eats',
-		'url'   => juiced_field( 'top_ubereats_url', '' ),
-		'class' => 'bg-[#06c167] text-brand-ink hover:bg-[#05a357]',
-	),
-	'gh' => array(
-		'label' => 'Grubhub',
-		'url'   => juiced_field( 'top_grubhub_url', '' ),
-		'class' => 'bg-[#ff8000] text-brand-ink hover:bg-[#e67300]',
-	),
+// Each app's shops (juiced_delivery_apps()), and the prefix of the slots'
+// own drink-link fields for it (top_dd_N etc.).
+$juiced_apps      = juiced_delivery_apps();
+$juiced_slot_keys = array(
+	'doordash' => 'dd',
+	'ubereats' => 'ue',
+	'grubhub'  => 'gh',
 );
 
 // Resolve the picks to post IDs, tags and the ranking slot they came from
@@ -101,12 +94,17 @@ foreach ( $juiced_picks as $k => $pick ) {
 		$type = preg_replace( '/s$/', '', $section[0]->name );
 	}
 
+	// A drink's own link for an app stands in for Location 1's shop link.
 	$order = array();
-	foreach ( $juiced_apps as $app => $info ) {
-		$url = juiced_field( "top_{$app}_{$slot}", '' );
-		$url = $url ? $url : $info['url'];
-		if ( $url ) {
-			$order[] = array( 'url' => $url ) + $info;
+	foreach ( juiced_order_apps() as $key => $meta ) {
+		$own = juiced_field( "top_{$juiced_slot_keys[ $key ]}_{$slot}", '' );
+		$app = isset( $juiced_apps[ $key ] ) ? $juiced_apps[ $key ] : $meta + array( 'shops' => array() );
+		if ( $own ) {
+			$app['shops'][1] = array( 'url' => $own ) + ( isset( $app['shops'][1] ) ? $app['shops'][1] : juiced_order_location_label( 1 ) );
+			ksort( $app['shops'] );
+		}
+		if ( $app['shops'] ) {
+			$order[] = $app;
 		}
 	}
 
@@ -189,12 +187,7 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 										<span><?php esc_html_e( 'Delivery', 'juiced' ); ?></span>
 									</span>
 									<?php foreach ( $drink['order'] as $app ) : ?>
-										<a href="<?php echo esc_url( $app['url'] ); ?>" target="_blank" rel="noopener noreferrer"
-										   :tabindex="i === <?php echo (int) $k; ?> ? 0 : -1"
-										   aria-label="<?php echo esc_attr( sprintf( /* translators: 1: drink, 2: delivery app */ __( 'Order %1$s on %2$s (opens in a new tab)', 'juiced' ), $drink['name'], $app['label'] ) ); ?>"
-										   class="whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold transition-colors <?php echo esc_attr( $app['class'] ); ?>">
-											<?php echo esc_html( $app['label'] ); ?>
-										</a>
+										<?php juiced_app_button( $app, 'px-4 py-2.5 text-sm', $drink['name'], ':tabindex="i === ' . (int) $k . ' ? 0 : -1"' ); ?>
 									<?php endforeach; ?>
 								</div>
 							<?php endif; ?>

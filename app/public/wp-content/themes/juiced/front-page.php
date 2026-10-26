@@ -20,6 +20,8 @@ get_template_part( 'template-parts/home/community' );
 
 get_template_part( 'template-parts/home/menu' );
 
+get_template_part( 'template-parts/home/vendor' );
+
 get_template_part( 'template-parts/home/locations' );
 
 // Google reviews now run inside the community section's Instagram card, which

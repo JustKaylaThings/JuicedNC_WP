@@ -67,6 +67,41 @@ function juiced_business_field( $name, $default = '' ) {
 }
 
 /**
+ * Embed URL for one shop's live Google map on the Locations page, or '' when
+ * the live map is switched off (Customize → Google Reviews & Maps) or the shop
+ * has no address.
+ *
+ * With a Maps Embed API key set there, this is the official embed pinned to
+ * the shop's Google Place ID (juiced_review_place_ids()); without one, Google's
+ * keyless embed searching for the shop's name and address, which needs no
+ * setup.
+ *
+ * @param int    $i       Location number (1 or 2).
+ * @param string $address The shop's address from Business Info.
+ * @return string
+ */
+function juiced_location_map_url( $i, $address ) {
+	$address = trim( preg_replace( '/\s+/', ' ', (string) $address ) );
+	if ( ! get_theme_mod( 'locations_live_map', true ) || '' === $address ) {
+		return '';
+	}
+
+	$key = trim( (string) get_theme_mod( 'google_maps_embed_key', '' ) );
+	$ids = function_exists( 'juiced_review_place_ids' ) ? juiced_review_place_ids() : array();
+	if ( '' !== $key && ! empty( $ids[ $i - 1 ] ) ) {
+		return add_query_arg(
+			array(
+				'key' => rawurlencode( $key ),
+				'q'   => rawurlencode( 'place_id:' . $ids[ $i - 1 ] ),
+			),
+			'https://www.google.com/maps/embed/v1/place'
+		);
+	}
+
+	return 'https://maps.google.com/maps?q=' . rawurlencode( 'Juiced! Juice Bar, ' . $address ) . '&z=15&output=embed';
+}
+
+/**
  * Read an ACF field from the page currently being viewed, with a fallback.
  *
  * The sibling of juiced_field(): that one always reads the front page (site-wide
@@ -640,24 +675,222 @@ function juiced_herb_card_data( $post ) {
 }
 
 /**
- * Delivery apps with a store link, for the Menu page's order buttons:
- * label => [url, button classes]. The links are the store links on the Home
- * page's Top five tab (DoorDash falls back to the Order Ahead URL); an app
- * without one is left out.
+ * The ordering apps each location can have a link for, in display order:
+ * key (the "loc{N}_{key}" Business Info setting) => label and button classes.
+ *
+ * @return array
+ */
+function juiced_order_apps() {
+	return array(
+		'doordash' => array( 'label' => 'DoorDash', 'class' => 'bg-[#ff3008] text-white hover:bg-[#d62a07]' ),
+		'ubereats' => array( 'label' => 'Uber Eats', 'class' => 'bg-[#06c167] text-brand-ink hover:bg-[#05a357]' ),
+		'grubhub'  => array( 'label' => 'Grubhub', 'class' => 'bg-[#ff8000] text-brand-ink hover:bg-[#e67300]' ),
+	);
+}
+
+/**
+ * Locations with at least one ordering link, for the "Order Ahead" picker:
+ * each [name, street, apps => [label, url, class]]. The links are per
+ * location in Business Info (inc/customizer.php); a location with none is
+ * left out.
+ *
+ * @return array
+ */
+function juiced_order_locations() {
+	$locations = array();
+	foreach ( array( 1, 2 ) as $i ) {
+		$apps = array();
+		foreach ( juiced_order_apps() as $key => $meta ) {
+			$url = juiced_business_field( "loc{$i}_{$key}", '' );
+			if ( $url ) {
+				$apps[] = array( 'label' => $meta['label'], 'url' => $url, 'class' => $meta['class'] );
+			}
+		}
+		if ( ! $apps ) {
+			continue;
+		}
+		$locations[] = juiced_order_location_label( $i ) + array( 'apps' => $apps );
+	}
+	return $locations;
+}
+
+/**
+ * A location's name and street (the first address line, or the part before
+ * the first comma), for the order pickers.
+ *
+ * @param int $i Location number.
+ * @return array
+ */
+function juiced_order_location_label( $i ) {
+	$address = (string) juiced_business_field( "loc{$i}_address", '' );
+	return array(
+		'name'   => juiced_business_field( "loc{$i}_name", "Location {$i}" ),
+		'street' => trim( strtok( strtok( $address, "\n" ), ',' ) ),
+	);
+}
+
+/**
+ * The locations with a link for one ordering app, keyed by location number:
+ * each [name, street, url]. Used by the Top five's per-app shop menus.
+ *
+ * @param string $app App key from juiced_order_apps(), e.g. 'doordash'.
+ * @return array
+ */
+function juiced_order_app_links( $app ) {
+	$links = array();
+	foreach ( array( 1, 2 ) as $i ) {
+		$url = juiced_business_field( "loc{$i}_{$app}", '' );
+		if ( $url ) {
+			$links[ $i ] = juiced_order_location_label( $i ) + array( 'url' => $url );
+		}
+	}
+	return $links;
+}
+
+/**
+ * Print an "Order Ahead" button that opens the order picker
+ * (template-parts/order-picker.php) — a dropdown under the button from md up,
+ * a bottom sheet on phones. It is a real link to the Locations page, so it
+ * still goes somewhere without JS. Its own bare x-data lets the click
+ * handler bind wherever the button sits (the hero has no Alpine component of
+ * its own). With no ordering links set at all, it is
+ * just that link (or the homepage's Order Ahead URL when one is set).
+ *
+ * @param string $label Button text.
+ * @param string $class Button classes.
+ */
+function juiced_order_button( $label, $class ) {
+	$fallback = juiced_field( 'order_ahead_url', '' );
+	if ( ! $fallback ) {
+		$fallback = juiced_template_page_url( 'page-templates/locations.php', 'locations' );
+	}
+	$picker = (bool) juiced_order_locations();
+	if ( $picker ) {
+		// A chevron marks it as a dropdown; it flips while the picker is open.
+		$class .= ' group gap-2';
+	}
+	?>
+	<a href="<?php echo esc_url( $fallback ); ?>" class="<?php echo esc_attr( $class ); ?>"
+		<?php if ( $picker ) : ?>
+			x-data aria-haspopup="dialog" aria-expanded="false"
+			@click.prevent="$dispatch('order-picker', $el)"
+		<?php endif; ?>
+	><?php echo esc_html( $label ); ?>
+		<?php if ( $picker ) : ?>
+			<svg class="shrink-0 transition-transform duration-200 group-aria-expanded:rotate-180" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+		<?php endif; ?>
+	</a>
+	<?php
+}
+
+/**
+ * Delivery apps for the per-app order buttons (homepage Top five, Menu page):
+ * key => [label, class, shops], where shops are the locations with a link for
+ * that app in Business Info. An app with none there falls back to one shop
+ * with the Top five tab's store link (DoorDash falls back once more to the
+ * Order Ahead URL); an app without any link is left out.
  *
  * @return array
  */
 function juiced_delivery_apps() {
-	return array_filter(
-		array(
-			'DoorDash'  => array( juiced_field( 'top_doordash_url', juiced_field( 'order_ahead_url', '' ) ), 'bg-[#ff3008] text-white hover:bg-[#d62a07]' ),
-			'Uber Eats' => array( juiced_field( 'top_ubereats_url', '' ), 'bg-[#06c167] text-brand-ink hover:bg-[#05a357]' ),
-			'Grubhub'   => array( juiced_field( 'top_grubhub_url', '' ), 'bg-[#ff8000] text-brand-ink hover:bg-[#e67300]' ),
-		),
-		function ( $app ) {
-			return (bool) $app[0];
-		}
+	$fallback = array(
+		'doordash' => juiced_field( 'top_doordash_url', juiced_field( 'order_ahead_url', '' ) ),
+		'ubereats' => juiced_field( 'top_ubereats_url', '' ),
+		'grubhub'  => juiced_field( 'top_grubhub_url', '' ),
 	);
+	$apps     = array();
+	foreach ( juiced_order_apps() as $key => $meta ) {
+		$shops = juiced_order_app_links( $key );
+		if ( ! $shops && $fallback[ $key ] ) {
+			$shops = array( 1 => array( 'url' => $fallback[ $key ] ) );
+		}
+		if ( $shops ) {
+			$apps[ $key ] = $meta + array( 'shops' => $shops );
+		}
+	}
+	return $apps;
+}
+
+/**
+ * Print one delivery-app button. With one shop it is a plain link there; with
+ * more it opens a small "Pick a shop on {app}" menu (still linking to the
+ * first shop without JS). The menu is position: fixed at the button's
+ * measured spot (below it, or above when there's no room) and follows it as
+ * the page scrolls, so a scrolling or clipped parent (the Menu page bar, the
+ * Top five photo) can't cut it off. It closes once the button scrolls off
+ * screen, on resize, Escape or a click elsewhere.
+ *
+ * @param array  $app   Entry from juiced_delivery_apps().
+ * @param string $class Size classes for the button (the app colours are added).
+ * @param string $what  What's being ordered, for the screen-reader label ('' = the shop).
+ * @param string $attrs Extra attributes for the button, already escaped.
+ */
+function juiced_app_button( $app, $class, $what = '', $attrs = '' ) {
+	$shops = array_values( $app['shops'] );
+	$multi = count( $shops ) > 1;
+	$label = $what
+		/* translators: 1: menu item, 2: delivery app */
+		? sprintf( __( 'Order %1$s on %2$s', 'juiced' ), $what, $app['label'] )
+		/* translators: %s: delivery app */
+		: sprintf( __( 'Order on %s', 'juiced' ), $app['label'] );
+	$label .= $multi ? __( ': choose a location', 'juiced' ) : __( ' (opens in a new tab)', 'juiced' );
+	?>
+	<span class="inline-flex"
+		<?php if ( $multi ) : ?>
+			x-data="{
+				open: false, top: 0, left: 0, up: false,
+				toggle() {
+					if (this.open) { this.open = false; return; }
+					this.up = window.innerHeight - this.$refs.btn.getBoundingClientRect().bottom < 220;
+					this.place();
+					this.open = true;
+				},
+				place() {
+					const r = this.$refs.btn.getBoundingClientRect();
+					if (r.bottom < 0 || r.top > window.innerHeight) { this.open = false; return; }
+					const w = Math.min(300, window.innerWidth - 32);
+					this.left = Math.min(Math.max(16, r.left), window.innerWidth - 16 - w);
+					this.top = this.up ? r.top - 10 : r.bottom + 10;
+				}
+			}"
+			@keydown.escape.window="open = false" @scroll.window.passive="open && place()" @resize.window="open = false"
+		<?php endif; ?>
+	>
+		<a href="<?php echo esc_url( $shops[0]['url'] ); ?>" target="_blank" rel="noopener noreferrer"
+		   aria-label="<?php echo esc_attr( $label ); ?>" <?php echo $attrs; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped by the caller. ?>
+		   <?php if ( $multi ) : ?>
+			   x-ref="btn" aria-haspopup="true" aria-expanded="false" :aria-expanded="open.toString()" @click.prevent="toggle()"
+		   <?php endif; ?>
+		   class="group inline-flex items-center gap-1.5 whitespace-nowrap rounded-full font-bold transition-colors <?php echo esc_attr( $class . ' ' . $app['class'] ); ?>">
+			<?php echo esc_html( $app['label'] ); ?>
+			<?php if ( $multi ) : ?>
+				<svg class="shrink-0 transition-transform duration-200 group-aria-expanded:rotate-180" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+			<?php endif; ?>
+		</a>
+		<?php if ( $multi ) : ?>
+			<div x-cloak x-show="open" x-transition.opacity.duration.150ms
+				 @click.outside="if (!$refs.btn.contains($event.target)) open = false"
+				 :style="{ top: top + 'px', left: left + 'px', transform: up ? 'translateY(-100%)' : 'none' }"
+				 class="fixed z-[80] flex w-[min(300px,calc(100vw-32px))] flex-col gap-2 rounded-[18px] bg-white p-3 text-left normal-case tracking-normal shadow-[0_18px_44px_rgba(19,17,14,.22)]">
+				<p class="mx-1 mt-0.5 text-[13px] font-bold text-[#4a4036]">
+					<?php echo esc_html( sprintf( /* translators: %s: delivery app */ __( 'Pick a shop on %s', 'juiced' ), $app['label'] ) ); ?>
+				</p>
+				<?php foreach ( $shops as $shop ) : ?>
+					<a href="<?php echo esc_url( $shop['url'] ); ?>" target="_blank" rel="noopener noreferrer" @click="open = false"
+					   class="flex min-h-12 items-center justify-between gap-3 rounded-xl bg-brand-paper px-3.5 py-2 text-brand-ink transition-colors hover:bg-brand-clay/40">
+						<span class="flex flex-col">
+							<span class="text-[15px] font-bold"><?php echo esc_html( $shop['name'] ); ?></span>
+							<?php if ( $shop['street'] ) : ?>
+								<span class="text-xs text-[#5a5148]"><?php echo esc_html( $shop['street'] ); ?></span>
+							<?php endif; ?>
+						</span>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+	</span>
+	<?php
 }
 
 /**

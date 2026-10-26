@@ -46,8 +46,15 @@ if ( $host_url ) {
 // Dropdown topics — one per line in ACF, mockup defaults here.
 $topics = array_filter( array_map( 'trim', explode( "\n", (string) juiced_page_field(
 	'contact_form_topics',
-	"General Question\nHost an Event\nPartnership Opportunity\nFeedback\nSomething Else"
+	"General Question\nHost an Event\nBook Us as a Vendor\nPartnership Opportunity\nFeedback\nSomething Else"
 ) ) ) );
+
+// ?topic=… preselects a topic (the homepage vendor button links here with one);
+// ignored unless it matches an option, so the dropdown can't show junk.
+$preset_topic = isset( $_GET['topic'] ) ? sanitize_text_field( wp_unslash( $_GET['topic'] ) ) : '';
+if ( ! in_array( $preset_topic, $topics, true ) ) {
+	$preset_topic = '';
+}
 
 // tel: href from a display number's digits ("(919) 123-JUICE (5842)" → 9191235842,
 // dropping the vanity-word expansion so the digits aren't doubled).
@@ -177,7 +184,7 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 
 				<form class="mt-6 space-y-4" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
 					  x-data="{
-						topic: '',
+						topic: <?php echo esc_attr( wp_json_encode( $preset_topic ) ); ?>,
 						hint: false,
 						get isEvent() { return /event/i.test(this.topic); },
 						toHost() {

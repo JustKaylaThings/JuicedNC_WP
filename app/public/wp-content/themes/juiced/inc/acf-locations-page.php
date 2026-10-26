@@ -53,21 +53,21 @@ add_action(
 				'type'          => 'image',
 				'return_format' => 'array',
 				'preview_size'  => 'thumbnail',
-				'instructions'  => 'A wide map screenshot with the shop at the centre — shown below the details, about 2:1.',
+				'instructions'  => 'Only used when the live Google map is switched off (Appearance → Customize → Google Reviews & Maps). A wide map screenshot with the shop at the centre, about 2:1.',
 			);
 			$location_fields[] = array(
 				'key'          => "field_juiced_loc_order_label{$i}",
 				'label'        => "Location {$i} — order button label",
 				'name'         => "locations_order_label{$i}",
 				'type'         => 'text',
-				'instructions' => 1 === $i ? 'e.g. "Order Rock Quarry".' : 'e.g. "Order Hill Street".',
+				'instructions' => ( 1 === $i ? 'e.g. "Order Rock Quarry".' : 'e.g. "Order Hill Street".' ) . ' Only used by the older single DoorDash button below.',
 			);
 			$location_fields[] = array(
 				'key'          => "field_juiced_loc_order_url{$i}",
 				'label'        => "Location {$i} — ordering link",
 				'name'         => "locations_order_url{$i}",
 				'type'         => 'text',
-				'instructions' => "Location {$i}'s DoorDash ordering link — the red DoorDash button in the tinted card, next to Get Directions. The button stays hidden until this is set.",
+				'instructions' => "Older setting — this location's order buttons now come from its DoorDash / Uber Eats / Grubhub links in Appearance → Customize → Business Info (also used by the Order Ahead buttons). This single DoorDash button is only shown while all of those are blank.",
 			);
 		}
 

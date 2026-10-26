@@ -7,7 +7,7 @@
  * plugin's Menu Item Details group), in the items' Order, then title; up to
  * three. Each card is a square photo with the badge in an orange pill and the
  * name and type · size · price over a dark fade, then the ingredients and the
- * delivery buttons (juiced_delivery_apps()). A drink without a photo shows a
+ * delivery buttons (juiced_delivery_apps() / juiced_app_button()). A drink without a photo shows a
  * colour block, as in the homepage top five. Renders nothing when no items
  * are featured.
  *
@@ -104,12 +104,8 @@ $juiced_f_blocks  = array(
 					<?php if ( $juiced_f_apps ) : ?>
 						<div class="mt-auto flex flex-wrap items-center gap-1.5">
 							<span class="mr-1 text-xs font-bold uppercase tracking-[.14em] text-brand-forest"><?php esc_html_e( 'Order on', 'juiced' ); ?></span>
-							<?php foreach ( $juiced_f_apps as $app => $info ) : ?>
-								<a href="<?php echo esc_url( $info[0] ); ?>" target="_blank" rel="noopener noreferrer"
-								   aria-label="<?php echo esc_attr( sprintf( /* translators: 1: menu item, 2: delivery app */ __( 'Order %1$s on %2$s (opens in a new tab)', 'juiced' ), $title, $app ) ); ?>"
-								   class="whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold transition-colors <?php echo esc_attr( $info[1] ); ?>">
-									<?php echo esc_html( $app ); ?>
-								</a>
+							<?php foreach ( $juiced_f_apps as $app ) : ?>
+								<?php juiced_app_button( $app, 'px-3 py-2 text-xs', $title ); ?>
 							<?php endforeach; ?>
 						</div>
 					<?php endif; ?>

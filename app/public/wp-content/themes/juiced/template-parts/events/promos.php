@@ -1,9 +1,9 @@
 <?php
 /**
- * Events page — the promo blocks in the row under the planner.
+ * Events page — the promo block in the row under the planner.
  *
- * Two blocks, emitted as siblings so the planner's grid lays them out as two
- * equal columns: a photo and the social links. The "Host Your Event" box and
+ * Just the social links now; the photo that sat beside them was removed at the
+ * client's request. The "Host Your Event" box and
  * the newsletter signup used to sit here too; the host pitch moved to the
  * carousel band at the foot of the page (community.php), and the signup was
  * dropped because the orange band in the footer already does that job.
@@ -15,9 +15,6 @@
  *
  * @package Juiced
  */
-
-// Photo.
-$juiced_image = juiced_image_url( juiced_page_field( 'events_sidebar_image', '' ), 'juiced_card' );
 
 // Socials — site-wide, same accounts the footer links to.
 $juiced_follow_heading = juiced_page_field( 'events_follow_heading', 'Follow Us' );
@@ -34,12 +31,6 @@ $juiced_socials = array(
 );
 $juiced_socials = array_filter( $juiced_socials );
 ?>
-
-<!-- Photo -->
-<?php if ( $juiced_image ) : ?>
-	<img src="<?php echo esc_url( $juiced_image ); ?>" alt=""
-		 class="aspect-[4/3] h-full w-full rounded-2xl object-cover" loading="lazy" />
-<?php endif; ?>
 
 <!-- Follow us -->
 <?php if ( $juiced_socials ) : ?>

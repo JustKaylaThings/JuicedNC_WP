@@ -118,15 +118,6 @@ add_action(
 						'type'  => 'tab',
 					),
 					array(
-						'key'           => 'field_juiced_ev_sidebar_image',
-						'label'         => 'Sidebar photo',
-						'name'          => 'events_sidebar_image',
-						'type'          => 'image',
-						'return_format' => 'array',
-						'preview_size'  => 'medium',
-						'instructions'  => 'Sits beside the Follow Us box, in the row under the calendar. Cropped to landscape. Leave empty to skip it.',
-					),
-					array(
 						'key'          => 'field_juiced_ev_follow_heading',
 						'label'        => 'Follow — heading',
 						'name'         => 'events_follow_heading',
@@ -173,7 +164,7 @@ add_action(
 						'label'        => 'Button link',
 						'name'         => 'events_host_cta_url',
 						'type'         => 'url',
-						'instructions' => 'Where the button goes — your contact or private events page. The button stays hidden until this is filled in, so it can never lead nowhere.',
+						'instructions' => 'Leave blank to use the Host an Event page.',
 					),
 					array(
 						'key'           => 'field_juiced_ev_comm_image_1',

@@ -85,10 +85,7 @@ if ( $juiced_announcement ) :
 		</nav>
 
 		<div class="flex items-center gap-3">
-			<a href="<?php echo esc_url( juiced_field( 'order_ahead_url', '#' ) ); ?>"
-			   class="hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition">
-				<?php esc_html_e( 'Order Ahead', 'juiced' ); ?>
-			</a>
+			<?php juiced_order_button( __( 'Order Ahead', 'juiced' ), 'hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition' ); ?>
 
 			<button type="button" class="md:hidden text-brand-cream cursor-pointer"
 					@click="menuOpen = !menuOpen"
@@ -122,10 +119,7 @@ if ( $juiced_announcement ) :
 				)
 			);
 			?>
-			<a href="<?php echo esc_url( juiced_field( 'order_ahead_url', '#' ) ); ?>"
-			   class="mt-4 inline-flex sm:hidden items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition">
-				<?php esc_html_e( 'Order Ahead', 'juiced' ); ?>
-			</a>
+			<?php juiced_order_button( __( 'Order Ahead', 'juiced' ), 'mt-4 inline-flex sm:hidden items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm font-bold text-brand-ink hover:bg-brand-cream transition' ); ?>
 		</div>
 	</nav>
 </header>

@@ -22,7 +22,6 @@ $subtext   = juiced_field( 'hero_subtext', 'Your neighborhood juice bar. Serving
 $primary   = juiced_field( 'hero_primary_label', 'Join us this week' );
 $primary_u = juiced_field( 'hero_primary_url', juiced_events_page_url() );
 $second    = juiced_field( 'hero_secondary_label', 'Order' );
-$second_u  = juiced_field( 'order_ahead_url', '#' );
 
 $default_captions = array( 'Regulars', 'Open Mic Thursdays', 'Game Night', 'Meet the owners' );
 // Staggered heights (mobile / desktop) so the photo tops step like the mockup.
@@ -63,10 +62,7 @@ $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (st
 						</a>
 					<?php endif; ?>
 					<?php if ( $second ) : ?>
-						<a href="<?php echo esc_url( $second_u ); ?>"
-						   class="inline-flex items-center rounded-full border-2 border-brand-cream px-6 py-3.5 font-semibold text-brand-cream hover:bg-brand-cream hover:text-brand-forest transition-colors">
-							<?php echo esc_html( $second ); ?>
-						</a>
+						<?php juiced_order_button( $second, 'inline-flex items-center rounded-full border-2 border-brand-cream px-6 py-3.5 font-semibold text-brand-cream hover:bg-brand-cream hover:text-brand-forest transition-colors' ); ?>
 					<?php endif; ?>
 				</div>
 			</div>

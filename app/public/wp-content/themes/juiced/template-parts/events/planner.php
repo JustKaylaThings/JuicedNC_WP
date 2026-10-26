@@ -14,8 +14,7 @@
  * client-side and carry x-cloak, because a calendar whose days do nothing is
  * worse than none.
  *
- * Under both, the host / sign-up / follow blocks (promos.php) split the width
- * in two equal columns, stretched to the same height.
+ * Under both, the Follow Us block (promos.php) sits in its own row.
  *
  * Data comes from juiced_event_planner_data() (inc/event-dates.php), which tests
  * every day against the same one-off / recurring rules the list uses, so a
@@ -194,14 +193,14 @@ $juiced_arrow = 'grid h-11 w-11 shrink-0 cursor-pointer place-items-center round
 		</div>
 
 		<?php
-		// Photo, follow. Buffered so the row (and its top margin) disappears
-		// when neither block has anything to show.
+		// Follow us. Buffered so the row (and its top margin) disappears
+		// when there is nothing to show.
 		ob_start();
 		get_template_part( 'template-parts/events/promos' );
 		$juiced_promos = trim( preg_replace( '/<!--.*?-->/s', '', ob_get_clean() ) );
 		?>
 		<?php if ( $juiced_promos ) : ?>
-			<div class="mt-14 grid gap-6 md:mt-20 md:grid-cols-2">
+			<div class="mt-14 md:mt-20">
 				<?php echo $juiced_promos; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in promos.php. ?>
 			</div>
 		<?php endif; ?>

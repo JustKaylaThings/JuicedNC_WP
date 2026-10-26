@@ -54,7 +54,7 @@ for ( $n = 1; $n <= 6; $n++ ) {
 	}
 }
 
-$juiced_reviews    = juiced_community_reviews( juiced_review_place_ids(), 8 );
+$juiced_reviews    = juiced_community_reviews( juiced_review_place_ids() );
 $juiced_rv_summary = $juiced_reviews ? juiced_reviews_summary( juiced_review_place_ids() ) : array();
 
 $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r="0.8" fill="currentColor"/></svg>';

@@ -196,6 +196,8 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 
 <?php get_template_part( 'template-parts/newsletter-popup' ); ?>
 
+<?php get_template_part( 'template-parts/order-picker' ); ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

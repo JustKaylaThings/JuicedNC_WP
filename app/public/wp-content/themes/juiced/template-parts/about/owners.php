@@ -12,6 +12,9 @@
  * pair holds its shape while photos come in. An owner is skipped when their
  * name is cleared; the section renders nothing when both are.
  *
+ * When the shared photo is set, it replaces the circles: one wide photo of the
+ * pair together, with their names and roles side by side underneath.
+ *
  * @package Juiced
  */
 
@@ -35,6 +38,8 @@ foreach ( array( 1, 2 ) as $i ) {
 if ( ! $owners ) {
 	return;
 }
+
+$shared = juiced_image_url( juiced_page_field( 'about_owners_photo', '' ), 'large' );
 ?>
 <section class="bg-brand-paper text-brand-ink">
 	<div class="mx-auto max-w-7xl px-4 py-16 md:py-26">
@@ -47,11 +52,19 @@ if ( ! $owners ) {
 			</h2>
 		<?php endif; ?>
 
-		<div class="mt-11 flex flex-wrap items-start justify-center gap-12 md:gap-24">
+		<?php if ( $shared ) : ?>
+			<img src="<?php echo esc_url( $shared ); ?>"
+				 alt="<?php echo esc_attr( implode( ' and ', wp_list_pluck( $owners, 'name' ) ) ); ?>"
+				 class="mx-auto mt-11 aspect-[5/4] w-full max-w-2xl rounded-3xl border-4 border-white object-cover shadow-lg" loading="lazy" />
+		<?php endif; ?>
+
+		<div class="<?php echo $shared ? 'mt-8' : 'mt-11'; ?> flex flex-wrap items-start justify-center gap-12 md:gap-24">
 			<?php foreach ( $owners as $owner ) : ?>
 				<div class="text-center">
 
-					<?php if ( $owner['photo'] ) : ?>
+					<?php if ( $shared ) : ?>
+						<?php // The shared photo above stands in for both circles. ?>
+					<?php elseif ( $owner['photo'] ) : ?>
 						<img src="<?php echo esc_url( $owner['photo'] ); ?>"
 							 alt="<?php echo esc_attr( $owner['name'] ); ?>"
 							 class="mx-auto aspect-square w-40 rounded-full border-4 border-white object-cover md:w-48" loading="lazy" />

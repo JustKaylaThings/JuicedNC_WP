@@ -38,7 +38,7 @@ add_action(
 						'label'        => 'Order Ahead URL',
 						'name'         => 'order_ahead_url',
 						'type'         => 'url',
-						'instructions' => 'Link for the "Order Ahead" buttons in the header and hero (your online ordering page). Also used for the DoorDash buttons in the Top five section when that section has no DoorDash link of its own.',
+						'instructions' => 'The "Order Ahead" buttons in the header and hero open a location picker built from each location\'s ordering links in Appearance → Customize → Business Info. This link is only a fallback for browsers without JavaScript, or when no ordering links are set (blank = the Locations page). Also used for the DoorDash buttons in the Top five section when that section has no DoorDash link of its own.',
 					),
 
 					// --- Hero (Section 2) --------------------------------------
@@ -334,7 +334,7 @@ add_action(
 						'label'   => 'How this section works',
 						'name'    => '',
 						'type'    => 'message',
-						'message' => 'Pick five drinks from Menu Items, in ranking order. The photo, ingredients, size, price and Juice/Smoothie label come from each menu item (the size is the part of its title in brackets, e.g. "(32oz)"). Leave all five blank to show Ginger Glow, Berry Boost, Pick Me Up, Spark Plug and Bright & Early.<br><br><strong>Order buttons:</strong> each drink shows DoorDash, Uber Eats and Grubhub buttons. Paste a link to that drink in each app under the drink, or leave it blank to use the store link for that app below. An app with no link anywhere gets no button.',
+						'message' => 'Pick five drinks from Menu Items, in ranking order. The photo, ingredients, size, price and Juice/Smoothie label come from each menu item (the size is the part of its title in brackets, e.g. "(32oz)"). Leave all five blank to show Ginger Glow, Berry Boost, Pick Me Up, Spark Plug and Bright & Early.<br><br><strong>Order buttons:</strong> each drink shows DoorDash, Uber Eats and Grubhub buttons. When both shops have a link for an app in Appearance → Customize → Business Info, its button opens a "pick a shop" menu; with one shop it goes straight there. The drink links below are optional and are used for Location 1 (Rock Quarry) only — leave them blank to use the shop\'s store link. The store links below are only used when Business Info has no links for that app. An app with no link anywhere gets no button.',
 					),
 					array(
 						'key'          => 'field_juiced_menu_eyebrow',
@@ -599,6 +599,86 @@ add_action(
 						'name'    => 'top_gh_5',
 						'type'    => 'url',
 						'wrapper' => array( 'width' => '34' ),
+					),
+
+					// --- Vendor / pop-ups ---------------------------------------
+					array(
+						'key'   => 'field_juiced_vendor_tab',
+						'label' => 'Vendor',
+						'type'  => 'tab',
+					),
+					array(
+						'key'         => 'field_juiced_vendor_eyebrow',
+						'label'       => 'Small label',
+						'name'        => 'vendor_eyebrow',
+						'type'        => 'text',
+						'placeholder' => 'Pop-ups & vending',
+					),
+					array(
+						'key'          => 'field_juiced_vendor_heading',
+						'label'        => 'Heading',
+						'name'         => 'vendor_heading',
+						'type'         => 'text',
+						'placeholder'  => 'Bring Juiced! to',
+						'instructions' => 'Clearing both heading fields hides the section.',
+						'wrapper'      => array( 'width' => '50' ),
+					),
+					array(
+						'key'          => 'field_juiced_vendor_heading_accent',
+						'label'        => 'Heading — accent',
+						'name'         => 'vendor_heading_accent',
+						'type'         => 'text',
+						'placeholder'  => 'your event',
+						'instructions' => 'Shown in orange.',
+						'wrapper'      => array( 'width' => '50' ),
+					),
+					array(
+						'key'   => 'field_juiced_vendor_body',
+						'label' => 'Text',
+						'name'  => 'vendor_body',
+						'type'  => 'textarea',
+						'rows'  => 3,
+					),
+					array(
+						'key'          => 'field_juiced_vendor_types',
+						'label'        => 'Event types',
+						'name'         => 'vendor_types',
+						'type'         => 'textarea',
+						'rows'         => 4,
+						'new_lines'    => '',
+						'instructions' => 'One per line, shown as small tags. Clearing this hides the tags.',
+					),
+					array(
+						'key'         => 'field_juiced_vendor_cta_label',
+						'label'       => 'Button label',
+						'name'        => 'vendor_cta_label',
+						'type'        => 'text',
+						'placeholder' => 'Book Us as a Vendor',
+						'wrapper'     => array( 'width' => '50' ),
+					),
+					array(
+						'key'          => 'field_juiced_vendor_cta_url',
+						'label'        => 'Button link',
+						'name'         => 'vendor_cta_url',
+						'type'         => 'url',
+						'instructions' => 'Leave blank to open the Contact form with "Book Us as a Vendor" already picked.',
+						'wrapper'      => array( 'width' => '50' ),
+					),
+					// Photo slots 1–12, generated (ACF free has no Repeater/Gallery).
+					...array_map(
+						static function ( $n ) {
+							return array(
+								'key'           => "field_juiced_vendor_photo_{$n}",
+								'label'         => "Photo {$n}",
+								'name'          => "vendor_photo_{$n}",
+								'type'          => 'image',
+								'return_format' => 'array',
+								'preview_size'  => 'thumbnail',
+								'instructions'  => 1 === $n ? 'Pop-up photos, 1 to 12. Photo 1 shows large first; the rest appear as thumbnails along its bottom edge. Alt text comes from the Media Library.' : '',
+								'wrapper'       => array( 'width' => '25' ),
+							);
+						},
+						range( 1, 12 )
 					),
 
 					// --- Locations (Section 6) ---------------------------------
