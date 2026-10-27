@@ -1,0 +1,472 @@
+# Copyright (C) 2026 Tiny Solutions
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Post Type WooCommerce Integration 2.2.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cpt-woo-integration\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-04-06T14:40:36+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: cpt-woo-integration\n"
+
+#. Plugin Name of the plugin
+#: cpt-woo-integration.php
+msgid "Custom Post Type WooCommerce Integration"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: cpt-woo-integration.php
+msgid "https://www.wptinysolutions.com/tiny-products/cpt-woo-integration"
+msgstr ""
+
+#. Description of the plugin
+#: cpt-woo-integration.php
+msgid "Integrate custom post-type with woocommerce. Sell Any Kind Of Custom Post"
+msgstr ""
+
+#. Author of the plugin
+#: cpt-woo-integration.php
+msgid "Tiny Solutions"
+msgstr ""
+
+#. Author URI of the plugin
+#: cpt-woo-integration.php
+msgid "https://www.wptinysolutions.com/"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:57
+#: TinyApp/Controllers/Admin/AdminMenu.php:58
+#: TinyApp/Controllers/Admin/AdminMenu.php:67
+#: TinyApp/Controllers/Admin/AdminMenu.php:68
+msgid "WC Integration"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:76
+#: TinyApp/Controllers/Admin/AdminMenu.php:77
+msgid "Short Code"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:83
+#: TinyApp/Controllers/Admin/AdminMenu.php:84
+msgid "Styles"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:90
+#: TinyApp/Controllers/Admin/AdminMenu.php:91
+msgid "Useful Plugins"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:97
+#: TinyApp/Controllers/Admin/AdminMenu.php:98
+msgid "Contacts Support"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/AdminMenu.php:103
+msgid "Buy Pro"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/Api.php:170
+msgid "Action Failed "
+msgstr ""
+
+#: TinyApp/Controllers/Admin/Api.php:174
+msgid "Cache Cleared."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/Api.php:187
+msgid "Update failed. Maybe change not found. "
+msgstr ""
+
+#: TinyApp/Controllers/Admin/Api.php:239
+msgid "Updated."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:122
+msgid "Product description"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:128
+msgid "Are you sure you want to remove the selected items?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:129
+msgid "Are you sure you want to remove the selected fees?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:130
+msgid "Are you sure you want to remove the selected shipping?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:138
+msgid "Please select some items."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:139
+msgid "Are you sure you wish to process this refund? This action cannot be undone."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:140
+msgid "Are you sure you wish to delete this refund? This action cannot be undone."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:141
+msgid "Are you sure you wish to delete this tax column? This action cannot be undone."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:142
+msgid "Remove this item meta?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:143
+msgid "Name"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:144
+msgid "Remove"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:145
+msgid "Click to toggle"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:146
+msgid "Value(s)"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:147
+msgid "Enter some text, or some attributes by pipe (|) separating values."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:148
+msgid "Visible on the product page"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:149
+msgid "Used for variations"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:150
+msgid "Enter a name for the new attribute term:"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:151
+msgid "Recalculate totals? This will calculate taxes based on the customers country (or the store base country) and update totals."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:152
+msgid "Copy billing information to shipping information? This will remove any currently entered shipping information."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:153
+msgid "Load the customer's billing information? This will remove any currently entered billing information."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:154
+msgid "Load the customer's shipping information? This will remove any currently entered shipping information."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:155
+msgid "Featured"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:159
+msgid "No customer selected"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:184
+msgid "Could not grant access - the user may already have permission for this file or billing email is not set. Ensure the billing email is set, and the order has been saved."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:185
+msgid "Are you sure you want to revoke access to this download?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:186
+msgid "You cannot add the same tax rate twice!"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:187
+msgid "Are you sure you wish to delete this note? This action cannot be undone."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:188
+msgid "Enter a coupon code to apply. Discounts are applied to line totals, before taxes."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:189
+msgid "Enter a fixed amount or percentage to apply as a fee."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:190
+msgid "New attribute"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:191
+msgid "<b>Simple –</b> covers the vast majority of any products you may sell. Simple products are shipped and have no options. For example, a book."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:192
+msgid "<b>Grouped –</b> a collection of related products that can be purchased individually and only consist of simple products. For example, a set of six drinking glasses."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:193
+msgid "<b>External or Affiliate –</b> one that you list and describe on your website but is sold elsewhere."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:194
+msgid "<b>Variable –</b> a product with variations, each of which may have a different SKU, price, stock option, etc. For example, a t-shirt available in different colors and/or sizes."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:195
+msgid "Product types define available product details and attributes, such as downloadable files and variations. They’re also used for analytics and inventory management."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:196
+msgid "Describe this product. What makes it unique? What are its most important features?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:197
+msgid "Summarize this product in 1-2 short sentences. We’ll show it at the top of the page."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:198
+msgid "Make sure you enter the name and values for each attribute."
+msgstr ""
+
+#. translators: %1$s: maximum file size
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:200
+#, php-format
+msgid "For best results, upload JPEG or PNG files that are 1000 by 1000 pixels or larger. Maximum upload file size: %1$s."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:201
+msgid "If you remove this attribute, customers will no longer be able to purchase some variations of this product."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:202
+msgid "Adding new attribute failed."
+msgstr ""
+
+#. translators: %d: Number of variations
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:229
+#, php-format
+msgid "Do you want to generate all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run)."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:230
+msgid "Enter a value"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:231
+msgid "Variation menu order (determines position in the list of variations)"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:232
+msgid "Enter a value (fixed or %)"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:233
+msgid "Are you sure you want to delete all variations? This cannot be undone."
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:234
+msgid "Last warning, are you sure?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:235
+msgid "Choose an image"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:236
+msgid "Set variation image"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:237
+msgid "1 variation added"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:238
+msgid "%qty% variations added"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:239
+msgid "Are you sure you want to remove this variation?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:240
+msgid "Sale start date (YYYY-MM-DD format or leave blank)"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:241
+msgid "Sale end date (YYYY-MM-DD format or leave blank)"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:242
+msgid "Save changes before changing page?"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:243
+msgid "1 variation"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:244
+msgid "%qty% variations"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductAdminAssets.php:252
+msgid "Enable reviews"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductMetaBoxes.php:70
+msgid "Product short description"
+msgstr ""
+
+#: TinyApp/Controllers/Admin/ProductMetaBoxes.php:74
+msgid "Product data"
+msgstr ""
+
+#. translators: 1: Plugin name 2: PHP 3: Required PHP version
+#: TinyApp/Controllers/Dependencies.php:170
+#, php-format
+msgid "\"%1$s\" requires \"%2$s\" version %3$s or greater."
+msgstr ""
+
+#: TinyApp/Controllers/Dependencies.php:171
+msgid "Custom Post Type Woocommerce Integration"
+msgstr ""
+
+#: TinyApp/Controllers/Dependencies.php:172
+msgid "PHP"
+msgstr ""
+
+#: TinyApp/Controllers/Dependencies.php:189
+msgid "and"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:309
+msgid "Quick Feedback: How can we improve the plugin?"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:313
+msgid "We're sorry to see you go! Before you leave, could you spare a moment to tell us why? Your feedback helps us make the plugin better for everyone."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:317
+msgid "Having trouble? Our support team is here to help."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:318
+msgid "Contact Support"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:322
+msgid "Or tell us why you're leaving"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:332
+msgid "Bug or issue detected"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:340
+msgid "I no longer need the plugin"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:348
+msgid "I found a better plugin"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:352
+msgid "Which plugin did you switch to?"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:360
+msgid "I couldn't get the plugin to work"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:368
+msgid "It's a temporary deactivation"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:376
+msgid "How can we improve the plugin? Any details help..."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:381
+msgid "Deactivating will disable all WooCommerce integrations for your custom post types."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:752
+msgid "Send Feedback & Deactivate"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:753
+msgid "Skip & Deactivate"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:763
+msgid "Please choose a reason before submitting."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:769
+msgid "Kindly share a few details so we can address this in a future update."
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Review.php:779
+msgid "Sending…"
+msgstr ""
+
+#: TinyApp/Controllers/Notice/Upgrade.php:70
+msgid "Heads up, Please backup before upgrade to version "
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:342
+msgid "Comments"
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:354
+msgid "Type"
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:437
+msgid "Facing issue?"
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:437
+msgid "Please open a support ticket."
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:555
+msgid "Settings"
+msgstr ""
+
+#: TinyApp/Hooks/FilterHooks.php:557
+msgid "Go Pro"
+msgstr ""
+
+#: TinyApp/PluginsSupport/BaBooking/BabeInit.php:65
+msgid "WooCommerce Order"
+msgstr ""
+
+#: TinyApp/PluginsSupport/BaBooking/BabeInit.php:75
+msgid "WooCommerce Order Id: "
+msgstr ""
+
+#. translators: %s is a order number
+#: TinyApp/PluginsSupport/BaBooking/BabeInit.php:312
+#, php-format
+msgid "Order #%s"
+msgstr ""
+
+#: TinyApp/Traits/CptProductDataStoreReadTrait.php:26
+msgid "Invalid product."
+msgstr ""
+
+#: TinyApp/Traits/SingletonTrait.php:41
+#: TinyApp/Traits/SingletonTrait.php:50
+msgid "Cheatin&#8217; huh?"
+msgstr ""

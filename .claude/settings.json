@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/kayla/Desktop/juiced-storefront/**)",
+      "Read(//Users/kayla/**)",
+      "Read(//Users/kayla/Desktop/**)",
+      "Bash(npm run:*)",
+      "Bash(rm -rf node_modules package-lock.json)",
+      "Bash(npm install:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/kayla/Desktop/juiced-storefront"
+    ]
+  }
+}

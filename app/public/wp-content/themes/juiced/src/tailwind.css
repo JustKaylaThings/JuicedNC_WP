@@ -1,0 +1,414 @@
+/**
+ * Juiced! — Tailwind v4 input stylesheet.
+ * Compiled to ../assets/theme.css via the Tailwind CLI (see package.json).
+ * Ported from the Next.js frontend's src/app/globals.css so existing utility
+ * class names (bg-brand-green, text-brand-bark, font-display, eyebrow, …) keep
+ * working verbatim when component markup is moved into PHP templates.
+ *
+ *   Dev:   npm run dev     (watch)
+ *   Build: npm run build   (minified, run before committing/deploying)
+ */
+@import "tailwindcss";
+
+/* Explicitly tell Tailwind where to find class names in this classic theme. */
+@source "../**/*.php";
+@source "../assets/**/*.js";
+
+@theme {
+  --color-background: #f5ecdc;
+  --color-foreground: #13110e;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand palette — sourced from client logo (orange / dark / green / gold).
+     Names preserved from the Next.js build so components inherit automatically. */
+  --color-brand-green: #38a54c;        /* CTAs, prices, primary accents */
+  --color-brand-green-light: #5cc070;  /* hover states */
+  --color-brand-gold: #f2811f;         /* badges, sale, eyebrows, icon accents */
+  --color-brand-yellow: #eebd18;       /* reserved highlight; use sparingly */
+  --color-brand-cream: #fdf8f0;        /* warm background */
+  --color-brand-paper: #f5ecdc;        /* warm background */
+  --color-brand-sage: #cfd9cb;         /* neutral */
+  --color-brand-clay: #c9b196;         /* neutral */
+  --color-brand-bark: #13110e;         /* headings, body, footer */
+  --color-brand-ink: #13110e;          /* headings, body, footer */
+
+  /* 2026 redesign ("Garden": deep green + orange). */
+  --color-brand-forest: #1d5c2a;       /* homepage hero, dark sections */
+  --color-brand-forest-deep: #123a1b;  /* footer */
+  --color-brand-mint: #cfe8d3;         /* muted text on forest */
+  --color-brand-rust: #b85a0c;         /* orange text on cream (AA contrast) */
+}
+
+/* Font families are loaded from Google Fonts in header.php (enqueued in
+   functions.php). In the Next build these came from next/font. */
+:root {
+  --font-display: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The page is cream, but the canvas behind it is the footer's deep green, so
+   a short page, or the trackpad bounce past the bottom, runs on as footer
+   instead of showing a cream strip under it. (The header is green too, so the
+   bounce at the top matches.) overscroll-behavior only takes effect on the
+   root element. */
+html {
+  background: var(--color-brand-forest-deep);
+  overscroll-behavior-y: none;
+}
+
+body {
+  background: var(--color-brand-paper);
+  color: var(--color-brand-ink);
+}
+
+/* In-page links (e.g. About's "Our Story" button) glide instead of jumping. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Editorial defaults — rounded display face sets the tone. (The optical-sizing
+   and SOFT/WONK variation settings from the Fraunces era are gone — Fredoka's
+   only axes are weight and width.) */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* Eyebrow label — grocery-shelf signage. Color is set by the caller (via a
+   text-* utility) so it works on both light and dark sections. */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Subtle paper grain used on hero / section backgrounds */
+.bg-grain {
+  background-image:
+    radial-gradient(rgba(92, 64, 51, 0.06) 1px, transparent 1px),
+    radial-gradient(rgba(92, 64, 51, 0.04) 1px, transparent 1px);
+  background-size: 6px 6px, 11px 11px;
+  background-position: 0 0, 3px 4px;
+}
+
+/* "Garden" leaf pattern on the homepage's deep-green header, hero and community band.
+   The header anchors the tile to its bottom edge and the hero to its top,
+   so the leaves run on across the seam as one surface. The tile carries its
+   own faint opacity; the base colour comes from the element's bg class. */
+.bg-garden {
+  background-image: url("images/garden-leaves.svg");
+  background-size: 220px 220px;
+  background-position: left top;
+}
+.bg-garden-above {
+  background-position: left bottom;
+}
+
+/* Header logo. the_custom_logo() prints the upload at its natural size, so a
+   taller file pushes the hero (and its ticker) below the fold. Cap it at the
+   height the header was designed around. */
+.custom-logo {
+  display: block;
+  width: auto;
+  max-height: 94px;
+}
+
+/* Sticky header. Logged-in editors get WordPress's admin bar pinned at the
+   top, so the header sits below it; at 600px and under the admin bar scrolls
+   away with the page, so the header pins to the very top there. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  transition: box-shadow 0.2s ease;
+}
+.admin-bar .site-header {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+@media (max-width: 600px) {
+  .admin-bar .site-header {
+    top: 0;
+  }
+}
+.site-header__bar {
+  transition: padding 0.2s ease;
+}
+.site-header .custom-logo {
+  transition: max-height 0.2s ease;
+}
+.site-header.is-scrolled {
+  box-shadow: 0 6px 20px rgba(18, 58, 27, 0.25);
+}
+.site-header.is-scrolled .site-header__bar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.site-header.is-scrolled .custom-logo {
+  max-height: 56px;
+}
+/* The wordmark is about twice as wide as it is tall; on tablets the full
+   nav and Order Ahead button share the bar, so it runs smaller there. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-header .custom-logo {
+    max-height: 52px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header__bar,
+  .site-header .custom-logo {
+    transition: none;
+  }
+}
+
+/* Keep in-page jumps (skip link, #anchors) from landing under the sticky header. */
+html {
+  scroll-padding-top: 7rem;
+}
+
+/* Menu page section bar: sticks just under the site header (main.js sets
+   --site-header-h as the header compacts). */
+.menu-section-bar {
+  position: sticky;
+  top: var(--site-header-h, 72px);
+  z-index: 30;
+}
+.admin-bar .menu-section-bar {
+  top: calc(var(--wp-admin--admin-bar--height, 32px) + var(--site-header-h, 72px));
+}
+@media (max-width: 600px) {
+  .admin-bar .menu-section-bar {
+    top: var(--site-header-h, 72px);
+  }
+}
+/* …and in-page jumps clear both bars. */
+html:has(.menu-section-bar) {
+  scroll-padding-top: calc(var(--site-header-h, 72px) + 6.5rem);
+}
+
+/* Hairline divider */
+.rule {
+  border-color: rgba(92, 64, 51, 0.18);
+}
+
+/* Sticker buttons (Oct 2026): every pill CTA gets an ink outline and a hard
+   ink shadow that it presses into on hover and click. Sizes are in em, so the
+   shadow scales with each button's text size. The fill and text colours stay
+   on the button as utilities; this only adds the outline, shadow and type. */
+@layer components {
+  .btn-sticker {
+    border: 3px solid var(--color-brand-ink);
+    box-shadow: 0 0.3em 0 var(--color-brand-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-sticker:hover { transform: translateY(0.15em); box-shadow: 0 0.15em 0 var(--color-brand-ink); }
+  .btn-sticker:active { transform: translateY(0.3em); box-shadow: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-sticker, .btn-sticker:hover, .btn-sticker:active { transform: none; }
+  }
+
+  /* Soft drop shadow for display headings: a light, slightly blurred ink
+     shade, scaled to the type with a floor so smaller headings still show it.
+     The home hero headline uses the stronger --hero version. */
+  .text-drop { text-shadow: 0 max(0.025em, 2px) max(0.03em, 3px) rgb(19 17 14 / 0.25); }
+  .text-drop--hero { text-shadow: 0 max(0.03em, 3px) max(0.04em, 4px) rgb(19 17 14 / 0.5); }
+}
+
+/* Hide scrollbars on horizontal rails while keeping scroll behavior */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Alpine.js: keep x-show/x-cloak elements hidden until Alpine initializes,
+   so inactive tab panels don't flash stacked on first paint. */
+[x-cloak] { display: none !important; }
+
+/* Primary nav — wp_nav_menu output has no utility classes on its <a> tags */
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+/* Tablets get the tighter, smaller links above so the bar fits on one row. */
+@media (min-width: 1024px) {
+  .primary-nav { gap: 1.5rem; font-size: 1rem; }
+}
+.primary-nav a {
+  color: var(--color-brand-cream);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.primary-nav a:hover,
+.primary-nav .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Mobile drawer nav — the same wp_nav_menu output, stacked */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 500;
+}
+.mobile-nav a {
+  display: block;
+  padding: 0.5rem 0;
+  color: var(--color-brand-cream);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.mobile-nav a:hover,
+.mobile-nav .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Footer nav */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+.footer-nav a:hover {
+  color: var(--color-brand-gold);
+}
+
+/* Editorial footer columns (Section 8). wp_nav_menu strips utility classes, so
+   the link lists are styled here; the same class dresses the default fallbacks. */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-links a {
+  color: var(--color-brand-mint);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.15s ease;
+}
+.footer-links a:hover,
+.footer-links .current-menu-item > a {
+  color: var(--color-brand-gold);
+}
+
+/* Post body copy (single event, and future single templates). the_content()
+   output is client-pasted HTML with no utility classes — often copied from
+   other sites, junk classes included — and the build has no typography plugin,
+   so the elements are styled here. Colors stay relative so it works on any
+   light section. */
+.entry-content {
+  color: color-mix(in srgb, var(--color-brand-ink) 80%, transparent);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+.entry-content > * + * {
+  margin-top: 1em;
+}
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4 {
+  font-family: var(--font-display);
+  color: var(--color-brand-ink);
+  line-height: 1.2;
+  margin-top: 1.6em;
+}
+.entry-content h1 { font-size: 1.6rem; }
+.entry-content h2 { font-size: 1.4rem; }
+.entry-content h3 { font-size: 1.2rem; }
+.entry-content h4 { font-size: 1.05rem; }
+.entry-content strong {
+  color: var(--color-brand-ink);
+}
+.entry-content a {
+  color: var(--color-brand-green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.entry-content a:hover {
+  color: var(--color-brand-gold);
+}
+.entry-content ul,
+.entry-content ol {
+  padding-left: 1.4em;
+}
+.entry-content ul { list-style: disc; }
+.entry-content ol { list-style: decimal; }
+.entry-content li + li { margin-top: 0.35em; }
+.entry-content img {
+  border-radius: 1rem;
+  max-width: 100%;
+  height: auto;
+}
+.entry-content blockquote {
+  border-left: 3px solid var(--color-brand-gold);
+  padding-left: 1em;
+  font-style: italic;
+}
+
+/* Hero ticker (homepage). The list is printed twice and slid left by half its
+   width, so the loop is seamless. Static for reduced-motion visitors. */
+@keyframes juiced-marquee {
+  to { transform: translateX(-50%); }
+}
+.juiced-marquee {
+  animation: juiced-marquee 45s linear infinite;
+}
+/* Homepage reviews strip (community.php): slower, pauses on hover or keyboard
+   focus. Only :focus-visible counts: a clicked review keeps focus after it
+   opens Google in a new tab, and :focus-within would leave the strip frozen
+   when the visitor comes back. Reduced motion drops the loop copy and lets
+   the row scroll by hand. */
+.juiced-marquee--reviews {
+  animation-duration: 80s;
+}
+.juiced-reviews:hover .juiced-marquee,
+.juiced-reviews:has(:focus-visible) .juiced-marquee {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .juiced-marquee { animation: none; }
+  .juiced-reviews { overflow-x: auto; }
+  .juiced-reviews .juiced-marquee > [aria-hidden="true"] { display: none; }
+}
+
+/* Mobile nav reveal */
+@keyframes juiced-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes juiced-rise {
+  to { opacity: 1; transform: translateY(0); }
+}
