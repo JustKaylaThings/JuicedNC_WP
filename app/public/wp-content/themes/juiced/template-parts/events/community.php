@@ -18,6 +18,8 @@
  * "community" because they predate the redesign and renaming them would orphan
  * photos already uploaded.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -55,7 +57,7 @@ $juiced_count = count( $juiced_slides );
 
 		<div class="max-w-xl">
 			<h2 id="events-host-h" class="font-display font-bold leading-[1.02] text-[clamp(2.25rem,5vw,3.75rem)]">
-				<?php echo esc_html( $juiced_heading ); ?>
+				<?php echo juiced_logo_text( $juiced_heading ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 			</h2>
 
 			<?php if ( $juiced_body ) : ?>

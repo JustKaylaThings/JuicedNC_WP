@@ -7,8 +7,12 @@
  * left, with a cream card (name, juice/smoothie · size · price, and order
  * buttons for DoorDash, Uber Eats and Grubhub), and a ranked list of five
  * drinks on the right. Tapping a drink swaps the photo (Alpine.js,
- * `i` = selected index). Without JS the first drink shows and the list still
- * reads as a ranking.
+ * `i` = selected index). The board also steps through the five on its own
+ * every 5s: the photo crossfades and settles from a slight zoom, the card
+ * rises in. It pauses
+ * while the pointer or keyboard focus is on the board, and doesn't run for
+ * visitors who prefer reduced motion. Tapping a drink restarts the clock.
+ * Without JS the first drink shows and the list still reads as a ranking.
  *
  * The five drinks are menu_item posts picked on the Home page (top_pick_1..5,
  * with an optional short tag each, inc/acf-homepage.php). With none picked it
@@ -131,7 +135,17 @@ $juiced_m_label   = juiced_field( 'menu_link_label', 'See the full menu' );
 $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_permalink( $juiced_menu_page ) : home_url( '/menu/' ) );
 ?>
 <section class="bg-brand-cream text-brand-ink">
-	<div class="mx-auto max-w-7xl px-4 py-16 md:py-22 flex flex-col gap-8 md:gap-10" x-data="{ i: 0 }">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-22 flex flex-col gap-8 md:gap-10"
+		 x-data="{
+			i: 0, n: <?php echo (int) count( $juiced_drinks ); ?>, paused: false, timer: null,
+			start() {
+				if ( this.n < 2 || window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) return;
+				clearInterval( this.timer );
+				this.timer = setInterval( () => { if ( ! this.paused ) this.i = ( this.i + 1 ) % this.n; }, 5000 );
+			},
+			pick( k ) { this.i = k; this.start(); }
+		 }"
+		 x-init="start()">
 
 		<!-- Heading row -->
 		<div class="flex flex-wrap items-end justify-between gap-6">
@@ -153,18 +167,20 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 		</div>
 
 		<!-- Sage board -->
-		<div class="grid gap-6 rounded-[32px] bg-[#cfd9cb] p-3 sm:p-5 lg:p-7 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10">
+		<div @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false"
+			 class="grid gap-6 rounded-[32px] bg-[#cfd9cb] p-3 sm:p-5 lg:p-7 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10">
 
 			<!-- Photo of the selected drink -->
 			<div class="relative min-h-[420px] sm:min-h-[480px] lg:min-h-[600px] overflow-hidden rounded-[22px]" aria-live="polite">
 				<?php foreach ( $juiced_drinks as $k => $drink ) : ?>
 					<?php // Stacked layers with the first drink on top, so without JS it shows; Alpine fades the rest out. Kept in the DOM (not display:none) so lazy photos preload. ?>
-					<div class="absolute inset-0 transition-opacity duration-300" style="z-index:<?php echo (int) ( count( $juiced_drinks ) - $k ); ?>"
+					<div class="absolute inset-0 transition-opacity duration-700 ease-in-out motion-reduce:duration-300" style="z-index:<?php echo (int) ( count( $juiced_drinks ) - $k ); ?>"
 						 :class="i === <?php echo (int) $k; ?> ? 'opacity-100 z-10!' : 'opacity-0 pointer-events-none'"
 						 :aria-hidden="(i !== <?php echo (int) $k; ?>).toString()">
 						<?php if ( $drink['img'] ) : ?>
 							<img src="<?php echo esc_url( $drink['img'] ); ?>" alt="<?php echo esc_attr( $drink['name'] ); ?>"
-								 class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+								 class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transition-none"
+								 :class="i === <?php echo (int) $k; ?> ? 'scale-100' : 'scale-105'" loading="lazy" />
 						<?php else : ?>
 							<div class="absolute inset-0 overflow-hidden <?php echo esc_attr( $drink['block'][0] ); ?>" aria-hidden="true">
 								<span class="absolute -right-15 -top-15 h-75 w-75 rounded-full <?php echo esc_attr( $drink['block'][1] ); ?>"></span>
@@ -172,7 +188,8 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 							</div>
 						<?php endif; ?>
 
-						<div class="absolute inset-x-3 bottom-3 sm:inset-x-5 sm:bottom-5 flex flex-col gap-3.5 rounded-[18px] bg-brand-cream px-4.5 py-4">
+						<div class="absolute inset-x-3 bottom-3 sm:inset-x-5 sm:bottom-5 flex flex-col gap-3.5 rounded-[18px] bg-brand-cream px-4.5 py-4 transition duration-500 ease-out motion-reduce:transition-none"
+							 :class="i === <?php echo (int) $k; ?> ? 'translate-y-0 opacity-100 delay-200' : 'translate-y-4 opacity-0'">
 							<div class="flex flex-col gap-0.5">
 								<span class="font-display text-[26px] font-bold leading-none text-brand-forest"><?php echo esc_html( $drink['name'] ); ?></span>
 								<?php $meta = implode( ' · ', array_filter( array( $drink['type'], $drink['size'], $drink['price'] ) ) ); ?>
@@ -200,7 +217,7 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 			<ol class="m-0! flex list-none flex-col justify-center gap-1 p-0 lg:pr-3">
 				<?php foreach ( $juiced_drinks as $k => $drink ) : ?>
 					<li>
-						<button type="button" @click="i = <?php echo (int) $k; ?>"
+						<button type="button" @click="pick( <?php echo (int) $k; ?> )"
 								:aria-pressed="(i === <?php echo (int) $k; ?>).toString()"
 								aria-pressed="<?php echo $k ? 'false' : 'true'; ?>"
 								class="group grid w-full cursor-pointer grid-cols-[48px_minmax(0,1fr)] sm:grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 sm:gap-4.5 rounded-[18px] border-b px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors"

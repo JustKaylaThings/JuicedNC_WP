@@ -2,16 +2,18 @@
 /**
  * Locations page Section 2 — Find Your Juiced!
  *
- * Homepage-style heading row (small eyebrow, big two-tone forest/rust heading)
+ * Homepage-style heading row (small eyebrow, big two-tone forest/rust heading;
+ * "Juiced!" shows as the logo, juiced_logo_text())
  * over one white card split into two location
  * columns, divided by a hairline. Each column: pin + location name + address,
  * icon rows for phone / hours / parking, an interior photo, a live Google map
  * (juiced_location_map_url(); the page's map image stands in when the live
  * map is switched off in Customize → Google Reviews & Maps), and
- * a tinted card with a Get Directions button and that location's DoorDash /
- * Uber Eats / Grubhub buttons (its links in Business Info; with none, the
- * older single DoorDash button from this page's fields). Location 1 dresses in orange, location 2 in forest green —
- * the homepage's neighborhood panels' pairing — though both names, pins and Get Directions buttons are green.
+ * then that location's DoorDash / Uber Eats / Grubhub buttons in an even row
+ * (its links in Business Info; with none, the older single DoorDash button
+ * from this page's fields). Get Directions is a text link under the address.
+ * Location 1's detail icons are rust, location 2's forest — the homepage's
+ * neighborhood panels' pairing — though both names and pins are green.
  *
  * Each location's name, address, phone, hours, parking and directions link
  * are the site-wide business info in Appearance → Customize → Business Info
@@ -37,14 +39,10 @@ $directions_label = juiced_page_field( 'locations_directions_label', 'Get Direct
 // neighborhood panels. Orange text uses rust for contrast on white.
 $palettes = array(
 	1 => array(
-		'text'   => 'text-brand-rust',
-		'tint'   => 'bg-brand-gold/15',
-		'button' => 'bg-brand-forest text-brand-cream hover:bg-brand-gold hover:text-brand-ink',
+		'text' => 'text-brand-rust',
 	),
 	2 => array(
-		'text'   => 'text-brand-forest',
-		'tint'   => 'bg-brand-forest/10',
-		'button' => 'bg-brand-forest text-brand-cream hover:bg-brand-gold hover:text-brand-ink',
+		'text' => 'text-brand-forest',
 	),
 );
 
@@ -110,7 +108,7 @@ $juiced_detail_icons = array(
 				<?php if ( $lead || $accent ) : ?>
 					<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
 						<?php echo esc_html( $lead ); ?>
-						<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+						<span class="text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 					</h2>
 				<?php endif; ?>
 			</div>
@@ -131,12 +129,24 @@ $juiced_detail_icons = array(
 								<div>
 									<?php if ( $location['name'] ) : ?>
 										<h3 class="font-display text-[28px] font-bold leading-tight text-brand-forest">
-											<?php echo esc_html( $location['name'] ); ?>
+											<?php
+											// Headings read "Rock Quarry Store" — suffix added here only, so the
+											// site-wide name stays bare elsewhere (and isn't doubled if the
+											// client already typed "Store").
+											echo esc_html( preg_match( '/\bstore$/i', $location['name'] ) ? $location['name'] : $location['name'] . ' Store' );
+											?>
 										</h3>
 									<?php endif; ?>
 									<?php if ( $location['address'] ) : ?>
 										<?php // Tags hug the text: whitespace-pre-line would render the template's own newlines/indentation. ?>
 										<p class="mt-2 whitespace-pre-line text-sm font-semibold leading-relaxed text-brand-bark/90 md:text-base"><?php echo esc_html( $location['address'] ); ?></p>
+									<?php endif; ?>
+									<?php if ( $directions_label && $location['directions'] ) : ?>
+										<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
+										   class="mt-2 inline-flex items-center gap-1.5 text-sm font-bold text-brand-forest underline decoration-brand-gold decoration-2 underline-offset-4 transition-colors hover:text-brand-rust md:text-base">
+											<?php echo esc_html( $directions_label ); ?>
+											<span aria-hidden="true">&rarr;</span>
+										</a>
 									<?php endif; ?>
 								</div>
 							</div>
@@ -174,42 +184,34 @@ $juiced_detail_icons = array(
 							 class="mt-6 h-48 w-full rounded-2xl object-cover md:h-56" loading="lazy" />
 					<?php endif; ?>
 
-					<?php if ( ( $directions_label && $location['directions'] ) || $location['apps'] || $location['order_url'] ) : ?>
-						<div class="mt-6 flex flex-col items-start gap-4 rounded-2xl <?php echo esc_attr( $palette['tint'] ); ?> p-5 md:p-6">
-
-							<?php if ( $directions_label && $location['directions'] ) : ?>
-								<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
-								   class="inline-flex items-center gap-2 rounded-full <?php echo esc_attr( $palette['button'] ); ?> px-5 py-2.5 text-sm font-bold transition-colors">
-									<?php echo esc_html( $directions_label ); ?>
-									<span aria-hidden="true">&rarr;</span>
-								</a>
-							<?php endif; ?>
-
-							<?php if ( $location['apps'] ) : ?>
-								<div class="flex flex-wrap items-center gap-2">
-									<span class="w-full text-xs font-bold uppercase tracking-[.14em] text-brand-forest"><?php esc_html_e( 'Order ahead', 'juiced' ); ?></span>
-									<?php foreach ( $location['apps'] as $app => $url ) : ?>
-										<?php $meta = juiced_order_apps()[ $app ]; ?>
-										<a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer"
-										   aria-label="<?php echo esc_attr( sprintf( /* translators: 1: delivery app, 2: location */ __( 'Order from %2$s on %1$s (opens in a new tab)', 'juiced' ), $meta['label'], $location['name'] ) ); ?>"
-										   class="whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold transition-colors <?php echo esc_attr( $meta['class'] ); ?>">
-											<?php echo esc_html( $meta['label'] ); ?>
-										</a>
-									<?php endforeach; ?>
-								</div>
-							<?php elseif ( $location['order_url'] ) : ?>
-								<!-- DoorDash-branded button: DoorDash red with the wing mark,
-									 since the ordering links go to DoorDash. -->
-								<a href="<?php echo esc_url( $location['order_url'] ); ?>" target="_blank" rel="noopener"
-								   class="inline-flex items-center gap-2.5 rounded-full bg-[#ff3008] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d62a07]">
-									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-										<path d="M2.9 5.5c-.5 0-.9.4-.9.9s.4.9.9.9h12.8c1.2 0 2.2.7 2.7 1.7H8.1c-.5 0-.9.4-.9.9s.4.9.9.9h10.4c-.3 1.2-1.4 2.1-2.7 2.1H5.4c-.5 0-.9.4-.9.9s.4.9.9.9h10.4c2.9 0 5.2-2.4 5.2-5.3 0-2.7-2.2-4.9-5-4.9H2.9Z" />
-									</svg>
-									<?php echo esc_html( $location['order_label'] ); ?>
-								</a>
-							<?php endif; ?>
-
+					<?php if ( $location['apps'] ) : ?>
+						<?php
+						// One equal-width column per app, so the row stays even with two or three.
+						$juiced_app_cols = array( 1 => 'grid-cols-1', 2 => 'grid-cols-2', 3 => 'grid-cols-3' );
+						?>
+						<div class="mt-6 flex flex-col gap-2.5">
+							<span class="text-xs font-bold uppercase tracking-[.14em] text-brand-forest"><?php esc_html_e( 'Order ahead', 'juiced' ); ?></span>
+							<div class="grid gap-2 <?php echo esc_attr( $juiced_app_cols[ min( 3, count( $location['apps'] ) ) ] ); ?>">
+								<?php foreach ( $location['apps'] as $app => $url ) : ?>
+									<?php $meta = juiced_order_apps()[ $app ]; ?>
+									<a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer"
+									   aria-label="<?php echo esc_attr( sprintf( /* translators: 1: delivery app, 2: location */ __( 'Order from %2$s on %1$s (opens in a new tab)', 'juiced' ), $meta['label'], $location['name'] ) ); ?>"
+									   class="whitespace-nowrap rounded-full px-2 py-2.5 text-center text-sm font-bold transition-colors <?php echo esc_attr( $meta['class'] ); ?>">
+										<?php echo esc_html( $meta['label'] ); ?>
+									</a>
+								<?php endforeach; ?>
+							</div>
 						</div>
+					<?php elseif ( $location['order_url'] ) : ?>
+						<!-- DoorDash-branded button: DoorDash red with the wing mark,
+							 since the ordering links go to DoorDash. -->
+						<a href="<?php echo esc_url( $location['order_url'] ); ?>" target="_blank" rel="noopener"
+						   class="mt-6 inline-flex items-center gap-2.5 rounded-full bg-[#ff3008] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d62a07]">
+							<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+								<path d="M2.9 5.5c-.5 0-.9.4-.9.9s.4.9.9.9h12.8c1.2 0 2.2.7 2.7 1.7H8.1c-.5 0-.9.4-.9.9s.4.9.9.9h10.4c-.3 1.2-1.4 2.1-2.7 2.1H5.4c-.5 0-.9.4-.9.9s.4.9.9.9h10.4c2.9 0 5.2-2.4 5.2-5.3 0-2.7-2.2-4.9-5-4.9H2.9Z" />
+							</svg>
+							<?php echo esc_html( $location['order_label'] ); ?>
+						</a>
 					<?php endif; ?>
 
 				</div>

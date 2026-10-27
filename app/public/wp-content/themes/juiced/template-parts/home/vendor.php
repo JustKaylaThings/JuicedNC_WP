@@ -8,6 +8,8 @@
  * event-type chips and a booking button on the left, a pop-up photo
  * gallery on the right (stacked on phones).
  *
+ * "Juiced!" in the heading renders as the logo (juiced_logo_text()).
+ *
  * Different from the Events page "Host Your Event" band, which sells renting
  * the shop itself. The button defaults to the Contact page with the
  * vendor topic preselected (?topic=…, read by template-parts/contact/connect.php).
@@ -65,7 +67,7 @@ $juiced_v_count = count( $juiced_v_photos );
 			<?php endif; ?>
 
 			<h2 id="home-vendor-h" class="mt-3.5 font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.75rem)]">
-				<?php echo esc_html( $juiced_v_heading ); ?>
+				<?php echo juiced_logo_text( $juiced_v_heading ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 				<span class="text-brand-gold"><?php echo esc_html( $juiced_v_accent ); ?></span>
 			</h2>
 
@@ -122,13 +124,13 @@ $juiced_v_count = count( $juiced_v_photos );
 				<?php endforeach; ?>
 
 				<?php if ( $juiced_v_count > 1 ) : ?>
-					<div x-ref="strip" class="absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto bg-gradient-to-t from-brand-ink/70 to-transparent p-3 pt-12 [scrollbar-width:none] sm:gap-3 sm:p-4 sm:pt-16 [&::-webkit-scrollbar]:hidden">
+					<div x-ref="strip" class="absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto p-3 [scrollbar-width:none] sm:gap-3 sm:p-4 [&::-webkit-scrollbar]:hidden">
 						<?php foreach ( $juiced_v_photos as $juiced_i => $juiced_photo ) : ?>
 							<button type="button" @click="show(<?php echo (int) $juiced_i; ?>)"
 									:aria-pressed="(i === <?php echo (int) $juiced_i; ?>).toString()"
 									aria-label="<?php echo esc_attr( sprintf( 'Show photo %d', $juiced_i + 1 ) ); ?>"
 									class="size-12 shrink-0 overflow-hidden rounded-lg ring-2 ring-inset transition sm:size-16"
-									:class="i === <?php echo (int) $juiced_i; ?> ? 'ring-brand-gold' : 'ring-brand-cream/60 opacity-75 hover:opacity-100'">
+									:class="i === <?php echo (int) $juiced_i; ?> ? 'ring-brand-gold' : 'ring-brand-cream/60 hover:ring-brand-cream'">
 								<img src="<?php echo esc_url( $juiced_photo['src'] ); ?>" alt="" class="h-full w-full object-cover" loading="lazy" />
 							</button>
 						<?php endforeach; ?>

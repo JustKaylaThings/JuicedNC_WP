@@ -9,7 +9,9 @@
  * stay visually of a piece. Copy is ACF-editable on the Contact page
  * (inc/acf-contact-page.php); defaults below match the approved mockup so the
  * section renders before anything is set. With no image the gradient collapses
- * to the plain leafy green, which still reads correctly.
+ * to the plain leafy green, which still reads correctly. As on the About hero,
+ * the Juiced! logo sits centred in the space right of the copy from tablet up;
+ * it's left off phones, where the copy fills the width.
  *
  * @package Juiced
  */
@@ -31,7 +33,7 @@ $image   = juiced_image_url( juiced_page_field( 'contact_hero_image', '' ), 'jui
 		</div>
 	<?php endif; ?>
 
-	<div class="mx-auto max-w-7xl px-4 py-16 md:py-20 min-h-[380px] md:min-h-[440px] flex items-center">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-20 min-h-[380px] md:min-h-[440px] flex items-center gap-12">
 		<div class="max-w-xl">
 
 			<h1 class="font-display font-bold leading-[.9] tracking-[-.03em] text-[clamp(3rem,9vw,4.5rem)] md:text-[clamp(2.75rem,5.2vw,4.5rem)]">
@@ -45,6 +47,10 @@ $image   = juiced_image_url( juiced_page_field( 'contact_hero_image', '' ), 'jui
 				</p>
 			<?php endif; ?>
 
+		</div>
+
+		<div class="hidden md:flex flex-1 justify-center">
+			<?php echo juiced_logo( 'block h-auto w-full', true, 'w-full max-w-sm lg:max-w-lg' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 		</div>
 	</div>
 </section>

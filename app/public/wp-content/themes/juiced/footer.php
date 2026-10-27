@@ -3,11 +3,11 @@
  * Theme footer — Section 8.
  *
  * Closes <main>, then renders two site-wide bands from the approved mockup:
- *   1. The warm-cream "Join the Juiced! Family" sign-up band ("Garden" redesign,
+ *   1. The warm-cream "Join the Juiced! Family" sign-up band ("Juiced!" shows as
+ *      the logo, juiced_logo_text(); "Garden" redesign,
  *      Sep 2026; ACF-editable copy; posts to the client's email-provider form URL).
  *      Skipped on the Careers page.
- *   2. The deep-green footer: the site logo (Customizer → Site Identity;
- *      the "Juiced!" wordmark if none is set), tagline, social icons and
+ *   2. The deep-green footer: the Juiced! logo (juiced_logo()), tagline, social icons and
  *      copyright, beside three link columns (Community, Wellness, Visit) — each
  *      an optional nav-menu location with default links.
  *
@@ -63,7 +63,7 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 	<div class="mx-auto max-w-7xl px-4 py-14 md:py-20 grid gap-8 md:grid-cols-2 md:gap-12 items-center">
 		<h2 id="juiced-join-heading" class="font-display font-bold leading-[.95] tracking-[-.02em] text-brand-forest text-[clamp(2.75rem,6vw,4.5rem)]">
 			<span class="block"><?php echo esc_html( $juiced_nl_heading ); ?></span>
-			<span class="block text-brand-gold"><?php echo esc_html( $juiced_nl_accent ); ?></span>
+			<span class="block text-brand-gold"><?php echo juiced_logo_text( $juiced_nl_accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 		</h2>
 
 		<div class="flex flex-col gap-3.5">
@@ -108,25 +108,9 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 
 		<!-- Brand column -->
 		<div class="flex flex-col gap-2.5">
-			<?php $juiced_logo_id = get_theme_mod( 'custom_logo' ); ?>
-			<?php if ( $juiced_logo_id ) : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="self-start transition-opacity hover:opacity-85">
-					<?php
-					echo wp_get_attachment_image(
-						$juiced_logo_id,
-						'medium',
-						false,
-						array(
-							'class'   => 'block h-20 w-auto',
-							'alt'     => get_bloginfo( 'name' ),
-							'loading' => 'lazy',
-						)
-					);
-					?>
-				</a>
-			<?php else : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="self-start font-display text-[44px] font-bold leading-none text-brand-gold hover:text-brand-cream transition-colors">Juiced!</a>
-			<?php endif; ?>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="self-start transition-opacity hover:opacity-85">
+				<?php echo juiced_logo( 'block h-20 w-auto' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
+			</a>
 			<?php if ( $juiced_tagline ) : ?>
 				<p class="m-0 text-[15px]"><?php echo esc_html( $juiced_tagline ); ?></p>
 			<?php endif; ?>

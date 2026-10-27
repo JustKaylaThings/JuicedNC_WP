@@ -15,6 +15,8 @@
  * Copy is ACF-editable on the About page (inc/acf-about-page.php); clearing
  * the values hides the section.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -104,7 +106,7 @@ $juiced_value_fallback = array(
 					</div>
 					<h3 class="mt-1 font-display text-2xl font-bold leading-tight text-brand-forest"><?php echo esc_html( $value['title'] ); ?></h3>
 					<?php if ( $value['desc'] ) : ?>
-						<p class="text-[15px] leading-relaxed text-brand-bark/75"><?php echo esc_html( $value['desc'] ); ?></p>
+						<p class="text-[15px] leading-relaxed text-brand-bark/75"><?php echo juiced_logo_text( $value['desc'], 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
 					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>

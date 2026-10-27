@@ -10,6 +10,8 @@
  * on the Events page (inc/acf-events-page.php); defaults below match the
  * approved design so the section renders before anything is set.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -38,7 +40,7 @@ $image   = juiced_image_url( juiced_page_field( 'events_hero_image', '' ), 'juic
 
 		<?php if ( $subtext ) : ?>
 			<p class="max-w-md text-[17px] font-medium leading-relaxed text-brand-mint">
-				<?php echo esc_html( $subtext ); ?>
+				<?php echo juiced_logo_text( $subtext, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 			</p>
 		<?php endif; ?>
 	</div>

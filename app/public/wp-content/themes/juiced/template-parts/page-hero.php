@@ -16,6 +16,8 @@
  *       'one_line' => true,             // lead and accent on one line; optional
  *   ) );
  *
+ * "Juiced!" in either line shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -45,10 +47,10 @@ $image   = juiced_image_url( isset( $args['image'] ) ? $args['image'] : '', 'jui
 	<div class="mx-auto flex min-h-[256px] max-w-7xl flex-col justify-end gap-6 px-4 py-12 md:min-h-[246px] md:py-16">
 		<h1 class="font-display font-bold leading-[.92] tracking-[-.03em] text-[clamp(2.75rem,7vw,4.5rem)]">
 			<?php if ( $lead ) : ?>
-				<span class="<?php echo esc_attr( $line ); ?>"><?php echo esc_html( $lead ); ?></span>
+				<span class="<?php echo esc_attr( $line ); ?>"><?php echo juiced_logo_text( $lead ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 			<?php endif; ?>
 			<?php if ( $accent ) : ?>
-				<span class="<?php echo esc_attr( $line ); ?> text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+				<span class="<?php echo esc_attr( $line ); ?> text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 			<?php endif; ?>
 		</h1>
 

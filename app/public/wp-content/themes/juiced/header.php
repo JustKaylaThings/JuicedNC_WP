@@ -61,13 +61,10 @@ if ( $juiced_announcement ) :
 	<div class="site-header__bar mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 py-4">
 
 		<div class="shrink-0">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php else : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="font-display text-2xl text-brand-gold">
-					<?php bloginfo( 'name' ); ?>
-				</a>
-			<?php endif; ?>
+			<?php // The Juiced! wordmark ships with the theme (the same file as the About hero), not the Customizer logo. ?>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home">
+				<?php echo juiced_logo( 'custom-logo', true ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
+			</a>
 		</div>
 
 		<nav class="hidden md:block" aria-label="<?php esc_attr_e( 'Primary', 'juiced' ); ?>">

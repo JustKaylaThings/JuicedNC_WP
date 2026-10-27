@@ -160,6 +160,13 @@ body {
 .site-header.is-scrolled .custom-logo {
   max-height: 56px;
 }
+/* The wordmark is about twice as wide as it is tall; on tablets the full
+   nav and Order Ahead button share the bar, so it runs smaller there. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-header .custom-logo {
+    max-height: 52px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-header__bar,

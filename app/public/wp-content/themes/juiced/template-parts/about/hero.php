@@ -10,6 +10,11 @@
  * on the About page (inc/acf-about-page.php); defaults below match the approved
  * mockup so the section renders before anything is set. With no image the
  * gradient collapses to the plain leafy green, which still reads correctly.
+ * The full Juiced! wordmark (assets/images/juiced-logo, 1328px wide, so it
+ * stays sharp on Retina) sits centred in the space right of the copy from
+ * tablet up; it's left off phones, where the copy fills the width.
+ *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
  *
  * @package Juiced
  */
@@ -31,7 +36,7 @@ $image   = juiced_image_url( juiced_page_field( 'about_hero_image', '' ), 'juice
 		</div>
 	<?php endif; ?>
 
-	<div class="mx-auto max-w-7xl px-4 py-16 md:py-20 min-h-[380px] md:min-h-[440px] flex items-center">
+	<div class="mx-auto max-w-7xl px-4 py-16 md:py-20 min-h-[380px] md:min-h-[440px] flex items-center gap-12">
 		<div class="max-w-xl">
 
 			<h1 class="font-display font-bold leading-[.9] tracking-[-.03em] text-[clamp(3rem,9vw,4.5rem)] md:text-[clamp(2.75rem,5.2vw,4.5rem)]">
@@ -41,10 +46,14 @@ $image   = juiced_image_url( juiced_page_field( 'about_hero_image', '' ), 'juice
 
 			<?php if ( $subtext ) : ?>
 				<p class="mt-6 max-w-md text-lg md:text-xl font-medium leading-relaxed">
-					<?php echo esc_html( $subtext ); ?>
+					<?php echo juiced_logo_text( $subtext, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 				</p>
 			<?php endif; ?>
 
+		</div>
+
+		<div class="hidden md:flex flex-1 justify-center">
+			<?php echo juiced_logo( 'block h-auto w-full', true, 'w-full max-w-sm lg:max-w-lg' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 		</div>
 	</div>
 </section>

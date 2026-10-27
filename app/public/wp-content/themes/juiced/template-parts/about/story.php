@@ -3,7 +3,7 @@
  * About page Section — Our Story timeline ("Blended with Purpose. Built on
  * Passion."). From About option A.
  *
- * Two columns on the cream ground: on the left an orange "Our Story" eyebrow,
+ * Two columns on the cream ground: on the left an orange "Our Story" eyebrow, the Juiced! logo,
  * two-tone heading (lead green, accent orange), the intro, and an optional
  * button; on the right a vertical timeline on a green rule — each milestone
  * an orange year, green title and short description. The last milestone gets
@@ -18,6 +18,8 @@
  * becomes one <p> per blank-line-separated block. No milestones → the intro
  * runs on its own; the button hides until a link is set.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -28,7 +30,8 @@ $body    = juiced_page_field( 'about_story_body', 'Juiced! started with a simple
 $raw     = juiced_page_field(
 	'about_timeline_items',
 	"[Year] | The Idea | [How Juiced! began — who, where, and why.]\n"
-	. "[Year] | Doors Open on Hill Street | [The first shop — a short memory from opening day.]\n"
+	. "[Year] | Doors Open on Rock Quarry Rd | [The first shop — a short memory from opening day.]\n"
+		. "[Year] | A Second Home on Hill Street | [The second shop — what brought Juiced! to Hill Street.]\n"
 	. "[Year] | Smooth Talk Is Born | Open mics, remote-work Mondays, game nights — the regulars made it theirs.\n"
 	. "Next | Growing with Raleigh | We're proud of how far we've come, and even more excited about where we're going — together."
 );
@@ -74,6 +77,8 @@ $last = count( $milestones ) - 1;
 					</p>
 				<?php endif; ?>
 
+				<?php echo juiced_logo( 'block h-auto w-full', false, 'mt-5 block w-full max-w-xs md:max-w-sm' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
+
 				<h2 id="about-story-h" class="mt-3.5 font-display font-bold leading-none text-[clamp(2.5rem,5vw,3.75rem)]">
 					<span class="text-brand-forest"><?php echo esc_html( $lead ); ?></span>
 					<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
@@ -81,7 +86,7 @@ $last = count( $milestones ) - 1;
 
 				<?php foreach ( $paragraphs as $paragraph ) : ?>
 					<p class="mt-5 text-base leading-relaxed text-brand-bark/70 md:text-lg">
-						<?php echo esc_html( $paragraph ); ?>
+						<?php echo juiced_logo_text( $paragraph, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 					</p>
 				<?php endforeach; ?>
 

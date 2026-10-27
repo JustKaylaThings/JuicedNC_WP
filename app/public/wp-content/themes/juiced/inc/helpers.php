@@ -449,6 +449,44 @@ function juiced_map_pin( $color = '#38a54c' ) {
 }
 
 /**
+ * The Juiced! wordmark that ships with the theme (assets/images/juiced-logo,
+ * 1328×621, WebP with a PNG fallback). Used by the header, footer, About hero
+ * and Our Story in place of the Customizer logo.
+ *
+ * @param string $class   Classes for the <img>.
+ * @param bool   $eager   True above the fold (header, hero); lazy otherwise.
+ * @param string $wrapper Classes for the <picture>.
+ * @param string $alt     Alt text; defaults to the site name.
+ * @return string Picture markup.
+ */
+function juiced_logo( $class, $eager = false, $wrapper = 'block', $alt = '' ) {
+	$loading = $eager ? 'fetchpriority="high"' : 'loading="lazy"';
+	return '<picture class="' . esc_attr( $wrapper ) . '">'
+		. '<source srcset="' . esc_url( get_theme_file_uri( 'assets/images/juiced-logo.webp' ) ) . '" type="image/webp" />'
+		. '<img src="' . esc_url( get_theme_file_uri( 'assets/images/juiced-logo.png' ) ) . '" alt="' . esc_attr( $alt ? $alt : get_bloginfo( 'name' ) ) . '" width="1328" height="621" class="' . esc_attr( $class ) . '" ' . $loading . ' />'
+		. '</picture>';
+}
+
+/**
+ * Escape a heading's (or line of copy's) text with its first "Juiced!" shown as
+ * the logo, sized to the line (the logo's alt keeps the words for screen readers). Text without
+ * "Juiced!" comes back as plain escaped text.
+ *
+ * @param string $text  Heading text.
+ * @param string $class Classes for the logo; the default suits a heading.
+ * @return string HTML.
+ */
+function juiced_logo_text( $text, $class = 'inline-block h-[1.5em] w-auto -my-[.15em] align-middle' ) {
+	$parts = explode( 'Juiced!', (string) $text, 2 );
+	if ( ! isset( $parts[1] ) ) {
+		return esc_html( $text );
+	}
+	return esc_html( $parts[0] )
+		. juiced_logo( $class, false, 'inline', 'Juiced!' )
+		. esc_html( $parts[1] );
+}
+
+/**
  * Render a 0–5 star rating as inline gold SVGs (filled up to the rounded rating,
  * faint for the rest). Used by the homepage Google reviews strip.
  *

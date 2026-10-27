@@ -11,6 +11,8 @@
  * below match the approved mockup. With no image the gradient collapses to
  * the plain leafy green, which still reads correctly.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -45,7 +47,7 @@ if ( ! $quote ) {
 
 			<div>
 				<blockquote class="font-display text-2xl font-semibold leading-snug md:text-4xl lg:text-[2.75rem] lg:leading-tight">
-					<?php echo esc_html( $quote ); ?>
+					<?php echo juiced_logo_text( $quote ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 				</blockquote>
 				<?php if ( $attribution ) : ?>
 					<figcaption class="mt-5 text-sm font-bold text-brand-gold md:text-base">

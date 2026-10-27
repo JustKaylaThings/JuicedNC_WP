@@ -15,6 +15,8 @@
  * When the shared photo is set, it replaces the circles: one wide photo of the
  * pair together, with their names and roles side by side underneath.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -47,7 +49,7 @@ $shared = juiced_image_url( juiced_page_field( 'about_owners_photo', '' ), 'larg
 		<?php if ( $lead || $accent || $tail ) : ?>
 			<h2 class="text-center font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
 				<?php echo esc_html( $lead ); ?>
-				<span class="text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+				<span class="text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 				<?php echo esc_html( $tail ); ?>
 			</h2>
 		<?php endif; ?>
