@@ -565,6 +565,11 @@ function juiced_footer_copyright( $class, $copyright, $privacy, $terms ) {
 		<?php if ( $terms ) : ?>
 			<span aria-hidden="true">·</span> <a href="<?php echo esc_url( $terms ); ?>" class="hover:text-brand-gold transition-colors"><?php esc_html_e( 'Terms', 'juiced' ); ?></a>
 		<?php endif; ?>
+		<?php // Site credit, on its own line under the copyright. ?>
+		<span class="mt-1 block">
+			<?php esc_html_e( 'Built with ❤️ by', 'juiced' ); ?>
+			<a href="https://kayjo.co" target="_blank" rel="noopener" class="font-semibold underline underline-offset-2 hover:text-brand-gold transition-colors">KAYJO</a>.
+		</span>
 	</p>
 	<?php
 }
