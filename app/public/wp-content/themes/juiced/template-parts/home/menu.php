@@ -159,7 +159,7 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 				<?php if ( $juiced_m_eyebrow ) : ?>
 					<span class="text-xs font-bold uppercase tracking-[.22em] text-brand-forest"><?php echo esc_html( $juiced_m_eyebrow ); ?></span>
 				<?php endif; ?>
-				<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.75rem)]">
+				<h2 class="text-drop font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.75rem)]">
 					<?php echo esc_html( $juiced_m_heading ); ?>
 					<span class="text-brand-gold"><?php echo esc_html( $juiced_m_accent ); ?></span>
 				</h2>

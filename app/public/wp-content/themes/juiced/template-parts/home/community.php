@@ -72,7 +72,7 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 				</a>
 			<?php endif; ?>
 
-			<h2 class="font-display font-bold leading-[1.02] text-[clamp(2.5rem,5.5vw,4rem)]">
+			<h2 class="text-drop font-display font-bold leading-[1.02] text-[clamp(2.5rem,5.5vw,4rem)]">
 				<span class="block"><?php echo esc_html( $juiced_c_heading ); ?></span>
 				<span class="block text-brand-gold"><?php echo esc_html( $juiced_c_accent ); ?></span>
 			</h2>

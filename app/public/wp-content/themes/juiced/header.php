@@ -55,7 +55,7 @@ if ( $juiced_announcement ) :
 <?php
 // The homepage runs edge to edge: its bar and hero span the full window
 // (with a wider side gutter from md) instead of the 1280px column.
-$juiced_bar_width = is_front_page() ? 'md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))]' : 'mx-auto max-w-7xl';
+$juiced_bar_width = is_front_page() ? 'md:px-8 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))]' : 'mx-auto max-w-7xl';
 ?>
 <header class="site-header <?php echo $juiced_garden ? 'bg-brand-forest bg-garden bg-garden-above' : 'bg-brand-ink'; ?> text-brand-cream"
 		x-data="{ menuOpen: false, scrolled: false }"
@@ -63,7 +63,7 @@ $juiced_bar_width = is_front_page() ? 'md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10
 		@scroll.window.passive="scrolled = window.scrollY > (scrolled ? 8 : 72)"
 		:class="{ 'is-scrolled': scrolled }"
 		@click.outside="menuOpen = false" @keydown.escape.window="menuOpen = false">
-	<div class="site-header__bar <?php echo esc_attr( $juiced_bar_width ); ?> flex items-center justify-between gap-6 px-4 py-4">
+	<div class="site-header__bar <?php echo esc_attr( $juiced_bar_width ); ?> flex items-center justify-between gap-4 lg:gap-6 px-4 py-4">
 
 		<div class="shrink-0">
 			<?php // The Juiced! wordmark ships with the theme (the same file as the About hero), not the Customizer logo. ?>
@@ -87,7 +87,7 @@ $juiced_bar_width = is_front_page() ? 'md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10
 		</nav>
 
 		<div class="flex items-center gap-3">
-			<?php juiced_order_button( __( 'Order Ahead', 'juiced' ), 'hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2 text-sm text-brand-ink btn-sticker' ); ?>
+			<?php juiced_order_button( __( 'Order Ahead', 'juiced' ), 'hidden sm:inline-flex shrink-0 whitespace-nowrap items-center gap-2 rounded-full bg-brand-gold px-4 lg:px-5 py-2 text-sm text-brand-ink btn-sticker' ); ?>
 
 			<button type="button" class="md:hidden text-brand-cream cursor-pointer"
 					@click="menuOpen = !menuOpen"

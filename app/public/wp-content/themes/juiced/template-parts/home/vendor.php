@@ -66,7 +66,7 @@ $juiced_v_count = count( $juiced_v_photos );
 				<span class="text-xs font-bold uppercase tracking-[.22em] text-brand-forest"><?php echo esc_html( $juiced_v_eyebrow ); ?></span>
 			<?php endif; ?>
 
-			<h2 id="home-vendor-h" class="mt-3.5 font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.75rem)]">
+			<h2 id="home-vendor-h" class="mt-3.5 text-drop font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,5vw,3.75rem)]">
 				<?php echo juiced_logo_text( $juiced_v_heading ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 				<span class="text-brand-gold"><?php echo esc_html( $juiced_v_accent ); ?></span>
 			</h2>

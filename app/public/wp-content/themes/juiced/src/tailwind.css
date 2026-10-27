@@ -222,6 +222,12 @@ html:has(.menu-section-bar) {
   @media (prefers-reduced-motion: reduce) {
     .btn-sticker, .btn-sticker:hover, .btn-sticker:active { transform: none; }
   }
+
+  /* Soft drop shadow for display headings: a light, slightly blurred ink
+     shade, scaled to the type with a floor so smaller headings still show it.
+     The home hero headline uses the stronger --hero version. */
+  .text-drop { text-shadow: 0 max(0.025em, 2px) max(0.03em, 3px) rgb(19 17 14 / 0.25); }
+  .text-drop--hero { text-shadow: 0 max(0.03em, 3px) max(0.04em, 4px) rgb(19 17 14 / 0.5); }
 }
 
 /* Hide scrollbars on horizontal rails while keeping scroll behavior */
@@ -236,11 +242,17 @@ html:has(.menu-section-bar) {
 .primary-nav {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.8rem;
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: 0.875rem;
   font-weight: 500;
+  white-space: nowrap;
+}
+/* Tablets get the tighter, smaller links above so the bar fits on one row. */
+@media (min-width: 1024px) {
+  .primary-nav { gap: 1.5rem; font-size: 1rem; }
 }
 .primary-nav a {
   color: var(--color-brand-cream);

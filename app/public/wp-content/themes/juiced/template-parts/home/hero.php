@@ -49,10 +49,10 @@ $ticker = juiced_field( 'hero_ticker', "Open Mic Thursdays\nIsekai Nights\nWork 
 $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (string) $ticker ) ) ) );
 ?>
 <section class="relative -mt-px bg-brand-forest bg-garden text-brand-cream overflow-hidden">
-	<div class="px-4 md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))] pt-6 md:pt-10">
+	<div class="px-4 md:px-8 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))] pt-6 md:pt-10">
 
 		<div class="xl:relative">
-			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] [text-shadow:0_.025em_0_var(--color-brand-ink)] text-[clamp(3.5rem,13vw,11.75rem)] lg:text-[clamp(4.5rem,min(10.6vw,12.5vh),9.75rem)]">
+			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] text-drop--hero text-[clamp(3.5rem,13vw,11.75rem)] lg:text-[clamp(4.5rem,min(10.6vw,12.5vh),9.75rem)]">
 				<?php if ( $pre ) : ?>
 					<span class="block text-brand-mint"><?php echo esc_html( $pre ); ?></span>
 				<?php endif; ?>

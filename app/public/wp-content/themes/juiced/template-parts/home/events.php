@@ -107,7 +107,7 @@ $juiced_cta = static function ( $id ) {
 				<?php if ( $juiced_eyebrow ) : ?>
 					<span class="text-xs font-bold uppercase tracking-[.22em] text-brand-forest"><?php echo esc_html( $juiced_eyebrow ); ?></span>
 				<?php endif; ?>
-				<h2 class="font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
+				<h2 class="text-drop font-display font-bold leading-none text-brand-forest text-[clamp(2.5rem,6vw,3.75rem)]">
 					<?php echo esc_html( $juiced_heading ); ?>
 					<span class="text-brand-gold"><?php echo esc_html( $juiced_accent ); ?></span>
 				</h2>
