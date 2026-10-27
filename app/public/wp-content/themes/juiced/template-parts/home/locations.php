@@ -14,6 +14,9 @@
  * photos are ACF-editable on the Home page (inc/acf-homepage.php); a panel
  * with no photo gets a plain decorative block.
  *
+ * Each name gets "Store" after it here ("Hill Street Store"), unless the
+ * Customizer name already ends with it.
+ *
  * Fixed at two locations to match the design; a location with no name is
  * skipped and the other then spans the full width.
  *
@@ -62,7 +65,7 @@ foreach ( $juiced_hood_styles as $i => $style ) {
 	$image = juiced_field( "locations_photo_{$i}", '' );
 
 	$juiced_hoods[] = array(
-		'name'       => $name,
+		'name'       => preg_match( '/\bstore$/i', $name ) ? $name : $name . ' Store',
 		'label'      => juiced_field( "locations_label_{$i}", $style['label_default'] ),
 		'address'    => $address,
 		'phone'      => $phone,
