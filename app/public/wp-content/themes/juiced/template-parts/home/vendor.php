@@ -14,11 +14,11 @@
  * the shop itself. The button defaults to the Contact page with the
  * vendor topic preselected (?topic=…, read by template-parts/contact/connect.php).
  *
- * The gallery is one large photo with a row of thumbnails along its bottom
- * edge; a thumbnail swaps the large photo (Alpine), and the photos cycle on
- * their own every 5s — paused for hover, focus, a hidden tab or reduced
- * motion, like the Events page carousel. The large photos are
- * stacked layers with the first on top, so without JS photo 1 still shows.
+ * The gallery is a native scroll-snap track (swipes sideways on phones, works
+ * without JS) with a row of thumbnails along its bottom edge and prev/next
+ * arrows plus a "1 / 7" count underneath. Alpine wires up the thumbnails and
+ * arrows and cycles the photos every 5s — paused for hover, focus, touch, a
+ * hidden tab or reduced motion, like the Events page carousel.
  * Photos are twelve fixed slots (ACF free has no Repeater); the thumbnail row
  * scrolls sideways when they don't fit, and is dropped with only one photo. Alt text comes from the Media Library. Clearing the
  * heading hides the section.
@@ -59,7 +59,7 @@ for ( $juiced_n = 1; $juiced_n <= 12; $juiced_n++ ) {
 $juiced_v_count = count( $juiced_v_photos );
 ?>
 <section class="bg-brand-paper text-brand-ink" aria-labelledby="home-vendor-h">
-	<div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:py-22 <?php echo $juiced_v_count ? 'lg:grid-cols-[2fr_3fr] lg:gap-14' : ''; ?>">
+	<div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 md:py-22 <?php echo $juiced_v_count ? 'lg:grid-cols-[2fr_3fr] lg:gap-14' : ''; ?>">
 
 		<div class="max-w-xl">
 			<?php if ( $juiced_v_eyebrow ) : ?>
@@ -95,45 +95,82 @@ $juiced_v_count = count( $juiced_v_photos );
 		</div>
 
 		<?php if ( $juiced_v_count ) : ?>
-			<div class="relative aspect-[5/4] overflow-hidden rounded-[22px] bg-brand-clay"
+			<div class="min-w-0"
+				 role="region" aria-roledescription="carousel" aria-label="Photos from our pop-ups"
 				 x-data="{
 					i: 0,
 					n: <?php echo (int) $juiced_v_count; ?>,
 					paused: false,
-					show(k) {
+					go(k) {
 						this.i = (k + this.n) % this.n;
-						// Centre the active thumbnail by scrolling the strip only — never the page.
+						const t = this.$refs.track;
+						t.scrollTo({ left: this.i * t.clientWidth, behavior: 'smooth' });
+						this.centerThumb();
+					},
+					sync() {
+						const t = this.$refs.track;
+						this.i = Math.round(t.scrollLeft / t.clientWidth);
+						this.centerThumb();
+					},
+					// Centre the active thumbnail by scrolling the strip only — never the page.
+					centerThumb() {
 						const strip = this.$refs.strip, t = strip && strip.children[this.i];
 						if (t) strip.scrollTo({ left: t.offsetLeft - (strip.clientWidth - t.offsetWidth) / 2, behavior: 'smooth' });
 					},
 					init() {
 						if (this.n < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-						setInterval(() => { if (!this.paused && !document.hidden) this.show(this.i + 1); }, 5000);
+						setInterval(() => { if (!this.paused && !document.hidden) this.go(this.i + 1); }, 5000);
 					}
 				 }"
 				 @mouseenter="paused = true" @mouseleave="paused = false"
-				 @focusin="paused = true" @focusout="paused = false">
-				<?php foreach ( $juiced_v_photos as $juiced_i => $juiced_photo ) : ?>
-					<img src="<?php echo esc_url( $juiced_photo['src'] ); ?>"
-						 alt="<?php echo esc_attr( $juiced_photo['alt'] ); ?>"
-						 class="absolute inset-0 h-full w-full object-cover object-[50%_20%] transition-opacity duration-300"
-						 style="z-index:<?php echo (int) ( $juiced_v_count - $juiced_i ); ?>"
-						 :class="i === <?php echo (int) $juiced_i; ?> ? 'opacity-100 z-10!' : 'opacity-0'"
-						 :aria-hidden="(i !== <?php echo (int) $juiced_i; ?>).toString()"
-						 loading="lazy" />
-				<?php endforeach; ?>
+				 @focusin="paused = true" @focusout="paused = false"
+				 @touchstart.passive="paused = true">
+
+				<div class="relative aspect-[5/4] overflow-hidden rounded-[22px] bg-brand-clay">
+					<ul x-ref="track" @scroll.debounce.100ms="sync()"
+						class="absolute inset-0 m-0 flex list-none snap-x snap-mandatory overflow-x-auto p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+						<?php foreach ( $juiced_v_photos as $juiced_i => $juiced_photo ) : ?>
+							<li class="h-full w-full shrink-0 snap-start"
+								aria-roledescription="slide"
+								aria-label="<?php echo esc_attr( sprintf( '%d of %d', $juiced_i + 1, $juiced_v_count ) ); ?>">
+								<img src="<?php echo esc_url( $juiced_photo['src'] ); ?>"
+									 alt="<?php echo esc_attr( $juiced_photo['alt'] ); ?>"
+									 class="h-full w-full object-cover object-[50%_20%]"
+									 loading="lazy" />
+							</li>
+						<?php endforeach; ?>
+					</ul>
+
+					<?php if ( $juiced_v_count > 1 ) : ?>
+						<div x-ref="strip" class="absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto p-3 [scrollbar-width:none] sm:gap-3 sm:p-4 [&::-webkit-scrollbar]:hidden">
+							<?php foreach ( $juiced_v_photos as $juiced_i => $juiced_photo ) : ?>
+								<button type="button" @click="go(<?php echo (int) $juiced_i; ?>)"
+										:aria-pressed="(i === <?php echo (int) $juiced_i; ?>).toString()"
+										aria-label="<?php echo esc_attr( sprintf( 'Show photo %d', $juiced_i + 1 ) ); ?>"
+										class="size-12 shrink-0 overflow-hidden rounded-lg ring-2 ring-inset transition sm:size-16"
+										:class="i === <?php echo (int) $juiced_i; ?> ? 'ring-brand-gold' : 'ring-brand-cream/60 hover:ring-brand-cream'">
+									<img src="<?php echo esc_url( $juiced_photo['src'] ); ?>" alt="" class="h-full w-full object-cover" loading="lazy" />
+								</button>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+				</div>
 
 				<?php if ( $juiced_v_count > 1 ) : ?>
-					<div x-ref="strip" class="absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto p-3 [scrollbar-width:none] sm:gap-3 sm:p-4 [&::-webkit-scrollbar]:hidden">
-						<?php foreach ( $juiced_v_photos as $juiced_i => $juiced_photo ) : ?>
-							<button type="button" @click="show(<?php echo (int) $juiced_i; ?>)"
-									:aria-pressed="(i === <?php echo (int) $juiced_i; ?>).toString()"
-									aria-label="<?php echo esc_attr( sprintf( 'Show photo %d', $juiced_i + 1 ) ); ?>"
-									class="size-12 shrink-0 overflow-hidden rounded-lg ring-2 ring-inset transition sm:size-16"
-									:class="i === <?php echo (int) $juiced_i; ?> ? 'ring-brand-gold' : 'ring-brand-cream/60 hover:ring-brand-cream'">
-								<img src="<?php echo esc_url( $juiced_photo['src'] ); ?>" alt="" class="h-full w-full object-cover" loading="lazy" />
+					<div class="mt-5 flex items-center justify-between gap-4">
+						<p class="m-0 text-sm font-semibold tabular-nums text-brand-forest" aria-live="polite">
+							<span x-text="i + 1">1</span> / <?php echo (int) $juiced_v_count; ?>
+						</p>
+						<div class="flex gap-2">
+							<button type="button" @click="go(i - 1)" aria-label="Previous photo"
+									class="grid size-11 place-items-center rounded-full ring-1 ring-brand-forest/30 text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream hover:ring-brand-forest">
+								<span aria-hidden="true">&larr;</span>
 							</button>
-						<?php endforeach; ?>
+							<button type="button" @click="go(i + 1)" aria-label="Next photo"
+									class="grid size-11 place-items-center rounded-full ring-1 ring-brand-forest/30 text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream hover:ring-brand-forest">
+								<span aria-hidden="true">&rarr;</span>
+							</button>
+						</div>
 					</div>
 				<?php endif; ?>
 			</div>
