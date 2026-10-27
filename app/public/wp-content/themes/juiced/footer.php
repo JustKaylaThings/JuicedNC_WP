@@ -141,7 +141,7 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 				</div>
 			<?php endif; ?>
 
-			<?php juiced_footer_copyright( 'hidden md:block m-0 mt-auto pt-4 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms, $juiced_credit ); ?>
+			<?php juiced_footer_copyright( 'hidden md:block m-0 mt-auto pt-4 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms ); ?>
 		</div>
 
 		<!-- Link columns -->
@@ -179,7 +179,15 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 		</nav>
 
 		<?php // On phones the copyright moves below the link columns. ?>
-		<?php juiced_footer_copyright( 'md:hidden m-0 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms, $juiced_credit ); ?>
+		<?php juiced_footer_copyright( 'md:hidden m-0 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms ); ?>
+	</div>
+
+	<?php // Site credit (Home page → Footer & Newsletter), centred on its own bottom row. ?>
+	<div class="border-t border-white/10">
+		<p class="mx-auto m-0 max-w-7xl px-4 py-4 text-center text-[13px]">
+			<?php echo esc_html( $juiced_credit['text'] ); ?>
+			<a href="<?php echo esc_url( $juiced_credit['url'] ); ?>" target="_blank" rel="noopener" class="font-semibold underline underline-offset-2 hover:text-brand-gold transition-colors"><?php echo esc_html( $juiced_credit['name'] ); ?></a>.
+		</p>
 	</div>
 </footer>
 
