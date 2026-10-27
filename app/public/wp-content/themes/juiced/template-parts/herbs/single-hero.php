@@ -83,7 +83,7 @@ $tags = ( $tags && ! is_wp_error( $tags ) ) ? $tags : array();
 			<?php endif; ?>
 
 			<?php if ( has_excerpt() ) : ?>
-				<p class="mt-5 max-w-md text-base leading-relaxed text-brand-cream/85 md:text-lg">
+				<p class="mt-5 max-w-md text-lg md:text-xl font-medium leading-relaxed text-brand-cream/85">
 					<?php echo esc_html( wp_strip_all_tags( get_the_excerpt() ) ); ?>
 				</p>
 			<?php endif; ?>

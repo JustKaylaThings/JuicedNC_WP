@@ -39,7 +39,7 @@ $image   = juiced_image_url( juiced_page_field( 'events_hero_image', '' ), 'juic
 		</h1>
 
 		<?php if ( $subtext ) : ?>
-			<p class="max-w-md text-[17px] font-medium leading-relaxed text-brand-mint">
+			<p class="w-full max-w-md text-lg md:text-xl font-medium leading-relaxed text-brand-mint md:max-w-none">
 				<?php echo juiced_logo_text( $subtext, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 			</p>
 		<?php endif; ?>

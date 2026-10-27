@@ -52,7 +52,7 @@ $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (st
 	<div class="px-4 md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))] pt-6 md:pt-10">
 
 		<div class="xl:relative">
-			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] text-[clamp(3.5rem,13vw,11.75rem)] lg:text-[clamp(4.5rem,min(10.6vw,12.5vh),9.75rem)]">
+			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] [text-shadow:0_.025em_0_var(--color-brand-ink)] text-[clamp(3.5rem,13vw,11.75rem)] lg:text-[clamp(4.5rem,min(10.6vw,12.5vh),9.75rem)]">
 				<?php if ( $pre ) : ?>
 					<span class="block text-brand-mint"><?php echo esc_html( $pre ); ?></span>
 				<?php endif; ?>
@@ -62,7 +62,7 @@ $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (st
 
 			<div class="mt-8 flex flex-col gap-6 max-w-xl xl:mt-0 xl:max-w-none xl:absolute xl:top-1/2 xl:-translate-y-1/2 xl:right-0 xl:w-[min(540px,33vw)]">
 				<?php if ( $subtext ) : ?>
-					<p class="text-lg md:text-xl xl:text-2xl leading-relaxed font-medium"><?php echo esc_html( $subtext ); ?></p>
+					<p class="text-lg md:text-xl leading-relaxed font-medium"><?php echo esc_html( $subtext ); ?></p>
 				<?php endif; ?>
 				<div class="flex flex-wrap gap-3">
 					<?php if ( $primary ) : ?>

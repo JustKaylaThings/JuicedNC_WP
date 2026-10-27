@@ -49,7 +49,7 @@ $query       = isset( $_GET['herb_search'] ) ? sanitize_text_field( wp_unslash( 
 			</h1>
 
 			<?php if ( $subtext ) : ?>
-				<p class="mt-6 max-w-md text-base md:text-lg text-brand-cream/80 leading-relaxed">
+				<p class="mt-6 max-w-md text-lg md:text-xl font-medium leading-relaxed text-brand-cream/80">
 					<?php echo esc_html( $subtext ); ?>
 				</p>
 			<?php endif; ?>

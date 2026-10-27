@@ -78,7 +78,7 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 			</h2>
 
 			<?php if ( $juiced_c_body ) : ?>
-				<p class="max-w-[520px] text-lg md:text-[19px] leading-[1.55] text-brand-mint"><?php echo juiced_logo_text( $juiced_c_body, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
+				<p class="max-w-[520px] text-lg md:text-xl leading-relaxed text-brand-mint"><?php echo juiced_logo_text( $juiced_c_body, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
 			<?php endif; ?>
 
 			<div class="mt-2 flex flex-wrap gap-3.5">

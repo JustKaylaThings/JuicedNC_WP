@@ -55,7 +55,7 @@ $image   = juiced_image_url( isset( $args['image'] ) ? $args['image'] : '', 'jui
 		</h1>
 
 		<?php if ( $subtext ) : ?>
-			<p class="max-w-md text-[17px] font-medium leading-relaxed text-brand-mint md:max-w-2xl">
+			<p class="max-w-md text-lg md:text-xl font-medium leading-relaxed text-brand-mint md:max-w-none">
 				<?php echo esc_html( $subtext ); ?>
 			</p>
 		<?php endif; ?>

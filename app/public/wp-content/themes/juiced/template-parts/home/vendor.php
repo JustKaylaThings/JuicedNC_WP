@@ -72,7 +72,7 @@ $juiced_v_count = count( $juiced_v_photos );
 			</h2>
 
 			<?php if ( $juiced_v_body ) : ?>
-				<p class="mt-6 text-lg leading-relaxed text-brand-bark/80"><?php echo esc_html( $juiced_v_body ); ?></p>
+				<p class="mt-6 text-lg md:text-xl leading-relaxed text-brand-bark/80"><?php echo esc_html( $juiced_v_body ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $juiced_v_types ) : ?>
