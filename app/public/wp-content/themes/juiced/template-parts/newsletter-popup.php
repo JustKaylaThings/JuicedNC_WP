@@ -12,6 +12,8 @@
  * thank-you. All copy and the on/off switch are ACF-editable on the Home page
  * (Footer & Newsletter tab, inc/acf-homepage.php).
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -57,7 +59,7 @@ $juiced_pp_leaf = '<path d="M0 0C10-26 40-34 62-30C56-6 30 10 0 0Z"/><path d="M0
 		</button>
 
 		<div class="relative flex flex-col items-center gap-3.5">
-			<p class="eyebrow m-0 text-brand-gold"><?php echo esc_html( $juiced_pp_eyebrow ); ?></p>
+			<p class="eyebrow m-0 text-brand-gold"><?php echo juiced_logo_text( $juiced_pp_eyebrow, 'inline-block h-[2.6em] w-auto -my-[.9em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
 
 			<template x-if="state !== 'done'">
 				<div class="flex w-full flex-col items-center gap-3.5">
@@ -99,7 +101,7 @@ $juiced_pp_leaf = '<path d="M0 0C10-26 40-34 62-30C56-6 30 10 0 0Z"/><path d="M0
 			<template x-if="state === 'done'">
 				<div class="flex flex-col items-center gap-3.5" role="status">
 					<h2 id="juiced-popup-heading" class="m-0 font-display text-[clamp(2.25rem,8vw,2.75rem)] leading-[1.02]"><?php esc_html_e( 'You’re on the list!', 'juiced' ); ?></h2>
-					<p class="m-0 max-w-[340px] text-base leading-normal text-brand-mint"><?php esc_html_e( 'Thanks for joining. Keep an eye on your inbox for what’s next at Juiced!', 'juiced' ); ?></p>
+					<p class="m-0 max-w-[340px] text-base leading-normal text-brand-mint"><?php echo juiced_logo_text( __( 'Thanks for joining. Keep an eye on your inbox for what’s next at Juiced!', 'juiced' ), 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
 					<button type="button" @click="dismiss()"
 						class="mt-2.5 h-13 cursor-pointer rounded-full bg-brand-gold px-8 text-base font-bold text-brand-ink hover:bg-brand-cream transition-colors">
 						<?php esc_html_e( 'Back to the site', 'juiced' ); ?>

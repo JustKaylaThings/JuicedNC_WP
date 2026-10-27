@@ -13,6 +13,8 @@
  * change updates both. The socials disappear wholesale when no URLs are set —
  * three icons linking nowhere are worse than no icons.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -41,7 +43,7 @@ $juiced_socials = array_filter( $juiced_socials );
 
 		<?php if ( $juiced_follow_body ) : ?>
 			<p class="mt-2 text-sm leading-relaxed text-brand-bark/70">
-				<?php echo esc_html( $juiced_follow_body ); ?>
+				<?php echo juiced_logo_text( $juiced_follow_body, 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 			</p>
 		<?php endif; ?>
 

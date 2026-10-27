@@ -15,6 +15,8 @@
  * Sent swaps the whole form for a thank-you; the other two show a notice
  * above it. The optional résumé is emailed as an attachment.
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -68,7 +70,7 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 					<span class="block"><?php echo esc_html( $lead ); ?></span>
 				<?php endif; ?>
 				<?php if ( $accent ) : ?>
-					<span class="block text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+					<span class="block text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 				<?php endif; ?>
 			</h1>
 
@@ -83,7 +85,7 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 
 			<?php if ( $perks ) : ?>
 				<?php if ( $why_heading ) : ?>
-					<h2 class="mt-10 font-display text-2xl font-bold text-brand-gold md:text-3xl"><?php echo esc_html( $why_heading ); ?></h2>
+					<h2 class="mt-10 font-display text-2xl font-bold text-brand-gold md:text-3xl"><?php echo juiced_logo_text( $why_heading ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></h2>
 				<?php endif; ?>
 				<ul class="mt-4 grid gap-3 sm:grid-cols-2">
 					<?php foreach ( $perks as $perk ) : ?>

@@ -17,6 +17,8 @@
  *
  * Copy is ACF-editable on this page (inc/acf-host-event-page.php).
  *
+ * "Juiced!" in the copy shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -63,7 +65,7 @@ foreach ( $defaults as $i => $default ) {
 					<span class="block"><?php echo esc_html( $lead ); ?></span>
 				<?php endif; ?>
 				<?php if ( $accent ) : ?>
-					<span class="block text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+					<span class="block text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 				<?php endif; ?>
 			</h1>
 

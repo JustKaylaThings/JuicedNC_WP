@@ -121,7 +121,7 @@ $last = count( $milestones ) - 1;
 
 							<?php if ( $milestone['desc'] ) : ?>
 								<p class="mt-2 text-base leading-relaxed text-brand-bark/70">
-									<?php echo esc_html( $milestone['desc'] ); ?>
+									<?php echo juiced_logo_text( $milestone['desc'], 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?>
 								</p>
 							<?php endif; ?>
 						</li>

@@ -11,6 +11,8 @@
  * defaults below. Clearing both heading fields hides the band; clearing the
  * button label hides the button.
  *
+ * "Juiced!" in the heading shows as the logo (juiced_logo_text()).
+ *
  * @package Juiced
  */
 
@@ -34,7 +36,7 @@ if ( $url ) {
 		<div class="max-w-2xl">
 			<h2 id="contact-host-h" class="font-display font-bold leading-[1.02] text-[clamp(2.25rem,5vw,3.5rem)]">
 				<?php echo esc_html( $heading ); ?>
-				<span class="block text-brand-gold"><?php echo esc_html( $accent ); ?></span>
+				<span class="block text-brand-gold"><?php echo juiced_logo_text( $accent ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></span>
 			</h2>
 
 			<?php if ( $body ) : ?>
