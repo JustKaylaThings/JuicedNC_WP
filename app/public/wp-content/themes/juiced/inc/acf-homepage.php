@@ -877,6 +877,27 @@ add_action(
 						'type'         => 'url',
 						'instructions' => 'Adds a "Terms" link after the copyright line. Leave blank to hide it.',
 					),
+					array(
+						'key'          => 'field_juiced_footer_credit_text',
+						'label'        => 'Site credit — text',
+						'name'         => 'footer_credit_text',
+						'type'         => 'text',
+						'instructions' => 'The line under the copyright, before the linked name. Leave blank to use "Built with ❤️ by".',
+					),
+					array(
+						'key'          => 'field_juiced_footer_credit_name',
+						'label'        => 'Site credit — linked name',
+						'name'         => 'footer_credit_name',
+						'type'         => 'text',
+						'instructions' => 'The linked name at the end of the credit line. Leave blank to use "KAYJO".',
+					),
+					array(
+						'key'          => 'field_juiced_footer_credit_url',
+						'label'        => 'Site credit — link',
+						'name'         => 'footer_credit_url',
+						'type'         => 'url',
+						'instructions' => 'Where the name links to (opens in a new tab). Leave blank to use https://kayjo.co.',
+					),
 				),
 				'location' => array(
 					array(

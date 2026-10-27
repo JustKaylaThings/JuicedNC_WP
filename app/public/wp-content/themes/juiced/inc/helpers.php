@@ -547,15 +547,17 @@ function juiced_footer_column( $location, $heading, $defaults ) {
 
 /**
  * Print the footer copyright line ("© <year> <name>", plus optional Privacy and
- * Terms links). footer.php prints it twice — beside the wordmark from md up,
+ * Terms links) and the site credit under it. footer.php prints it twice — beside the wordmark from md up,
  * below the link columns on phones — so it lives here.
  *
  * @param string $class     Classes for the <p>.
  * @param string $copyright Text after the year.
  * @param string $privacy   Privacy policy URL, or ''.
  * @param string $terms     Terms URL, or ''.
+ * @param array  $credit    Site credit: 'text', linked 'name' and its 'url'
+ *                          (Home page → Footer fields).
  */
-function juiced_footer_copyright( $class, $copyright, $privacy, $terms ) {
+function juiced_footer_copyright( $class, $copyright, $privacy, $terms, $credit ) {
 	?>
 	<p class="<?php echo esc_attr( $class ); ?>">
 		&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( $copyright ); ?>
@@ -567,8 +569,8 @@ function juiced_footer_copyright( $class, $copyright, $privacy, $terms ) {
 		<?php endif; ?>
 		<?php // Site credit, on its own line under the copyright. ?>
 		<span class="mt-1 block">
-			<?php esc_html_e( 'Built with ❤️ by', 'juiced' ); ?>
-			<a href="https://kayjo.co" target="_blank" rel="noopener" class="font-semibold underline underline-offset-2 hover:text-brand-gold transition-colors">KAYJO</a>.
+			<?php echo esc_html( $credit['text'] ); ?>
+			<a href="<?php echo esc_url( $credit['url'] ); ?>" target="_blank" rel="noopener" class="font-semibold underline underline-offset-2 hover:text-brand-gold transition-colors"><?php echo esc_html( $credit['name'] ); ?></a>.
 		</span>
 	</p>
 	<?php

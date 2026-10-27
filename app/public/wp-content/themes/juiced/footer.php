@@ -35,6 +35,11 @@ $juiced_tagline   = juiced_field( 'footer_tagline', 'Blending together health an
 $juiced_copyright = juiced_field( 'footer_copyright', 'Juiced! Juice Bar · Raleigh, NC' );
 $juiced_privacy   = juiced_field( 'footer_privacy_url', '' );
 $juiced_terms     = juiced_field( 'footer_terms_url', '' );
+$juiced_credit    = array(
+	'text' => juiced_field( 'footer_credit_text', 'Built with ❤️ by' ),
+	'name' => juiced_field( 'footer_credit_name', 'KAYJO' ),
+	'url'  => juiced_field( 'footer_credit_url', 'https://kayjo.co' ),
+);
 
 $juiced_ig_url = juiced_field( 'community_instagram_url', 'https://www.instagram.com/juicednc/' );
 $juiced_fb_url = juiced_field( 'footer_facebook_url', 'https://www.facebook.com/juicedjourney/' );
@@ -136,7 +141,7 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 				</div>
 			<?php endif; ?>
 
-			<?php juiced_footer_copyright( 'hidden md:block m-0 mt-auto pt-4 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms ); ?>
+			<?php juiced_footer_copyright( 'hidden md:block m-0 mt-auto pt-4 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms, $juiced_credit ); ?>
 		</div>
 
 		<!-- Link columns -->
@@ -174,7 +179,7 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 		</nav>
 
 		<?php // On phones the copyright moves below the link columns. ?>
-		<?php juiced_footer_copyright( 'md:hidden m-0 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms ); ?>
+		<?php juiced_footer_copyright( 'md:hidden m-0 text-[13px]', $juiced_copyright, $juiced_privacy, $juiced_terms, $juiced_credit ); ?>
 	</div>
 </footer>
 
