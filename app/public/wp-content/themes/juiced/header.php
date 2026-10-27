@@ -26,7 +26,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<?php wp_head(); ?>
 </head>
-<body <?php body_class( 'bg-brand-paper text-brand-ink' ); ?>>
+<body <?php body_class( 'bg-brand-forest-deep text-brand-ink' ); ?>>
 <?php wp_body_open(); ?>
 
 <a class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-brand-gold focus:text-white focus:px-4 focus:py-2" href="#main">
@@ -126,4 +126,4 @@ $juiced_bar_width = is_front_page() ? 'md:px-8 lg:px-20 xl:px-28 2xl:px-[max(10r
 	</nav>
 </header>
 
-<main id="main">
+<main id="main" class="bg-brand-paper">

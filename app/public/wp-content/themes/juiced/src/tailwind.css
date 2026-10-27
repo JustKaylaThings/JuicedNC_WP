@@ -48,18 +48,20 @@
   --font-body: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* The page is cream, but the canvas behind it is the footer's deep green, so
-   a short page, or the trackpad bounce past the bottom, runs on as footer
-   instead of showing a cream strip under it. (The header is green too, so the
-   bounce at the top matches.) overscroll-behavior only takes effect on the
-   root element. */
+/* The page content (<main>) is cream, but the html and body behind it are the
+   footer's deep green, so a short page, or the trackpad bounce past the
+   bottom, runs on as footer instead of showing a cream strip under it. The
+   body has to be green too: iPhone Safari tints the area behind its bottom
+   toolbar with the body colour. (The header is green too, so the bounce at
+   the top matches.) overscroll-behavior only takes effect on the root
+   element. */
 html {
   background: var(--color-brand-forest-deep);
   overscroll-behavior-y: none;
 }
 
 body {
-  background: var(--color-brand-paper);
+  background: var(--color-brand-forest-deep);
   color: var(--color-brand-ink);
 }
 
