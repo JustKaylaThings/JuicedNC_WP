@@ -114,7 +114,7 @@ $juiced_cta = static function ( $id ) {
 			</div>
 			<?php if ( $juiced_cal_url && $juiced_link_label ) : ?>
 				<a href="<?php echo esc_url( $juiced_cal_url ); ?>"
-				   class="self-start md:self-auto shrink-0 rounded-full border-2 border-brand-forest px-6 py-3.5 font-semibold text-brand-forest hover:bg-brand-forest hover:text-brand-cream transition-colors">
+				   class="self-start md:self-auto shrink-0 rounded-full px-6 py-3.5 bg-brand-cream text-brand-ink btn-sticker">
 					<?php echo esc_html( $juiced_link_label ); ?>
 				</a>
 			<?php endif; ?>
@@ -155,7 +155,7 @@ $juiced_cta = static function ( $id ) {
 				<?php endif; ?>
 
 				<a href="<?php echo esc_url( $fcta_url ); ?>"
-				   class="relative z-10 justify-self-start whitespace-nowrap rounded-full bg-brand-gold px-6.5 py-4 font-bold text-brand-ink hover:bg-brand-cream transition-colors"
+				   class="relative z-10 justify-self-start whitespace-nowrap rounded-full bg-brand-gold px-6.5 py-4 text-brand-ink btn-sticker"
 				   <?php echo $fcta_url !== get_permalink( $fid ) ? 'target="_blank" rel="noopener"' : ''; ?>>
 					<?php echo esc_html( $fcta ); ?>
 				</a>

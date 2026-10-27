@@ -85,7 +85,7 @@ $juiced_single  = 1 === count( $juiced_cards );
 
 							<a href="<?php echo esc_url( $juiced_card['permalink'] ); ?>"
 							   class="mt-auto inline-flex items-center gap-2 self-start pt-8">
-								<span class="inline-flex items-center gap-2 rounded-full bg-brand-forest px-6 py-3 font-bold text-brand-cream transition-colors group-hover:bg-brand-gold group-hover:text-brand-ink">
+								<span class="inline-flex items-center gap-2 rounded-full bg-brand-forest px-6 py-3 text-brand-cream btn-sticker">
 									<?php esc_html_e( 'Read the Story', 'juiced' ); ?>
 									<span aria-hidden="true">&rarr;</span>
 								</span>

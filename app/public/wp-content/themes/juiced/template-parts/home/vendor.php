@@ -87,7 +87,7 @@ $juiced_v_count = count( $juiced_v_photos );
 
 			<?php if ( $juiced_v_url && $juiced_v_label ) : ?>
 				<a href="<?php echo esc_url( $juiced_v_url ); ?>"
-				   class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-forest px-6.5 py-4 font-bold text-brand-cream transition-colors hover:bg-brand-rust">
+				   class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-forest px-6.5 py-4 text-brand-cream btn-sticker">
 					<?php echo esc_html( $juiced_v_label ); ?>
 					<span aria-hidden="true">&rarr;</span>
 				</a>

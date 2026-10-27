@@ -93,7 +93,7 @@ if ( ! $locations ) {
 						<?php endif; ?>
 						<?php if ( $directions_label && $location['directions'] ) : ?>
 							<a href="<?php echo esc_url( $location['directions'] ); ?>" target="_blank" rel="noopener"
-							   class="mt-4 inline-flex items-center gap-1.5 rounded-full border-2 border-brand-forest px-5 py-2 text-sm font-bold text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream">
+							   class="mt-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm bg-brand-cream text-brand-ink btn-sticker">
 								<?php echo esc_html( $directions_label ); ?>
 								<span aria-hidden="true">&rarr;</span>
 							</a>

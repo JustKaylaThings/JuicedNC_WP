@@ -14,6 +14,12 @@
  * visitors who prefer reduced motion. Tapping a drink restarts the clock.
  * Without JS the first drink shows and the list still reads as a ranking.
  *
+ * Phones (below md) get a swipe row instead of the board: one card per drink
+ * (photo, rank, tag, ingredients, its own order buttons), the next card
+ * peeking in from the right, with dots under the row tracking the card in
+ * view and the "See the full menu" button beside them. The board, and its
+ * auto-advance, only run from md up.
+ *
  * The five drinks are menu_item posts picked on the Home page (top_pick_1..5,
  * with an optional short tag each, inc/acf-homepage.php). With none picked it
  * falls back to the client's Oct 2026 list (two juices, three smoothies),
@@ -139,7 +145,7 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 		 x-data="{
 			i: 0, n: <?php echo (int) count( $juiced_drinks ); ?>, paused: false, timer: null,
 			start() {
-				if ( this.n < 2 || window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) return;
+				if ( this.n < 2 || window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches || ! window.matchMedia( '(min-width: 768px)' ).matches ) return;
 				clearInterval( this.timer );
 				this.timer = setInterval( () => { if ( ! this.paused ) this.i = ( this.i + 1 ) % this.n; }, 5000 );
 			},
@@ -160,15 +166,74 @@ $juiced_m_url     = juiced_field( 'menu_link_url', $juiced_menu_page ? get_perma
 			</div>
 			<?php if ( $juiced_m_url && $juiced_m_label ) : ?>
 				<a href="<?php echo esc_url( $juiced_m_url ); ?>"
-				   class="inline-flex items-center rounded-full bg-brand-forest px-6.5 py-4 font-bold text-brand-cream hover:bg-brand-rust transition-colors">
+				   class="hidden md:inline-flex items-center rounded-full bg-brand-forest px-6.5 py-4 text-brand-cream btn-sticker">
 					<?php echo esc_html( $juiced_m_label ); ?>
 				</a>
 			<?php endif; ?>
 		</div>
 
+		<!-- Phones: swipe row of cards -->
+		<div class="md:hidden flex flex-col gap-6" x-data="{ a: 0 }">
+			<ol class="my-0! -mx-4! flex list-none snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 py-0 no-scrollbar"
+				aria-label="<?php esc_attr_e( 'The top five', 'juiced' ); ?>"
+				@scroll.passive="const el = $el, step = el.firstElementChild.offsetWidth + 12; a = el.scrollLeft >= el.scrollWidth - el.clientWidth - 4 ? <?php echo (int) count( $juiced_drinks ) - 1; ?> : Math.round( el.scrollLeft / step )">
+				<?php foreach ( $juiced_drinks as $k => $drink ) : ?>
+					<li class="flex w-[min(320px,84vw)] shrink-0 snap-start flex-col overflow-hidden rounded-3xl bg-[#cfd9cb]">
+						<div class="relative h-[230px] <?php echo $drink['img'] ? '' : esc_attr( $drink['block'][0] ); ?>">
+							<?php if ( $drink['img'] ) : ?>
+								<img src="<?php echo esc_url( $drink['img'] ); ?>" alt="<?php echo esc_attr( $drink['name'] ); ?>"
+									 class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+							<?php else : ?>
+								<span class="absolute -right-10 -top-10 h-40 w-40 rounded-full <?php echo esc_attr( $drink['block'][1] ); ?>" aria-hidden="true"></span>
+							<?php endif; ?>
+							<span class="absolute left-3 top-3 flex h-13 min-w-13 items-center justify-center rounded-full bg-brand-forest px-2.5 font-display text-[26px] font-bold text-brand-gold"><?php echo esc_html( $drink['rank'] ); ?></span>
+							<?php if ( $drink['tag'] ) : ?>
+								<span class="absolute right-3 top-3 max-w-[60%] rounded-2xl bg-brand-cream px-3 py-1.5 text-right text-xs font-bold leading-tight text-brand-forest"><?php echo esc_html( $drink['tag'] ); ?></span>
+							<?php endif; ?>
+						</div>
+						<div class="flex flex-1 flex-col gap-3.5 p-4">
+							<div class="flex flex-col gap-1">
+								<span class="font-display text-[26px] font-bold leading-[1.05] text-brand-forest"><?php echo esc_html( $drink['name'] ); ?></span>
+								<?php $meta = implode( ' · ', array_filter( array( $drink['type'], $drink['size'], $drink['price'] ) ) ); ?>
+								<?php if ( $meta ) : ?>
+									<span class="text-[13px] font-semibold text-[#4a4036]"><?php echo esc_html( $meta ); ?></span>
+								<?php endif; ?>
+								<?php if ( $drink['ingr'] ) : ?>
+									<span class="line-clamp-2 text-sm leading-snug text-[#2c3a2e]"><?php echo esc_html( $drink['ingr'] ); ?></span>
+								<?php endif; ?>
+							</div>
+							<?php if ( $drink['order'] ) : ?>
+								<div class="mt-auto flex flex-wrap gap-1">
+									<?php foreach ( $drink['order'] as $app ) : ?>
+										<?php juiced_app_button( $app, 'min-h-11 px-3 text-[13px]', $drink['name'] ); ?>
+									<?php endforeach; ?>
+								</div>
+							<?php endif; ?>
+						</div>
+					</li>
+				<?php endforeach; ?>
+			</ol>
+
+			<div class="flex items-center justify-between gap-4">
+				<div class="flex items-center gap-1.5" aria-hidden="true">
+					<?php foreach ( $juiced_drinks as $k => $drink ) : ?>
+						<span class="h-2 rounded-full transition-all duration-200"
+							  :class="a === <?php echo (int) $k; ?> ? 'w-6 bg-brand-forest' : 'w-2 bg-brand-forest/25'"
+							  class="<?php echo $k ? 'w-2 bg-brand-forest/25' : 'w-6 bg-brand-forest'; ?>"></span>
+					<?php endforeach; ?>
+				</div>
+				<?php if ( $juiced_m_url && $juiced_m_label ) : ?>
+					<a href="<?php echo esc_url( $juiced_m_url ); ?>"
+					   class="inline-flex min-h-12 items-center rounded-full bg-brand-forest px-5.5 text-brand-cream btn-sticker">
+						<?php echo esc_html( $juiced_m_label ); ?>
+					</a>
+				<?php endif; ?>
+			</div>
+		</div>
+
 		<!-- Sage board -->
 		<div @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false"
-			 class="grid gap-6 rounded-[32px] bg-[#cfd9cb] p-3 sm:p-5 lg:p-7 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10">
+			 class="hidden md:grid gap-6 rounded-[32px] bg-[#cfd9cb] p-3 sm:p-5 lg:p-7 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10">
 
 			<!-- Photo of the selected drink -->
 			<div class="relative min-h-[420px] sm:min-h-[480px] lg:min-h-[600px] overflow-hidden rounded-[22px]" aria-live="polite">

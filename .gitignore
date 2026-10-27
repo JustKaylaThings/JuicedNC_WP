@@ -32,3 +32,4 @@ node_modules/
 # Claude Code local settings
 .claude/settings.local.json
 pass.txt
+migration/

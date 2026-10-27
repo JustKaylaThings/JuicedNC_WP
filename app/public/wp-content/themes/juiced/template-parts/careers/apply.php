@@ -57,7 +57,7 @@ $status = isset( $_GET['apply'] ) ? sanitize_key( wp_unslash( $_GET['apply'] ) )
 $input  = juiced_form_input_classes() . ' bg-white';
 $label  = 'mb-1.5 block text-sm font-semibold text-brand-forest';
 $legend = 'font-display text-2xl font-bold text-brand-forest focus:outline-none md:text-3xl';
-$next   = 'inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-gold px-7 py-3.5 text-[15px] font-bold text-brand-ink transition-colors hover:bg-brand-forest hover:text-brand-cream';
+$next   = 'inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-gold px-7 py-3.5 text-[15px] text-brand-ink btn-sticker';
 $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.5 text-[15px] font-bold text-brand-forest underline-offset-4 hover:underline';
 ?>
 <section class="relative -mt-px grid bg-brand-cream text-brand-ink lg:grid-cols-2" id="apply">
@@ -116,7 +116,7 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 					<h2 class="font-display text-3xl font-bold text-brand-forest md:text-4xl"><?php esc_html_e( 'Thanks for applying!', 'juiced' ); ?></h2>
 					<p class="max-w-md text-lg leading-relaxed text-brand-ink/75"><?php esc_html_e( 'We\'ve got your application and will reach out if it\'s a fit.', 'juiced' ); ?></p>
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-					   class="mt-2 inline-flex items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+					   class="mt-2 inline-flex items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] text-brand-cream btn-sticker">
 						<?php esc_html_e( 'Back to home', 'juiced' ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</a>
@@ -283,7 +283,7 @@ $back   = 'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-3.
 					<div class="flex items-center justify-between gap-4 pt-2">
 						<button type="button" class="<?php echo esc_attr( $back ); ?>" @click="back()" x-cloak><span aria-hidden="true">&larr;</span> <?php esc_html_e( 'Back', 'juiced' ); ?></button>
 						<button type="submit"
-								class="ml-auto inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+								class="ml-auto inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] text-brand-cream btn-sticker">
 							<?php echo esc_html( $button_label ); ?>
 							<span aria-hidden="true">&rarr;</span>
 						</button>

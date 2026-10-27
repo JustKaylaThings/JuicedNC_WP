@@ -92,7 +92,7 @@ $last = count( $milestones ) - 1;
 
 				<?php if ( $label && $url ) : ?>
 					<a href="<?php echo esc_url( $url ); ?>"
-					   class="mt-7 inline-flex items-center gap-2 rounded-full bg-brand-forest px-6 py-3 text-sm font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+					   class="mt-7 inline-flex items-center gap-2 rounded-full bg-brand-forest px-6 py-3 text-sm text-brand-cream btn-sticker">
 						<?php echo esc_html( $label ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</a>

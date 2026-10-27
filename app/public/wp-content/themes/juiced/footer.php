@@ -90,7 +90,7 @@ $juiced_directions = static function ( $i ) use ( $juiced_page_url ) {
 					placeholder="<?php esc_attr_e( 'Your email address', 'juiced' ); ?>"
 					class="h-14 w-full min-w-0 sm:flex-1 rounded-full border-2 border-brand-forest bg-brand-cream px-5.5 text-base text-brand-ink placeholder:text-brand-ink/50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-gold/50" />
 				<button type="submit"
-					class="h-14 shrink-0 cursor-pointer rounded-full bg-brand-gold px-7.5 text-base font-bold text-brand-ink hover:bg-brand-forest hover:text-brand-cream transition-colors">
+					class="h-14 shrink-0 cursor-pointer rounded-full bg-brand-gold px-7.5 text-base text-brand-ink btn-sticker">
 					<?php esc_html_e( 'Join', 'juiced' ); ?>
 				</button>
 			</form>

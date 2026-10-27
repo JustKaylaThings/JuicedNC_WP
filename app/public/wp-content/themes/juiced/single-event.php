@@ -199,7 +199,7 @@ while ( have_posts() ) :
 								 lead nowhere. -->
 							<?php if ( $signup ) : ?>
 								<a href="<?php echo esc_url( $signup ); ?>" target="_blank" rel="noopener"
-								   class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-7 py-3.5 font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+								   class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-7 py-3.5 text-brand-ink btn-sticker">
 									<?php esc_html_e( 'Sign up', 'juiced' ); ?>
 									<span aria-hidden="true">&rarr;</span>
 								</a>
@@ -209,7 +209,7 @@ while ( have_posts() ) :
 								<!-- A native <details> dropdown: works with JS off, closes on
 									 a second click, and needs no Alpine on this template. -->
 								<details class="relative">
-									<summary class="inline-flex cursor-pointer select-none list-none items-center gap-2 rounded-full border-2 border-brand-cream px-6 py-3 font-bold text-brand-cream transition-colors hover:bg-brand-cream hover:text-brand-forest [&::-webkit-details-marker]:hidden">
+									<summary class="inline-flex cursor-pointer select-none list-none items-center gap-2 rounded-full px-6 py-3 [&::-webkit-details-marker]:hidden bg-brand-cream text-brand-ink btn-sticker">
 										<?php echo $icons['calendar']; // phpcs:ignore WordPress.Security.EscapeOutput -- static inline SVG. ?>
 										<?php esc_html_e( 'Add to Calendar', 'juiced' ); ?>
 										<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
@@ -275,7 +275,7 @@ while ( have_posts() ) :
 						<?php esc_html_e( 'More', 'juiced' ); ?> <span class="text-brand-gold"><?php esc_html_e( 'coming up', 'juiced' ); ?></span>
 					</h2>
 					<a href="<?php echo esc_url( juiced_events_page_url() ); ?>"
-					   class="inline-flex items-center gap-1.5 rounded-full border-2 border-brand-forest px-5 py-2.5 text-sm font-bold text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream">
+					   class="inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm bg-brand-cream text-brand-ink btn-sticker">
 						<?php esc_html_e( 'View all events', 'juiced' ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</a>

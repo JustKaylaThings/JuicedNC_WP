@@ -135,7 +135,7 @@ while ( have_posts() ) :
 
 						<?php if ( $juiced_link_url ) : ?>
 							<a href="<?php echo esc_url( $juiced_link_url ); ?>" target="_blank" rel="noopener"
-							   class="flex items-center justify-center gap-2 rounded-full bg-brand-gold px-6 py-4 font-bold text-brand-ink transition-colors hover:bg-brand-forest hover:text-brand-cream">
+							   class="flex items-center justify-center gap-2 rounded-full bg-brand-gold px-6 py-4 text-brand-ink btn-sticker">
 								<?php echo esc_html( $juiced_link_label ); ?>
 								<span aria-hidden="true">&rarr;</span>
 							</a>

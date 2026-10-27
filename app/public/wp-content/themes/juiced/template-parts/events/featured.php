@@ -81,12 +81,12 @@ $free     = '' === trim( $cost ) || false !== stripos( $cost, 'free' );
 					<div class="flex flex-wrap gap-3">
 						<?php if ( $signup ) : ?>
 							<a href="<?php echo esc_url( $signup ); ?>" target="_blank" rel="noopener"
-							   class="whitespace-nowrap rounded-full bg-brand-gold px-5.5 py-3 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+							   class="whitespace-nowrap rounded-full bg-brand-gold px-5.5 py-3 text-sm text-brand-ink btn-sticker">
 								<?php echo esc_html( $free ? __( 'Sign up', 'juiced' ) : __( 'Get tickets', 'juiced' ) ); ?>
 							</a>
 						<?php endif; ?>
 						<a href="<?php echo esc_url( get_permalink( $fid ) ); ?>"
-						   class="whitespace-nowrap rounded-full border-2 border-brand-cream/60 px-5 py-2.5 text-sm font-bold text-brand-cream transition-colors hover:border-brand-cream hover:bg-brand-cream hover:text-brand-forest">
+						   class="whitespace-nowrap rounded-full px-5 py-2.5 text-sm bg-brand-cream text-brand-ink btn-sticker">
 							<?php esc_html_e( 'Event details', 'juiced' ); ?>
 						</a>
 					</div>

@@ -119,7 +119,7 @@ $juiced_term  = $juiced_card['term'];
 				<?php echo esc_html( $juiced_card['cost'] ); ?>
 			</span>
 			<a href="<?php echo esc_url( $juiced_card['permalink'] ); ?>"
-			   class="inline-flex items-center justify-center rounded-full border-2 px-4 py-2 text-xs font-bold transition-colors <?php echo esc_attr( $juiced_color['border'] . ' ' . $juiced_color['text'] . ' ' . $juiced_color['hover'] ); ?> hover:text-white">
+			   class="inline-flex items-center justify-center rounded-full bg-brand-cream px-4 py-2 text-xs text-brand-ink btn-sticker">
 				<?php esc_html_e( 'Learn More', 'juiced' ); ?>
 			</a>
 		</div>

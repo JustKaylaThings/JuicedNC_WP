@@ -262,7 +262,7 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 									<?php esc_html_e( 'Our Host an Event form gets the details to our events team fastest. We\'ll bring over what you\'ve typed.', 'juiced' ); ?>
 								</p>
 								<a href="<?php echo esc_url( $host_url ); ?>" @click="toHost()"
-								   class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-brand-gold px-5 py-2.5 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-forest hover:text-brand-cream sm:self-center">
+								   class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-brand-gold px-5 py-2.5 text-sm text-brand-ink sm:self-center btn-sticker">
 									<?php esc_html_e( 'Host an Event', 'juiced' ); ?>
 									<span aria-hidden="true">&rarr;</span>
 								</a>
@@ -288,7 +288,7 @@ $input_classes = 'w-full rounded-xl border border-brand-forest/20 bg-brand-cream
 						 @mouseenter="hint = <?php echo $host_url ? 'isEvent' : 'false'; ?>" @mouseleave="hint = false">
 						<button type="submit"
 								<?php if ( $host_url ) : ?>:disabled="isEvent" :class="isEvent && 'pointer-events-none opacity-45'"<?php endif; ?>
-								class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+								class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] text-brand-cream btn-sticker">
 							<?php echo esc_html( $button_label ); ?>
 							<span aria-hidden="true">&rarr;</span>
 						</button>

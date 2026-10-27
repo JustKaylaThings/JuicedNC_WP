@@ -205,6 +205,25 @@ html:has(.menu-section-bar) {
   border-color: rgba(92, 64, 51, 0.18);
 }
 
+/* Sticker buttons (Oct 2026): every pill CTA gets an ink outline and a hard
+   ink shadow that it presses into on hover and click. Sizes are in em, so the
+   shadow scales with each button's text size. The fill and text colours stay
+   on the button as utilities; this only adds the outline, shadow and type. */
+@layer components {
+  .btn-sticker {
+    border: 3px solid var(--color-brand-ink);
+    box-shadow: 0 0.3em 0 var(--color-brand-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-sticker:hover { transform: translateY(0.15em); box-shadow: 0 0.15em 0 var(--color-brand-ink); }
+  .btn-sticker:active { transform: translateY(0.3em); box-shadow: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-sticker, .btn-sticker:hover, .btn-sticker:active { transform: none; }
+  }
+}
+
 /* Hide scrollbars on horizontal rails while keeping scroll behavior */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -355,13 +374,16 @@ html:has(.menu-section-bar) {
 .juiced-marquee {
   animation: juiced-marquee 45s linear infinite;
 }
-/* Homepage reviews strip (community.php): slower, pauses on hover or focus.
-   Reduced motion drops the loop copy and lets the row scroll by hand. */
+/* Homepage reviews strip (community.php): slower, pauses on hover or keyboard
+   focus. Only :focus-visible counts: a clicked review keeps focus after it
+   opens Google in a new tab, and :focus-within would leave the strip frozen
+   when the visitor comes back. Reduced motion drops the loop copy and lets
+   the row scroll by hand. */
 .juiced-marquee--reviews {
   animation-duration: 80s;
 }
 .juiced-reviews:hover .juiced-marquee,
-.juiced-reviews:focus-within .juiced-marquee {
+.juiced-reviews:has(:focus-visible) .juiced-marquee {
   animation-play-state: paused;
 }
 @media (prefers-reduced-motion: reduce) {

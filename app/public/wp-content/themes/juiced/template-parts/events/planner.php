@@ -137,13 +137,12 @@ $juiced_arrow = 'grid h-11 w-11 shrink-0 cursor-pointer place-items-center round
 								<div class="mt-3 flex flex-wrap gap-2.5">
 									<template x-if="ev.g">
 										<a :href="ev.g" target="_blank" rel="noopener"
-										   class="inline-flex items-center rounded-full bg-brand-gold px-5 py-2.5 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+										   class="inline-flex items-center rounded-full bg-brand-gold px-5 py-2.5 text-sm text-brand-ink btn-sticker">
 											<?php esc_html_e( 'Sign up', 'juiced' ); ?>
 										</a>
 									</template>
 									<a :href="ev.u"
-									   class="inline-flex items-center gap-1.5 rounded-full border-2 px-5 py-2 text-sm font-bold transition-colors"
-									   :class="ev.s ? 'border-brand-cream text-brand-cream hover:bg-brand-cream hover:text-brand-forest' : 'border-brand-forest text-brand-forest hover:bg-brand-forest hover:text-brand-cream'">
+									   class="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm bg-brand-cream text-brand-ink btn-sticker">
 										<?php esc_html_e( 'Details', 'juiced' ); ?> <span aria-hidden="true">&rarr;</span>
 									</a>
 								</div>
@@ -155,7 +154,7 @@ $juiced_arrow = 'grid h-11 w-11 shrink-0 cursor-pointer place-items-center round
 								<p><?php esc_html_e( "Nothing on the calendar this day — the juice bar's still open, so come say hi.", 'juiced' ); ?></p>
 								<template x-if="nextDay">
 									<button type="button" @click="jump()"
-											class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-full border-2 border-brand-forest px-5 py-2 text-sm font-bold text-brand-forest transition-colors hover:bg-brand-forest hover:text-brand-cream">
+											class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-full px-5 py-2 text-sm bg-brand-cream text-brand-ink btn-sticker">
 										<span x-text="'<?php echo esc_js( __( 'Next event:', 'juiced' ) ); ?> ' + nextDay.label"></span>
 										<span aria-hidden="true">&rarr;</span>
 									</button>

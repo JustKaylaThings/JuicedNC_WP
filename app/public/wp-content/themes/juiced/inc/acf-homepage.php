@@ -48,6 +48,13 @@ add_action(
 						'type'  => 'tab',
 					),
 					array(
+						'key'          => 'field_juiced_hero_pre',
+						'label'        => 'Headline — opening line',
+						'name'         => 'hero_headline_pre',
+						'type'         => 'text',
+						'instructions' => 'Shown in mint above the headline, so the three lines read as one sentence. e.g. "Blending".',
+					),
+					array(
 						'key'          => 'field_juiced_hero_lead',
 						'label'        => 'Headline — line 1',
 						'name'         => 'hero_headline_lead',

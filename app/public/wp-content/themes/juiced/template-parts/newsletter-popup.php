@@ -103,7 +103,7 @@ $juiced_pp_leaf = '<path d="M0 0C10-26 40-34 62-30C56-6 30 10 0 0Z"/><path d="M0
 					<h2 id="juiced-popup-heading" class="m-0 font-display text-[clamp(2.25rem,8vw,2.75rem)] leading-[1.02]"><?php esc_html_e( 'You’re on the list!', 'juiced' ); ?></h2>
 					<p class="m-0 max-w-[340px] text-base leading-normal text-brand-mint"><?php echo juiced_logo_text( __( 'Thanks for joining. Keep an eye on your inbox for what’s next at Juiced!', 'juiced' ), 'inline-block h-[1.9em] w-auto -my-[.5em] align-middle' ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in the helper. ?></p>
 					<button type="button" @click="dismiss()"
-						class="mt-2.5 h-13 cursor-pointer rounded-full bg-brand-gold px-8 text-base font-bold text-brand-ink hover:bg-brand-cream transition-colors">
+						class="mt-2.5 h-13 cursor-pointer rounded-full bg-brand-gold px-8 text-base text-brand-ink btn-sticker">
 						<?php esc_html_e( 'Back to the site', 'juiced' ); ?>
 					</button>
 				</div>

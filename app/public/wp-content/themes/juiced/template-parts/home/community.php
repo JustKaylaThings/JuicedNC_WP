@@ -84,13 +84,13 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 			<div class="mt-2 flex flex-wrap gap-3.5">
 				<?php if ( $juiced_c_url && $juiced_c_label ) : ?>
 					<a href="<?php echo esc_url( $juiced_c_url ); ?>"
-					   class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6.5 py-4 font-bold text-brand-ink hover:bg-brand-cream transition-colors">
+					   class="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6.5 py-4 text-brand-ink btn-sticker">
 						<?php echo esc_html( $juiced_c_label ); ?> <span aria-hidden="true">&rarr;</span>
 					</a>
 				<?php endif; ?>
 				<?php if ( $juiced_ig_url ) : ?>
 					<a href="<?php echo esc_url( $juiced_ig_url ); ?>" target="_blank" rel="noopener noreferrer"
-					   class="inline-flex items-center gap-2 rounded-full border-2 border-brand-cream px-6 py-3.5 font-semibold text-brand-cream hover:bg-brand-cream hover:text-brand-forest transition-colors">
+					   class="inline-flex items-center gap-2 rounded-full px-6 py-3.5 bg-brand-cream text-brand-ink btn-sticker">
 						<?php echo $juiced_ig_icon; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG. ?>
 						<?php esc_html_e( 'Follow on Instagram', 'juiced' ); ?>
 					</a>
@@ -111,7 +111,7 @@ $juiced_ig_icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 							<span class="text-[13px] text-[#4a4036]">Juiced! NC · Raleigh</span>
 						</span>
 						<a href="<?php echo esc_url( $juiced_ig_url ); ?>" target="_blank" rel="noopener noreferrer"
-						   class="ml-auto rounded-full bg-brand-forest px-4 py-2 text-[13px] font-bold text-brand-cream hover:bg-brand-rust transition-colors">
+						   class="ml-auto rounded-full bg-brand-forest px-4 py-2 text-[13px] text-brand-cream btn-sticker">
 							<?php esc_html_e( 'Follow', 'juiced' ); ?>
 						</a>
 					</div>

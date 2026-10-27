@@ -175,7 +175,7 @@ $carousel = trim( ob_get_clean() );
 				<?php juiced_captcha_field(); ?>
 
 				<button type="submit"
-						class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] font-bold text-brand-cream transition-colors hover:bg-brand-gold hover:text-brand-ink">
+						class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-forest px-7 py-3.5 text-[15px] text-brand-cream btn-sticker">
 					<?php echo esc_html( $button_label ); ?>
 					<span aria-hidden="true">&rarr;</span>
 				</button>

@@ -48,7 +48,7 @@ if ( $url ) {
 
 		<?php if ( $label && $url ) : ?>
 			<a href="<?php echo esc_url( $url ); ?>"
-			   class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-brand-gold px-7 py-4 font-bold text-brand-ink transition-colors hover:bg-brand-cream lg:self-center">
+			   class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-brand-gold px-7 py-4 text-brand-ink lg:self-center btn-sticker">
 				<?php echo esc_html( $label ); ?>
 				<span aria-hidden="true">&rarr;</span>
 			</a>

@@ -77,7 +77,7 @@ foreach ( $defaults as $i => $default ) {
 
 			<?php if ( $primary ) : ?>
 				<a href="#event-form"
-				   class="mt-8 inline-flex min-h-13 items-center gap-2 rounded-full bg-brand-gold px-7 text-[15px] font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+				   class="mt-8 inline-flex min-h-13 items-center gap-2 rounded-full bg-brand-gold px-7 text-[15px] text-brand-ink btn-sticker">
 					<?php echo esc_html( $primary ); ?>
 					<span aria-hidden="true">&darr;</span>
 				</a>
@@ -109,7 +109,7 @@ foreach ( $defaults as $i => $default ) {
 
 				<?php if ( $peerspace ) : ?>
 					<a href="<?php echo esc_url( $peerspace ); ?>" target="_blank" rel="noopener"
-					   class="group mt-8 inline-flex min-h-12 items-center gap-1.5 rounded-full border-2 border-brand-cream/50 px-6 text-sm font-bold text-brand-cream transition-colors hover:border-brand-cream hover:bg-brand-cream hover:text-brand-forest">
+					   class="group mt-8 inline-flex min-h-12 items-center gap-1.5 rounded-full px-6 text-sm bg-brand-cream text-brand-ink btn-sticker">
 						<?php esc_html_e( 'Book on Peerspace', 'juiced' ); ?>
 						<?php if ( $ps_rating ) : ?>
 							<?php // Peerspace rating, e.g. ★ 4.9 (26) — set on the page, as Peerspace has no public feed. ?>

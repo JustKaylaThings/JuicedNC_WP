@@ -2,12 +2,16 @@
 /**
  * Homepage Section 2 — Hero ("Garden" redesign, Sep 2026).
  *
- * Deep-green band that continues the header: a huge two-tone headline, a short
+ * Deep-green band that continues the header: a huge three-line headline
+ * ("Blending / Health & / Community.", mint, cream, orange), a short
  * intro with two buttons (top right on wide screens, under the headline below
  * that), a row of four captioned community photos along the bottom edge, and
  * a scrolling orange ticker of weekly events. The faint leaf pattern (.bg-garden,
  * src/tailwind.css) continues from the header above; -mt-px tucks the hero
  * under the header so no hairline of the page background shows at the seam.
+ * Full width, like the homepage header bar (header.php): no 1280px column.
+ * The two buttons are "stickers" (ink outline, hard ink shadow that presses
+ * down on hover) so they hold up against the green.
  *
  * All copy, photos and ticker items are ACF-editable on the Home page
  * (inc/acf-homepage.php); defaults match the approved mockup. Photo slots with
@@ -16,6 +20,7 @@
  * @package Juiced
  */
 
+$pre       = juiced_field( 'hero_headline_pre', 'Blending' );
 $lead      = juiced_field( 'hero_headline_lead', 'Health &' );
 $accent    = juiced_field( 'hero_headline_accent', 'Community.' );
 $subtext   = juiced_field( 'hero_subtext', 'Your neighborhood juice bar. Serving our Southeast Raleigh community with fresh juices, smoothies, herbal teas, and much more.' );
@@ -25,7 +30,9 @@ $second    = juiced_field( 'hero_secondary_label', 'Order' );
 
 $default_captions = array( 'Regulars', 'Open Mic Thursdays', 'Game Night', 'Meet the owners' );
 // Staggered heights (mobile / desktop) so the photo tops step like the mockup.
-$heights = array( 'h-48 lg:h-[260px]', 'h-56 lg:h-[330px]', 'h-52 lg:h-[290px]', 'h-60 lg:h-[350px]' );
+// From lg they scale with the window height (vh), with the headline, so the
+// whole hero (photos and ticker included) fits on a laptop screen.
+$heights = array( 'h-48 lg:h-[clamp(180px,25vh,260px)]', 'h-56 lg:h-[clamp(210px,31vh,330px)]', 'h-52 lg:h-[clamp(195px,27.5vh,290px)]', 'h-60 lg:h-[clamp(220px,33vh,350px)]' );
 $photos  = array();
 foreach ( $default_captions as $i => $default_caption ) {
 	$n     = $i + 1;
@@ -42,34 +49,37 @@ $ticker = juiced_field( 'hero_ticker', "Open Mic Thursdays\nIsekai Nights\nWork 
 $ticker = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (string) $ticker ) ) ) );
 ?>
 <section class="relative -mt-px bg-brand-forest bg-garden text-brand-cream overflow-hidden">
-	<div class="mx-auto max-w-7xl px-4 pt-6 md:pt-10">
+	<div class="px-4 md:px-14 lg:px-20 xl:px-28 2xl:px-[max(10rem,calc(50vw-40rem))] pt-6 md:pt-10">
 
 		<div class="xl:relative">
-			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] text-[clamp(3.5rem,13vw,11.75rem)] xl:text-[min(10.5rem,11.5vw)]">
+			<h1 class="font-display font-bold leading-[.86] tracking-[-.03em] text-[clamp(3.5rem,13vw,11.75rem)] lg:text-[clamp(4.5rem,min(10.6vw,12.5vh),9.75rem)]">
+				<?php if ( $pre ) : ?>
+					<span class="block text-brand-mint"><?php echo esc_html( $pre ); ?></span>
+				<?php endif; ?>
 				<span class="block"><?php echo esc_html( $lead ); ?></span>
 				<span class="block text-brand-gold"><?php echo esc_html( $accent ); ?></span>
 			</h1>
 
-			<div class="mt-8 flex flex-col gap-5 max-w-xl xl:mt-0 xl:absolute xl:top-8 xl:right-0 xl:w-[360px]">
+			<div class="mt-8 flex flex-col gap-6 max-w-xl xl:mt-0 xl:max-w-none xl:absolute xl:top-1/2 xl:-translate-y-1/2 xl:right-0 xl:w-[min(540px,33vw)]">
 				<?php if ( $subtext ) : ?>
-					<p class="text-lg md:text-xl leading-relaxed font-medium"><?php echo esc_html( $subtext ); ?></p>
+					<p class="text-lg md:text-xl xl:text-2xl leading-relaxed font-medium"><?php echo esc_html( $subtext ); ?></p>
 				<?php endif; ?>
 				<div class="flex flex-wrap gap-3">
 					<?php if ( $primary ) : ?>
 						<a href="<?php echo esc_url( $primary_u ); ?>"
-						   class="inline-flex items-center rounded-full bg-brand-gold px-6 py-4 font-bold text-brand-ink hover:bg-brand-cream transition-colors">
+						   class="inline-flex items-center min-h-14 rounded-full px-7 text-xl text-brand-ink bg-brand-gold btn-sticker">
 							<?php echo esc_html( $primary ); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ( $second ) : ?>
-						<?php juiced_order_button( $second, 'inline-flex items-center rounded-full border-2 border-brand-cream px-6 py-3.5 font-semibold text-brand-cream hover:bg-brand-cream hover:text-brand-forest transition-colors' ); ?>
+						<?php juiced_order_button( $second, 'inline-flex items-center gap-2 min-h-14 rounded-full px-7 text-xl text-brand-ink bg-brand-cream btn-sticker' ); ?>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 
 		<!-- Community photos: a swipeable row on phones, a 4-up grid from lg. -->
-		<div class="mt-10 lg:mt-16 -mx-4 px-4 lg:mx-0 lg:px-0 flex items-end gap-3 overflow-x-auto no-scrollbar snap-x lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
+		<div class="mt-10 lg:mt-8 -mx-4 px-4 lg:mx-0 lg:px-0 flex items-end gap-3 overflow-x-auto no-scrollbar snap-x lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
 			<?php foreach ( $photos as $photo ) : ?>
 				<figure class="relative m-0! w-[62%] sm:w-[40%] shrink-0 snap-start lg:w-auto overflow-hidden rounded-t-3xl border-4 border-b-0 border-white <?php echo esc_attr( $photo['height'] ); ?>">
 					<?php if ( $photo['url'] ) : ?>

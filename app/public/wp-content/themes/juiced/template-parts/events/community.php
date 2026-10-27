@@ -68,7 +68,7 @@ $juiced_count = count( $juiced_slides );
 
 			<?php if ( $juiced_url && $juiced_label ) : ?>
 				<a href="<?php echo esc_url( $juiced_url ); ?>"
-				   class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-4 font-bold text-brand-ink transition-colors hover:bg-brand-cream">
+				   class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-4 text-brand-ink btn-sticker">
 					<?php echo esc_html( $juiced_label ); ?>
 					<span aria-hidden="true">&rarr;</span>
 				</a>
